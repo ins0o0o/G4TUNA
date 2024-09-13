@@ -1,5 +1,4 @@
 import RPi.GPIO as GPIO
-import threading
 import time
 
 DistanceTrig = 23  # Trig 핀
@@ -20,19 +19,21 @@ def measure_distance():
     GPIO.output(DistanceTrig, GPIO.LOW)
     
     # Echo 핀이 HIGH로 될 때까지 대기
+    pulse_start = time.time()  # pulse_start 초기화
     while GPIO.input(DistanceEcho) == GPIO.LOW:
-        pulse_start = time.time()
+        pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
     
     # Echo 핀이 LOW로 될 때까지 대기
+    pulse_end = time.time()  # pulse_end 초기화
     while GPIO.input(DistanceEcho) == GPIO.HIGH:
-        pulse_end = time.time()
+        pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
     
     # 펄스 지속 시간 계산
     pulse_duration = pulse_end - pulse_start
     
     # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
     distance = pulse_duration * 34300 / 2
-    distance = round(distance,0)
+    distance = round(distance, 0)  # 반올림하여 정수로 변환
     return distance
 
 while True:
