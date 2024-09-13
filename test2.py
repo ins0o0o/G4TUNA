@@ -25,7 +25,7 @@ touch_thread.start()
 
 def mainProcess():
     global touch
-    distance = measure_distance()
+    
     if touch == 1:
         GPIO.output(ledRed, GPIO.HIGH)
         GPIO.output(ledYello, GPIO.HIGH)
