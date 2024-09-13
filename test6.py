@@ -25,18 +25,6 @@ GPIO.setup(sensDH, GPIO.IN)
 GPIO.setup(DistanceTrig, GPIO.OUT)
 GPIO.setup(DistanceEcho, GPIO.IN)
 
-touch = 0
-
-def check_touch():
-    global touch
-    while True:
-        if GPIO.input(sensTouch) == 1:
-            touch = 1
-
-touch_thread = threading.Thread(target=check_touch)
-touch_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 종료되도록 설정
-touch_thread.start()
-
 def measure_distance():
     # Trig 핀을 LOW로 설정하고 짧은 시간 대기
     GPIO.output(DistanceTrig, GPIO.LOW)
@@ -78,7 +66,6 @@ while True:
 readDH()
 
 while True:
-
     distance = measure_distance()
     if distance <= 10:
         GPIO.output(ledRed, GPIO.HIGH)
