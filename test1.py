@@ -50,7 +50,7 @@ button_thread.start()
 def check_touch():
     global touch
     while True:
-        if GPIO.input(sensTouch) == 0:
+        if GPIO.input(sensTouch) == 1:
             touch = 1
 
 touch_thread = threading.Thread(target=check_touch)
