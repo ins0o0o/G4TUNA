@@ -95,6 +95,8 @@ while True:
         GPIO.output(ledYello, GPIO.LOW)
         GPIO.output(ledGreen, GPIO.HIGH)
         print(f"거리는 {distance}센티 입니다.")
-
+        
+    time.sleep(1)
+    
     if GPIO.input(sensTouch) == 1:
         break
