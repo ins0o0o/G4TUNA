@@ -63,6 +63,7 @@ while True:
         time.sleep(1)
         break
 
+print("시스템 작동을 시작합니다.")
 readDH()
 
 while True:
@@ -87,3 +88,4 @@ while True:
     
     if GPIO.input(sensTouch) == 1:
         break
+print("시스템 작동을 종료합니다.")
