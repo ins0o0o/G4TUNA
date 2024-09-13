@@ -19,12 +19,10 @@ def measure_distance():
     GPIO.output(DistanceTrig, GPIO.LOW)
     
     # Echo 핀이 HIGH로 될 때까지 대기
-    pulse_start = time.time()  # pulse_start 초기화
     while GPIO.input(DistanceEcho) == GPIO.LOW:
         pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
     
     # Echo 핀이 LOW로 될 때까지 대기
-    pulse_end = time.time()  # pulse_end 초기화
     while GPIO.input(DistanceEcho) == GPIO.HIGH:
         pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
     
@@ -33,11 +31,10 @@ def measure_distance():
     
     # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
     distance = pulse_duration * 34300 / 2
-    distance = round(distance, 0)  # 반올림하여 정수로 변환
+    
     return distance
 
 while True:
     distance = measure_distance()
-    print(f"장애물이 {distance}cm 거리에 있습니다.")
-    
+    print(f"장애물이 {int(distance)}cm 거리에 있습니다.")
     time.sleep(1)  # 1초 간격으로 거리 측정
