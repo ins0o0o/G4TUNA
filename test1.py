@@ -46,11 +46,11 @@ button_thread.start()
 def check_touch():
     global touch
     while True:
-        if GPIO.input(sensTouch) == 0:
+        if GPIO.input(sensTouch) == 1:
             touch = 1
             print(f"touch pressed, touch is now: {touch}")
 
-touch_thread = threading.Thread(target=touch_button)
+touch_thread = threading.Thread(target=check_touch)
 touch_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 종료되도록 설정
 touch_thread.start()
 
