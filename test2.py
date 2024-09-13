@@ -11,7 +11,7 @@ ledGreen = 22
 
 sensTouch = 5
 sensDH = 6
-
+touch = 0
 def check_button():
     global touch
     while True:
