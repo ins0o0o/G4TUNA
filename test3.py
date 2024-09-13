@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import threading
 import time
 
 DistanceTrig = 23  # Trig 핀
@@ -36,9 +37,6 @@ def measure_distance():
 
 while True:
     distance = measure_distance()
-    if distance <= 10:
-        print(f"10cm 이내에 장애물이 있습니다. 너무 가깝습니다. 현재 거리: {distance:.1f}cm")
-    else:
-        print(f"장애물이 {distance:.1f}cm 거리에 있습니다.")
+    print(f"장애물이 {distance:.1f}cm 거리에 있습니다.")
     
     time.sleep(1)  # 1초 간격으로 거리 측정
