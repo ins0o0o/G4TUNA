@@ -37,7 +37,7 @@ def check_button():
     while True:
         GPIO.wait_for_edge(buttonPin, GPIO.FALLING)  # 버튼이 눌렸을 때까지 대기 (FALLING 엣지 감지)
         flag = 1 - flag  # flag 값 토글
-        print(f"Button pressed, flag is now: {flag}")
+        
 
 button_thread = threading.Thread(target=check_button)
 button_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 종료되도록 설정
