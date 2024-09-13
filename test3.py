@@ -32,11 +32,11 @@ def measure_distance():
     
     # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
     distance = pulse_duration * 34300 / 2
-    
+    distance = round(distance,0)
     return distance
 
 while True:
     distance = measure_distance()
-    print(f"장애물이 {distance:.1f}cm 거리에 있습니다.")
+    print(f"장애물이 {distance}cm 거리에 있습니다.")
     
     time.sleep(1)  # 1초 간격으로 거리 측정
