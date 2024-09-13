@@ -6,7 +6,6 @@ sensTouch = 5
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(sensTouch, GPIO.IN)
 
-        
 while True:
     if GPIO.input(sensTouch) == 1:
         print("터치되었습니다")
