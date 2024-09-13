@@ -23,7 +23,7 @@ while True:
     if GPIO.input(sensTouch) == 1:
         GPIO.output(ledRed, GPIO.HIGH)
         GPIO.output(ledYello, GPIO.HIGH)
-        GPIO.output(ledGreen, GPIO.HIDH)
+        GPIO.output(ledGreen, GPIO.HIGH)
     else:
         GPIO.output(ledRed, GPIO.LOW)
         GPIO.output(ledYello, GPIO.LOW)
