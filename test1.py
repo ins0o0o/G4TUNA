@@ -38,9 +38,9 @@ def check_button():
         GPIO.wait_for_edge(buttonPin, GPIO.FALLING)  # 버튼이 눌렸을 때까지 대기 (FALLING 엣지 감지)
         flag = 1 - flag  # flag 값 토글
         if flag == 1:
-            print("Process Start!!")
+            print("<<<<Process Start!!>>>>\n")
         else:
-            print("Process Terminated")
+            print("<<<<Process Terminated>>>>\n")
         time.sleep(0.5)
 
 button_thread = threading.Thread(target=check_button)
