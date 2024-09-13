@@ -5,7 +5,7 @@ sensTouch = 5
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(sensTouch, GPIO.IN)
-GPIO.setup(sensDH, GPIO.IN)
+
         
 while True:
     if GPIO.input(sensTouch) == 1:
