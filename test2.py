@@ -3,6 +3,8 @@ import threading
 import time
 import Adafruit_DHT
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(ledRed, GPIO.OUT, initial=GPIO.LOW)
 buttonPin = 25
 
 ledRed = 17
