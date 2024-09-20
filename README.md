@@ -2,7 +2,7 @@
 
 Raspberry Pi4를 하드웨어의 기반으로 둔 수업입니다.
 
-![참치 이미지](6492BB6B-AA5B-4EC5-8C0B-A08DADC49F11.png)
+![참치 이미지](G4TUNA.png)
 
 ## 🐟 What is that?
 
