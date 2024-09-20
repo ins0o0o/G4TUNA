@@ -7,6 +7,9 @@ import time
 GPIO.setmode(GPIO.BCM)
 sensDH = 6
 
+humidity = 0
+temperature = 0
+
 GPIO.setup(sensDH, GPIO.IN)
 def readDH():
     sensor = Adafruit_DHT.DHT11  # sensor 객체 생성

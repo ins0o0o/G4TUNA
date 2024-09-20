@@ -17,7 +17,7 @@ html_page = '''
     </head>
     <body>
         <h1>Flag Checker</h1>
-        <p>현재 Flag 값: {{ flag }}</p>
+        <p>{% if { flag }==1 %} 터치됨 {% else %} 터치안됨 {% endif %}</p>
         <p>이 페이지는 1초마다 새로고침됩니다.</p>
     </body>
     </html>
@@ -30,7 +30,7 @@ def generate_flag_values():
             flag = 1
         else:
             flag = 0
-        time.sleep(5)
+        time.sleep(0.1)
 
 thread = threading.Thread(target=generate_flag_values)
 thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
