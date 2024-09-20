@@ -176,8 +176,8 @@ html_page = '''
             var stopSlider = document.getElementById('stopSlider');
             var breakSlider = document.getElementById('breakSlider');
             
-            // 온도가 24도 이상이면 temperature slider ON
-            if (temperature >= 24 && systemOn) {
+            // 온도가 28도 이상이면 temperature slider ON
+            if (temperature >= 28 && systemOn) {
                 tempSlider.checked = true;
             } else if (systemOn) {
                 tempSlider.checked = false;
