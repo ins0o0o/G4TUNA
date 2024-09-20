@@ -91,25 +91,37 @@ distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종
 distance_thread.start()
 
 def LEDONOFF():
-    global button_states
     while True:
-        if button_states['button1'] == True:
-                if distance < 10:
-                    button_states['button2'] = False
-                    GPIO.output(ledRed, 1)
-                    button_states['button3'] = True
-                    GPIO.output(ledGreen, 0)
-                elif distance > 10:
-                    button_states['button2'] = True
-                    GPIO.output(ledRed, 0)
-                    button_states['button3'] = False
-                    GPIO.output(ledGreen, 1)
+        if button_states['button2'] == True:
+                GPIO.ouput(ledRed,1)
+        else:
+                GPIO.ouput(ledRed,0)
+        if button_states['button3'] == True:
+                GPIO.ouput(ledGreen,1)
+        else:
+                GPIO.ouput(ledGreen,0)
         time.sleep(0.2)
 
 LED_thread = threading.Thread(target=LEDONOFF)
 LED_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
 LED_thread.start()
 
+
+def AutoToggle():
+    global button_states
+    while True:
+        if button_states['button1'] == True:
+                if distance < 10:
+                    button_states['button2'] = False
+                    button_states['button3'] = True
+                elif distance > 10:
+                    button_states['button2'] = True
+                    button_states['button3'] = False
+        time.sleep(0.2)
+
+auto_thread = threading.Thread(target=LEDONOFF)
+auto_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
+auto_thread.start()
 
 app = Flask(__name__)
 
@@ -182,7 +194,7 @@ def index():
         </style>
     </head>
     <body>
-        <h1>G4TUNA WEEEK3</h1>
+        <h1>G4TUNA WEEK3</h1>
         <p>거리: {{distance}} </p>
         <p>온도: {{temperature}} </p>
 
