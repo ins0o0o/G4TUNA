@@ -91,13 +91,11 @@ distance_thread = threading.Thread(target=measure_distance)
 distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
 distance_thread.start()
 
-html_page = '''
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="1">
     <title>Distance and Temperature Checker</title>
     <style>
         /* 스위치 스타일 */
@@ -200,18 +198,20 @@ html_page = '''
                 stopImage.style.display = 'block';
                 breakImage.style.display = 'block';
                 warningText.style.display = 'block';
+                window.location.href = "/on"; // Navigate to "/on" when switched ON
             } else {
                 // Toggle OFF: Display based on conditions
                 temperatureImage.style.display = temperature >= 24 ? 'block' : 'none';
                 stopImage.style.display = distance < 50 ? 'block' : 'none';
                 breakImage.style.display = distance >= 50 ? 'block' : 'none';
                 warningText.style.display = distance < 10 ? 'block' : 'none';
+                window.location.href = "/off"; // Navigate to "/off" when switched OFF
             }
         });
     </script>
 </body>
 </html>
-'''
+
 
 app = Flask(__name__)
 
