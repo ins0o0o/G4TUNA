@@ -52,8 +52,15 @@ def measure_DH():
     sensor = Adafruit_DHT.DHT11
     global temperature
     global humidity
-    humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
-    time.sleep(0.2)
+    while True:
+        humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
+        if temperature < 25:
+            button_states['button4'] = True
+            GPIO.output[ledYellow, 1]
+        else:
+            button_states['button4'] = False
+            GPIO.output[ledYellow, 0]
+        time.sleep(0.2)
 
 DH_thread = threading.Thread(target=measure_DH)
 DH_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 종료되도록 설정
