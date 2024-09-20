@@ -1,9 +1,9 @@
 from flask import Flask, render_template_string
+import RPi.GPIO as GPIO
 import threading
 import time
-import random
 
-app = Flask(__name__)
+sensTouch = 5
 flag = 0
 
 html_page = '''
@@ -26,15 +26,20 @@ html_page = '''
 def generate_flag_values():
     global flag
     while True:
-        # 라즈베리파이의 연산을 통해 flag 값을 결정한다고 가정
-        flag = random.randint(0, 10)  # 이 부분을 라즈베리파이 연산으로 대체
-        time.sleep(5)  # 5초마다 flag 값 전송 (필요에 맞게 조정 가능)
+        if GPIO.input(sensTouch) == 1:
+            flag = 1
+        else:
+            flag = 0
+        time.sleep(5)
+
+thread = threading.Thread(target=generate_flag_values)
+thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
+thread.start()
+
+app = Flask(__name__)
 
 @app.route('/')
 def index():
-    thread = threading.Thread(target=generate_flag_values)
-    thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
-    thread.start()
     return render_template_string(html_page, flag=flag)
 
 if __name__ == '__main__':
