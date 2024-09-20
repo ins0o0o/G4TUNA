@@ -6,10 +6,9 @@ import Adafruit_DHT
 
 app = Flask(__name__)
 
-# GPIO 핀 설정
-ledRed = 17      # 브레이크
-ledYello = 27    # 에어컨
-ledGreen = 22    # 액셀
+ledRed = 17
+ledYello = 27
+ledGreen = 22
 
 sensTouch = 5
 sensDH = 6
@@ -26,11 +25,14 @@ GPIO.setup(sensDH, GPIO.IN)
 GPIO.setup(DistanceTrig, GPIO.OUT)
 GPIO.setup(DistanceEcho, GPIO.IN)
 
+AutoAccBrk = 0  # 차간 거리 유지 ON / OFF
+AutoAC = 0      # 에어컨 자동 ON / OFF
+
 humidity = 0
 temperature = 0
 distance = 0
+warning_message = ""
 
-# HTML 페이지
 html_page = '''
 <!DOCTYPE html>
 <html lang="ko">
@@ -54,6 +56,10 @@ html_page = '''
             display: flex;
             justify-content: space-around;
             width: 100%;
+        }
+        .image-slider-container img {
+            width: 100px;
+            height: 100px;
         }
         .slider-container {
             text-align: center;
@@ -110,29 +116,42 @@ html_page = '''
     <div class="container">
         <h1>Embeded CAR Controller</h1>
         <div class="row">
+            <label for="systemSlider">Automation</label>
+            <label class="switch">
+                <input type="checkbox" id="systemSlider" checked onchange="toggleSystem()" />
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="row">
             <p>온도: <span id="temperature">0</span>°C</p>
             <p>습도: <span id="humidity">0</span>%</p>
             <p>거리: <span id="distance">0</span>cm</p>
         </div>
         <div class="image-slider-container">
             <div class="slider-container">
-                <p>에어컨</p>
+                <p>에어컨</p> <!-- 에어컨 표시 -->
+                <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
+                <br>
                 <label class="switch">
-                    <input type="checkbox" id="acSlider" onchange="toggleAC()" />
+                    <input type="checkbox" id="temperatureSlider" disabled>
                     <span class="slider"></span>
                 </label>
             </div>
             <div class="slider-container">
-                <p>브레이크</p>
+                <p>브레이크</p> <!-- 브레이크 표시 -->
+                <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP">
+                <br>
                 <label class="switch">
-                    <input type="checkbox" id="brakeSlider" onchange="toggleBrake()" />
+                    <input type="checkbox" id="stopSlider" disabled>
                     <span class="slider"></span>
                 </label>
             </div>
             <div class="slider-container">
-                <p>액셀</p>
+                <p>엑셀</p> <!-- 엑셀 표시 -->
+                <img src="{{ url_for('static', filename='break.png') }}" alt="Break">
+                <br>
                 <label class="switch">
-                    <input type="checkbox" id="accelSlider" onchange="toggleAccel()" />
+                    <input type="checkbox" id="breakSlider" disabled>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -140,19 +159,41 @@ html_page = '''
     </div>
 
     <script>
-        function toggleAC() {
-            var acSlider = document.getElementById('acSlider').checked;
-            fetch('/toggle_ac?status=' + acSlider);
+        var systemOn = true; // 시작 상태를 ON으로 설정
+
+        function toggleSystem() {
+            systemOn = !systemOn;
+            if (systemOn) {
+                document.getElementById('temperatureSlider').disabled = true;
+                document.getElementById('stopSlider').disabled = true;
+                document.getElementById('breakSlider').disabled = true;
+            } else {
+                document.getElementById('temperatureSlider').disabled = false;
+                document.getElementById('stopSlider').disabled = false;
+                document.getElementById('breakSlider').disabled = false;
+            }
         }
 
-        function toggleBrake() {
-            var brakeSlider = document.getElementById('brakeSlider').checked;
-            fetch('/toggle_brake?status=' + brakeSlider);
-        }
+        function updateSliders(temperature, distance) {
+            var tempSlider = document.getElementById('temperatureSlider');
+            var stopSlider = document.getElementById('stopSlider');
+            var breakSlider = document.getElementById('breakSlider');
+            
+            // 온도가 28도 이상이면 temperature slider ON
+            if (temperature >= 28 && systemOn) {
+                tempSlider.checked = true;
+            } else if (systemOn) {
+                tempSlider.checked = false;
+            }
 
-        function toggleAccel() {
-            var accelSlider = document.getElementById('accelSlider').checked;
-            fetch('/toggle_accel?status=' + accelSlider);
+            // 거리가 25cm 미만일 때 STOP slider ON
+            if (distance < 25 && systemOn) {
+                stopSlider.checked = true;
+                breakSlider.checked = false;
+            } else if (systemOn) {
+                stopSlider.checked = false;
+                breakSlider.checked = true;
+            }
         }
 
         function fetchSensorData() {
@@ -162,6 +203,7 @@ html_page = '''
                 document.getElementById('temperature').innerText = data.temperature;
                 document.getElementById('humidity').innerText = data.humidity;
                 document.getElementById('distance').innerText = data.distance;
+                updateSliders(data.temperature, data.distance);
             })
             .catch(error => console.error('Error fetching sensor data:', error));
         }
@@ -172,26 +214,59 @@ html_page = '''
 </html>
 '''
 
-# GPIO 제어 함수들
-@app.route('/toggle_ac')
-def toggle_ac():
-    status = request.args.get('status') == 'true'
-    GPIO.output(ledYello, GPIO.HIGH if status else GPIO.LOW)  # 에어컨 슬라이더 상태에 따른 LED 제어
-    return jsonify({'status': status})
+def check_touch():
+    global flag
+    while True:
+        GPIO.wait_for_edge(sensTouch, GPIO.FALLING)
+        flag = 1 - flag
+        if flag == 1:
+            print("\n<<< Process Start!! >>>\n")
+        else:
+            print("\n<<< Process Terminated >>>\n")
+        time.sleep(0.5)
 
-@app.route('/toggle_brake')
-def toggle_brake():
-    status = request.args.get('status') == 'true'
-    GPIO.output(ledRed, GPIO.HIGH if status else GPIO.LOW)  # 브레이크 슬라이더 상태에 따른 LED 제어
-    return jsonify({'status': status})
+touch_thread = threading.Thread(target=check_touch)
+touch_thread.daemon = True
+touch_thread.start()
 
-@app.route('/toggle_accel')
-def toggle_accel():
-    status = request.args.get('status') == 'true'
-    GPIO.output(ledGreen, GPIO.HIGH if status else GPIO.LOW)  # 액셀 슬라이더 상태에 따른 LED 제어
-    return jsonify({'status': status})
+def readDH():
+    sensor = Adafruit_DHT.DHT11
+    global humidity
+    global temperature
+    while True:
+        humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
+        time.sleep(0.5)
 
-# 센서 데이터를 JSON 형태로 반환
+DH_thread = threading.Thread(target=readDH)
+DH_thread.daemon = True
+DH_thread.start()
+
+def measure_distance():
+    global distance
+    while True:
+        GPIO.output(DistanceTrig, GPIO.LOW)
+        time.sleep(0.1)
+        GPIO.output(DistanceTrig, GPIO.HIGH)
+        time.sleep(0.00001)
+        GPIO.output(DistanceTrig, GPIO.LOW)
+        
+        while GPIO.input(DistanceEcho) == GPIO.LOW:
+            pulse_start = time.time()
+        while GPIO.input(DistanceEcho) == GPIO.HIGH:
+            pulse_end = time.time()
+        
+        pulse_duration = pulse_end - pulse_start
+        distance = int(pulse_duration * 34300 / 2)
+        time.sleep(0.5)
+
+distance_thread = threading.Thread(target=measure_distance)
+distance_thread.daemon = True
+distance_thread.start()
+
+@app.route('/')
+def index():
+    return render_template_string(html_page)
+
 @app.route('/sensor_data')
 def sensor_data():
     return jsonify({
@@ -201,4 +276,4 @@ def sensor_data():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
