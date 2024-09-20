@@ -125,7 +125,7 @@ html_page = '''
         <div class="row">
             <p>온도: <span id="temperature">0</span>°C</p>
             <p>습도: <span id="humidity">0</span>%</p>
-            <p>거리: <span id="int(distance)">0</span>cm</p>
+            <p>거리: <span id="distance">0</span>cm</p>
         </div>
         <div class="image-slider-container">
             <div class="slider-container">
@@ -253,7 +253,7 @@ def measure_distance():
             pulse_end = time.time()
         
         pulse_duration = pulse_end - pulse_start
-        distance = pulse_duration * 34300 / 2
+        distance = int(pulse_duration * 34300 / 2)
         time.sleep(0.5)
 
 distance_thread = threading.Thread(target=measure_distance)
