@@ -88,7 +88,7 @@ distance_thread = threading.Thread(target=measure_distance)
 distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
 distance_thread.start()
 
-# HTML 페이지 템플릿
+html_page = '''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -208,8 +208,8 @@ distance_thread.start()
 </body>
 </html>
 
-'''
 
+'''
 app = Flask(__name__)
 
 # 메인 페이지 라우트
