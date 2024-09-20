@@ -29,6 +29,7 @@ AutoAC = 0      # 에어컨 자동 ON / OFF
 humidity = 0
 temperature = 0
 distance = 0
+warning_message = ""
 
 def check_touch():
     global flag
