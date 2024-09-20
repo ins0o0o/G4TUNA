@@ -111,11 +111,11 @@ html_page = '''
     <p>현재 습도: {{ humidity }}%</p>
 
     {% if temperature < 30 %}
-    <img src="{{ url_for('static', filename='gun.png') }}" alt="Gun Image" class="image-left">
+    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Gun Image" class="image-left">
     {% endif %}
 
     {% if distance >= 50 %}
-    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" class="image-center">
+    <img src="{{ url_for('static', filename='STOP.png') }}" alt="Temperature Image" class="image-center">
     {% elif distance < 50 %}
     <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" class="image-right">
     {% endif %}
