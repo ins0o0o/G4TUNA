@@ -3,11 +3,12 @@ import RPi.GPIO as GPIO
 
 # GPIO 설정
 GPIO.setmode(GPIO.BCM)
-ledPin = [17, 27]
-ledStates = [0, 0]
+ledPin = [17, 27, 22]
+ledStates = [0, 0, 0]
 
 GPIO.setup(ledPin[0], GPIO.OUT)
 GPIO.setup(ledPin[1], GPIO.OUT)
+GPIO.setup(ledPin[2], GPIO.OUT)
 
 # LED 상태 업데이트 함수
 def updateLeds():
@@ -35,6 +36,11 @@ html_page = '''
             <b>LED2:</b> 
             <a href="{{ url_for('ledswitch', LEDN=1, state=1) }}"><input type="button" value="ON"></a>
             <a href="{{ url_for('ledswitch', LEDN=1, state=0) }}"><input type="button" value="OFF"></a>
+        </p>
+        <p>
+            <b>LED3:</b> 
+            <a href="{{ url_for('ledswitch', LEDN=2, state=1) }}"><input type="button" value="ON"></a>
+            <a href="{{ url_for('ledswitch', LEDN=2, state=0) }}"><input type="button" value="OFF"></a>
         </p>
     </div>
 </body>
