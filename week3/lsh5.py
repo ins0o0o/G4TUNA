@@ -84,16 +84,14 @@ def measure_distance():
         if button_states['button1'] == True:
             if distance < 10:
                 button_states['button2'] = False
-                GPIO.output(ledRed, GPIO.HIGH)
+                GPIO.output(ledRed, 1)
                 button_states['button3'] = True
-                GPIO.output(ledGreen, GPIO.LOW)
+                GPIO.output(ledGreen, 0)
             elif distance > 10:
                 button_states['button2'] = True
-                GPIO.output(ledRed, GPIO.LOW)
+                GPIO.output(ledRed, 0)
                 button_states['button3'] = False
-                GPIO.output(ledGreen, GPIO.HIGH)
-
-        time.sleep(0.2)
+                GPIO.output(ledGreen, 1)
 
 measure_thread = threading.Thread(target=measure_distance)
 measure_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
