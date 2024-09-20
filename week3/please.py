@@ -178,33 +178,22 @@ html_page = '''
             var tempSlider = document.getElementById('temperatureSlider');
             var stopSlider = document.getElementById('stopSlider');
             var breakSlider = document.getElementById('breakSlider');
-
+            
             // 온도가 28도 이상이면 temperature slider ON
             if (temperature >= 28 && systemOn) {
                 tempSlider.checked = true;
-                toggleLed('yellow', 'on');
             } else if (systemOn) {
                 tempSlider.checked = false;
-                toggleLed('yellow', 'off');
             }
 
             // 거리가 25cm 미만일 때 STOP slider ON
             if (distance < 25 && systemOn) {
                 stopSlider.checked = true;
-                toggleLed('red', 'on');
-                toggleLed('green', 'off');
+                breakSlider.checked = false;
             } else if (systemOn) {
                 stopSlider.checked = false;
-                toggleLed('red', 'off');
-                toggleLed('green', 'on');
+                breakSlider.checked = true;
             }
-        }
-
-        function toggleLed(color, state) {
-            fetch(`/toggle_led/${color}/${state}`)
-            .then(response => response.json())
-            .then(data => console.log(`LED ${color} is now ${state}`))
-            .catch(error => console.error('Error toggling LED:', error));
         }
 
         function fetchSensorData() {
@@ -286,17 +275,5 @@ def sensor_data():
         'distance': distance
     })
 
-@app.route('/toggle_led/<color>/<state>')
-def toggle_led(color, state):
-    if color == 'red':
-        GPIO.output(ledRed, GPIO.HIGH if state == 'on' else GPIO.LOW)
-    elif color == 'yellow':
-        GPIO.output(ledYello, GPIO.HIGH if state == 'on' else GPIO.LOW)
-    elif color == 'green':
-        GPIO.output(ledGreen, GPIO.HIGH if state == 'on' else GPIO.LOW)
-    return jsonify({'status': 'success'})
-
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-
