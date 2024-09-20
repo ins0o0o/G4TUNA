@@ -68,6 +68,8 @@ DH_thread.start()
 
 def measure_distance():
     global distance
+    global temperature
+    global humidity
     # Trig 핀을 LOW로 설정하고 짧은 시간 대기
     while True:
         GPIO.output(DistanceTrig, GPIO.LOW)
