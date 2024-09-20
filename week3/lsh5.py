@@ -56,7 +56,7 @@ def measure_DH():
     while True:
         humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
         if button_states['button4'] == True:
-            if temperature < 25:
+            if temperature > 25:
                 button_states['button5'] = True
             else:
                 button_states['button5'] = False
