@@ -28,17 +28,17 @@ html_page = '''
     <div style="padding-left:20px;">
         <h3>LED1, LED2</h3>
         <p>
-            <b>LED1: {% if ledStates[0]==1 %} ON {% else %} OFF</b> 
+            <b>LED1: {% if ledStates[0]==1 %} ON {% else %} OFF {% endif %}</b> 
             <a href="{{ url_for('ledswitch', LEDN=0, state=1) }}"><input type="button" value="ON"></a>
             <a href="{{ url_for('ledswitch', LEDN=0, state=0) }}"><input type="button" value="OFF"></a>
         </p>
         <p>
-            <b>LED2: {% if ledStates[1]==1 %} ON {% else %} OFF</b> 
+            <b>LED2: {% if ledStates[1]==1 %} ON {% else %} OFF {% endif %}</b> 
             <a href="{{ url_for('ledswitch', LEDN=1, state=1) }}"><input type="button" value="ON"></a>
             <a href="{{ url_for('ledswitch', LEDN=1, state=0) }}"><input type="button" value="OFF"></a>
         </p>
         <p>
-            <b>LED3: {% if ledStates[2]==1 %} ON {% else %} OFF</b> 
+            <b>LED3: {% if ledStates[2]==1 %} ON {% else %} OFF {% endif %}</b> 
             <a href="{{ url_for('ledswitch', LEDN=2, state=1) }}"><input type="button" value="ON"></a>
             <a href="{{ url_for('ledswitch', LEDN=2, state=0) }}"><input type="button" value="OFF"></a>
         </p>
