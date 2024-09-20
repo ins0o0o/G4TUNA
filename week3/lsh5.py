@@ -82,21 +82,21 @@ def measure_distance():
             distance = pulse_duration * 34300 / 2
 
         if distance < 10:
-            button_states['button2'] = True
+            button_states['button2'] = False
             GPIO.output(ledRed, GPIO.HIGH)
-            button_states['button3'] = False
+            button_states['button3'] = True
             GPIO.output(ledGreen, GPIO.LOW)
         else:
-            button_states['button2'] = False
+            button_states['button2'] = True
             GPIO.output(ledRed, GPIO.LOW)
-            button_states['button3'] = True
+            button_states['button3'] = False
             GPIO.output(ledGreen, GPIO.HIGH)
 
         time.sleep(0.5)
 
-distance_thread = threading.Thread(target=measure_distance)
-distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
-distance_thread.start()
+measure_thread = threading.Thread(target=measure_distance)
+measure_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
+measure_thread.start()
 
 app = Flask(__name__)
 
@@ -108,7 +108,7 @@ def index():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="refresh" content="1">
+        <meta http-equiv="refresh" content="0.5">
         <title>Slide Toggle Buttons</title>
         <style>
             .switch {
