@@ -2,7 +2,7 @@ from flask import Flask
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
-ledPin = [18, 23]
+ledPin = [17, 27]
 ledStates = [0, 0]
 
 GPIO.setup(ledPin[0], GPIO.OUT)
