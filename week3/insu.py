@@ -81,7 +81,7 @@ html_page = '''
         /* 이미지 위치 설정 */
         .image-temperature {
             position: absolute;
-            top: 500px; /* 습도 값 아래 100px */
+            top: 250px; /* 온도 이미지 위치 */
             left: 0; /* 왼쪽 가장자리 */
             width: 100px;
             height: 100px;
@@ -89,7 +89,7 @@ html_page = '''
 
         .image-stop {
             position: absolute;
-            top: 500px; /* STOP 이미지 위치 */
+            top: 250px; /* STOP 이미지 위치 */
             left: 300px; /* temperature.png 기준 오른쪽 300px */
             width: 100px;
             height: 100px;
@@ -97,10 +97,19 @@ html_page = '''
 
         .image-break {
             position: absolute;
-            top: 500px; /* break 이미지 위치 */
+            top: 250px; /* break 이미지 위치 */
             left: 600px; /* STOP.png 기준 오른쪽 300px */
             width: 100px;
             height: 100px;
+        }
+
+        .warning-text {
+            position: absolute;
+            top: 360px; /* STOP 이미지 아래에 위치 */
+            left: 300px; /* STOP 이미지와 같은 위치 */
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -117,13 +126,14 @@ html_page = '''
 
     {% if distance < 50 %}
     <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" class="image-stop">
+    <p class="warning-text">{{ warning_message }}</p>
     {% elif distance >= 50 %}
     <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" class="image-break">
     {% endif %}
 
-    <p style="color: red;">{{ warning_message }}</p>
 </body>
 </html>
+
 
 '''
 
