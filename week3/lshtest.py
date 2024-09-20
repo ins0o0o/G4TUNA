@@ -22,9 +22,6 @@ button_states = {
     'button5': False
 }
 
-AutoAccBrk = 0  # 차간 거리 유지 ON / OFF
-AutoAC = 0      # 에어컨 자동 ON / OFF
-
 humidity = 0
 temperature = 0
 distance = 0
@@ -66,9 +63,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    #GPIO.output(ledGreen, button_states['button2'])
-    #GPIO.output(ledRed, button_states['button3'])
-    #GPIO.output(ledYellow, button_states['button4'])
     html = '''
     <!DOCTYPE html>
     <html lang="en">
@@ -201,14 +195,12 @@ def index():
     
     return render_template_string(html, button_states=button_states, distance=distance, temperature=temperature)
 
-# 버튼 1의 상태를 토글하는 라우트
 @app.route('/toggle_button1', methods=['POST'])
 def toggle_button1():
     global button_states
     button_states['button1'] = not button_states['button1']  # 상태 토글
     return redirect(url_for('index'))
 
-# 버튼 2의 상태를 토글하는 라우트
 @app.route('/toggle_button2', methods=['POST'])
 def toggle_button2():
     global button_states
@@ -216,7 +208,6 @@ def toggle_button2():
     button_states['button2'] = not button_states['button2']
     return redirect(url_for('index'))
 
-# 버튼 3의 상태를 토글하는 라우트
 @app.route('/toggle_button3', methods=['POST'])
 def toggle_button3():
     global button_states
@@ -224,7 +215,6 @@ def toggle_button3():
     button_states['button3'] = not button_states['button3']
     return redirect(url_for('index'))
 
-# 버튼 4의 상태를 토글하는 라우트
 @app.route('/toggle_button4', methods=['POST'])
 def toggle_button4():
     global button_states
