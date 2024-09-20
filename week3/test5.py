@@ -215,7 +215,7 @@ app = Flask(__name__)
 # 메인 페이지 라우트
 @app.route('/')
 def index():
-    return render_template_string(html_page)
+    return render_template_string(html_page, distance=int(distance), temperature=int(temperature), humidity=int(humidity), warning_message=warning_message)
 
 
 if __name__ == '__main__':
