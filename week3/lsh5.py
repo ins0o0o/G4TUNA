@@ -38,7 +38,7 @@ temperature = 0
 distance = 0
 
 def check_touch():
-    global button_states['button1']
+    global button_states
     while True:
         GPIO.wait_for_edge(sensTouch, GPIO.FALLING)  # 버튼이 눌렸을 때까지 대기 (FALLING 엣지 감지)
         button_states['button1'] = not button_states['button1']  # button_states['button1'] 값 토글
