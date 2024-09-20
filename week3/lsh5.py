@@ -56,7 +56,7 @@ def measure_distance():
     global humidity
     # Trig 핀을 LOW로 설정하고 짧은 시간 대기
     while True:
-        humidity, temperature = int(Adafruit_DHT.read_retry(sensor, sensDH))
+        humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
 
         if button_states['button1'] == True:
             GPIO.output(DistanceTrig, GPIO.LOW)
@@ -79,7 +79,7 @@ def measure_distance():
             pulse_duration = pulse_end - pulse_start
             
             # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
-            distance = int(pulse_duration * 34300 / 2)
+            distance = pulse_duration * 34300 / 2
 
         if distance < 10:
             button_states['button2'] = True
