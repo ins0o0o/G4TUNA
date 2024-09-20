@@ -66,32 +66,27 @@ html_page = '''
         }
         .slider {
             -webkit-appearance: none;
+            appearance: none;
             width: 50px;
             height: 25px;
-            background: #ddd;
+            background: #ccc;
+            cursor: pointer;
             outline: none;
-            opacity: 0.7;
-            -webkit-transition: .2s;
-            transition: opacity .2s;
-        }
-        .slider:checked {
-            background-color: #4CAF50;
         }
         .slider:before {
-            position: absolute;
             content: "";
-            height: 20px;
+            position: absolute;
             width: 20px;
+            height: 20px;
             left: 4px;
-            bottom: 3px;
+            bottom: 2px;
             background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
+            transition: 0.4s;
+            border: 1px solid #ccc;
         }
         .slider:checked:before {
-            -webkit-transform: translateX(26px);
-            -ms-transform: translateX(26px);
             transform: translateX(26px);
+            background-color: #4CAF50;
         }
     </style>
 </head>
@@ -131,15 +126,10 @@ html_page = '''
 
         function toggleSystem() {
             systemOn = !systemOn;
-            if (systemOn) {
-                document.getElementById('temperatureSlider').disabled = true;
-                document.getElementById('stopSlider').disabled = true;
-                document.getElementById('breakSlider').disabled = true;
-            } else {
-                document.getElementById('temperatureSlider').disabled = false;
-                document.getElementById('stopSlider').disabled = false;
-                document.getElementById('breakSlider').disabled = false;
-            }
+            var sliders = document.querySelectorAll('.slider');
+            sliders.forEach(function(slider) {
+                slider.disabled = systemOn;
+            });
         }
 
         function updateSliders(temperature, distance) {
@@ -180,6 +170,7 @@ html_page = '''
     </script>
 </body>
 </html>
+
 '''
 
 
