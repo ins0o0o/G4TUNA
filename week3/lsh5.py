@@ -59,7 +59,6 @@ def measure_DH():
             GPIO.output[ledYellow, 1]
         else:
             button_states['button4'] = False
-            GPIO.output[ledYellow, 0]
         time.sleep(0.2)
 
 DH_thread = threading.Thread(target=measure_DH)
@@ -91,32 +90,7 @@ def measure_distance():
         
         # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
         distance = pulse_duration * 34300 / 2
-        time.sleep(0.2)
-
-distance_thread = threading.Thread(target=measure_distance)
-distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
-distance_thread.start()
-
-def LEDONOFF():
-    while True:
-        if button_states['button2'] == True:
-                GPIO.ouput(ledGreen,1)
-        else:
-                GPIO.ouput(ledGreen,0)
-        if button_states['button3'] == True:
-                GPIO.ouput(ledRed,1)
-        else:
-                GPIO.ouput(ledRed,0)
-        time.sleep(0.2)
-
-LED_thread = threading.Thread(target=LEDONOFF)
-LED_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
-LED_thread.start()
-
-
-def AutoToggle():
-    global button_states
-    while True:
+        
         if button_states['button1'] == True:
                 if distance < 10:
                     button_states['button2'] = False
@@ -126,14 +100,17 @@ def AutoToggle():
                     button_states['button3'] = False
         time.sleep(0.2)
 
-auto_thread = threading.Thread(target=AutoToggle)
-auto_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
-auto_thread.start()
+distance_thread = threading.Thread(target=measure_distance)
+distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
+distance_thread.start()
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
+    GPIO.output(ledGreen, button_states['button2'])
+    GPIO.output(ledRed, button_states['button3'])
+    GPIO.output(ledYellow, button_states['button4'])
     html = '''
     <!DOCTYPE html>
     <html lang="en">
