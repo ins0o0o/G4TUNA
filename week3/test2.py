@@ -17,7 +17,7 @@ html_page = '''
     </head>
     <body>
         <h1>Flag Checker</h1>
-        <p>{% if { flag }==1 %} 터치됨 {% else %} 터치안됨 {% endif %}</p>
+        <p>{% if flag==1 %} 터치됨 {% else %} 터치안됨 {% endif %}</p>
         <p>이 페이지는 1초마다 새로고침됩니다.</p>
     </body>
     </html>
