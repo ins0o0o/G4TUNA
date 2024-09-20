@@ -91,6 +91,7 @@ distance_thread = threading.Thread(target=measure_distance)
 distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
 distance_thread.start()
 
+html_page = '''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -212,6 +213,7 @@ distance_thread.start()
 </body>
 </html>
 
+'''
 
 app = Flask(__name__)
 
