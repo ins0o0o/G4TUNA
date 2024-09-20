@@ -51,6 +51,7 @@ touch_thread.start()
 
 def measure_distance():
     sensor = Adafruit_DHT.DHT11
+    global button_states
     global distance
     global temperature
     global humidity
@@ -58,39 +59,39 @@ def measure_distance():
     while True:
         humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
 
-        if button_states['button1'] == True:
-            GPIO.output(DistanceTrig, GPIO.LOW)
-            time.sleep(0.1)
-            
-            # Trig 핀에 짧은 펄스(10μs) 발생
-            GPIO.output(DistanceTrig, GPIO.HIGH)
-            time.sleep(0.00001)  # 10μs 대기
-            GPIO.output(DistanceTrig, GPIO.LOW)
-            
-            # Echo 핀이 HIGH로 될 때까지 대기
-            while GPIO.input(DistanceEcho) == GPIO.LOW:
-                pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
-            
-            # Echo 핀이 LOW로 될 때까지 대기
-            while GPIO.input(DistanceEcho) == GPIO.HIGH:
-                pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
-            
-            # 펄스 지속 시간 계산
-            pulse_duration = pulse_end - pulse_start
-            
-            # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
-            distance = pulse_duration * 34300 / 2
+        GPIO.output(DistanceTrig, GPIO.LOW)
+        time.sleep(0.1)
+        
+        # Trig 핀에 짧은 펄스(10μs) 발생
+        GPIO.output(DistanceTrig, GPIO.HIGH)
+        time.sleep(0.00001)  # 10μs 대기
+        GPIO.output(DistanceTrig, GPIO.LOW)
+        
+        # Echo 핀이 HIGH로 될 때까지 대기
+        while GPIO.input(DistanceEcho) == GPIO.LOW:
+            pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
+        
+        # Echo 핀이 LOW로 될 때까지 대기
+        while GPIO.input(DistanceEcho) == GPIO.HIGH:
+            pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
+        
+        # 펄스 지속 시간 계산
+        pulse_duration = pulse_end - pulse_start
+        
+        # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
+        distance = pulse_duration * 34300 / 2
 
-        if distance < 10:
-            button_states['button2'] = False
-            GPIO.output(ledRed, GPIO.HIGH)
-            button_states['button3'] = True
-            GPIO.output(ledGreen, GPIO.LOW)
-        elif distance > 10:
-            button_states['button2'] = True
-            GPIO.output(ledRed, GPIO.LOW)
-            button_states['button3'] = False
-            GPIO.output(ledGreen, GPIO.HIGH)
+        if button_states['button1'] == True:
+            if distance < 10:
+                button_states['button2'] = False
+                GPIO.output(ledRed, GPIO.HIGH)
+                button_states['button3'] = True
+                GPIO.output(ledGreen, GPIO.LOW)
+            elif distance > 10:
+                button_states['button2'] = True
+                GPIO.output(ledRed, GPIO.LOW)
+                button_states['button3'] = False
+                GPIO.output(ledGreen, GPIO.HIGH)
 
         time.sleep(0.2)
 
