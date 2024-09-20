@@ -87,3 +87,19 @@ def measure_distance():
 distance_thread = threading.Thread(target=measure_distance)
 distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
 distance_thread.start()
+
+# HTML 페이지 템플릿
+html_page = '''
+
+'''
+
+app = Flask(__name__)
+
+# 메인 페이지 라우트
+@app.route('/')
+def index():
+    return render_template_string(html_page, ledStates=ledStates)
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
