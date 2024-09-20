@@ -109,7 +109,7 @@ def index():
         'humidifier_status': 'OFF',# 제습기 상태
         'mode': 'AUTO'  # 'AUTO' 또는 'MANU' 모드
     }
-    return render_template('index.html', data=data)
+    return render_template('html_page', data=data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
