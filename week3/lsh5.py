@@ -42,30 +42,22 @@ def check_touch():
     while True:
         GPIO.wait_for_edge(sensTouch, GPIO.FALLING)  # 버튼이 눌렸을 때까지 대기 (FALLING 엣지 감지)
         button_states['button1'] = not button_states['button1']  # button_states['button1'] 값 토글
-        time.sleep(0.5)
+        time.sleep(0.2)
 
 touch_thread = threading.Thread(target=check_touch)
 touch_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 종료되도록 설정
 touch_thread.start()
 
 
-def readDH():
-    sensor = Adafruit_DHT.DHT11     # sensor 객체 생성
-    global humidity
-    global temperature
-    while True:                     #0.5초마다 온도와 습도 값을 불러옴
-        humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
-        time.sleep(0.5)
-
-DH_thread = threading.Thread(target=readDH)
-DH_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
-DH_thread.start()
-
-
 def measure_distance():
+    sensor = Adafruit_DHT.DHT11
     global distance
+    global temperature
+    global humidity
     # Trig 핀을 LOW로 설정하고 짧은 시간 대기
     while True:
+        humidity, temperature = int(Adafruit_DHT.read_retry(sensor, sensDH))
+
         if button_states['button1'] == True:
             GPIO.output(DistanceTrig, GPIO.LOW)
             time.sleep(0.1)
@@ -87,7 +79,7 @@ def measure_distance():
             pulse_duration = pulse_end - pulse_start
             
             # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
-            distance = pulse_duration * 34300 / 2
+            distance = int(pulse_duration * 34300 / 2)
 
         if distance < 10:
             button_states['button2'] = True
@@ -179,6 +171,7 @@ def index():
     <body>
         <h1>G4TUNA WEEEK3</h1>
         <p>거리: {{distance}} </p>
+        <p>온도: {{temperature}} </p>
 
         <form method="POST" action="/toggle_button1">
             <div class="switch-container">
@@ -220,7 +213,7 @@ def index():
                     onchange="this.form.submit()">
                     <span class="slider"></span>
                 </label>
-                <span class="label-text">온도: {{ temperature }}</span>
+                <span class="label-text">Air Conditional</span>
             </div>
         </form>
 
