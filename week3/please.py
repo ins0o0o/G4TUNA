@@ -52,17 +52,19 @@ html_page = '''
             justify-content: space-between;
             margin: 20px 0;
         }
-        .image-slider-container {
+        .sensor-data {
+            margin-top: 20px;
+        }
+        .images-row {
             display: flex;
             justify-content: space-around;
-            width: 100%;
-        }
-        .image-slider-container img {
-            width: 100px;
-            height: 100px;
+            width: 900px; /* Enough width to accommodate images and space */
         }
         .slider-container {
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 300px; /* Space between images */
         }
         .switch {
             position: relative;
@@ -114,28 +116,28 @@ html_page = '''
                 <span class="slider"></span>
             </label>
         </div>
-        <div class="row">
+        <div class="sensor-data">
             <p>온도: <span id="temperature">0</span>°C</p>
             <p>습도: <span id="humidity">0</span>%</p>
             <p>거리: <span id="distance">0</span>cm</p>
         </div>
-        <div class="image-slider-container">
+        <div class="images-row">
             <div class="slider-container">
-                <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
+                <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature" width="100" height="100">
                 <label class="switch">
                     <input type="checkbox" id="temperatureSlider" disabled>
                     <span class="slider"></span>
                 </label>
             </div>
             <div class="slider-container">
-                <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP">
+                <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP" width="100" height="100">
                 <label class="switch">
                     <input type="checkbox" id="stopSlider" disabled>
                     <span class="slider"></span>
                 </label>
             </div>
             <div class="slider-container">
-                <img src="{{ url_for('static', filename='break.png') }}" alt="Break">
+                <img src="{{ url_for('static', filename='break.png') }}" alt="Break" width="100" height="100">
                 <label class="switch">
                     <input type="checkbox" id="breakSlider" disabled>
                     <span class="slider"></span>
@@ -151,7 +153,7 @@ html_page = '''
             systemOn = !systemOn;
             var sliders = document.querySelectorAll('.switch input');
             sliders.forEach(function(slider) {
-                slider.disabled = systemOn;
+                slider.disabled = !systemOn; // Disable or enable based on system state
             });
         }
 
@@ -159,22 +161,10 @@ html_page = '''
             var tempSlider = document.getElementById('temperatureSlider');
             var stopSlider = document.getElementById('stopSlider');
             var breakSlider = document.getElementById('breakSlider');
-            
-            // 온도가 24도 이상이면 temperature slider ON
-            if (temperature >= 24 && systemOn) {
-                tempSlider.checked = true;
-            } else if (systemOn) {
-                tempSlider.checked = false;
-            }
 
-            // 거리가 25cm 미만일 때 STOP slider ON
-            if (distance < 25 && systemOn) {
-                stopSlider.checked = true;
-                breakSlider.checked = false;
-            } else if (systemOn) {
-                stopSlider.checked = false;
-                breakSlider.checked = true;
-            }
+            tempSlider.checked = temperature >= 24;
+            stopSlider.checked = distance < 25;
+            breakSlider.checked = distance >= 25;
         }
 
         function fetchSensorData() {
@@ -184,7 +174,9 @@ html_page = '''
                 document.getElementById('temperature').innerText = data.temperature;
                 document.getElementById('humidity').innerText = data.humidity;
                 document.getElementById('distance').innerText = data.distance;
-                updateSliders(data.temperature, data.distance);
+                if (systemOn) {
+                    updateSliders(data.temperature, data.distance);
+                }
             })
             .catch(error => console.error('Error fetching sensor data:', error));
         }
@@ -193,6 +185,7 @@ html_page = '''
     </script>
 </body>
 </html>
+
 
 
 '''
