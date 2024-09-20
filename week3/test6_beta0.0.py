@@ -96,20 +96,18 @@ html_page = '''
 </html>
 
 ''' 
-
 @app.route('/')
 def index():
-    # 이 데이터를 실제 센서나 시스템에서 받아오게 설정할 수 있습니다.
     data = {
-        'temperature': 37.5,  # 온도 (℃)
-        'humidity': 45.0,     # 습도 (%)
-        'intruder_distance': 3.5,  # 침입자 거리 (m)
-        'aircon_status': 'ON',     # 에어컨 상태
-        'heater_status': 'OFF',    # 히터 상태
-        'humidifier_status': 'OFF',# 제습기 상태
-        'mode': 'AUTO'  # 'AUTO' 또는 'MANU' 모드
+        'temperature': 37.5,
+        'humidity': 45.0,
+        'intruder_distance': 3.5,
+        'aircon_status': 'ON',
+        'heater_status': 'OFF',
+        'humidifier_status': 'OFF',
+        'mode': 'AUTO'
     }
-    return render_template('html_page', data=data)
+    return render_template('index.html', data=data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
