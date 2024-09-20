@@ -116,7 +116,7 @@ html_page = '''
     <div class="container">
         <h1>Embeded CAR Controller</h1>
         <div class="row">
-            <label for="systemSlider">전체 동작</label>
+            <label for="systemSlider">Automation</label>
             <label class="switch">
                 <input type="checkbox" id="systemSlider" checked onchange="toggleSystem()" />
                 <span class="slider"></span>
