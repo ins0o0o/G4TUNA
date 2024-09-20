@@ -78,27 +78,27 @@ html_page = '''
     <title>Distance and Temperature Checker</title>
     <meta http-equiv="refresh" content="1">
     <style>
-        .image-left {
+        /* 이미지 위치 설정 */
+        .image-temperature {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: calc(100px + {{ humidity }}px); /* 습도 값 아래 100px */
+            left: 0; /* 왼쪽 가장자리 */
             width: 100px;
             height: 100px;
         }
 
-        .image-center {
+        .image-stop {
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: calc(100px + {{ humidity }}px); /* 습도 값 아래 100px */
+            left: 300px; /* temperature.png 기준 오른쪽 300px */
             width: 100px;
             height: 100px;
         }
 
-        .image-right {
+        .image-break {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: calc(100px + {{ humidity }}px); /* 습도 값 아래 100px */
+            left: 600px; /* STOP.png 기준 오른쪽 300px */
             width: 100px;
             height: 100px;
         }
@@ -110,19 +110,15 @@ html_page = '''
     <p>현재 온도: {{ temperature }} °C</p>
     <p>현재 습도: {{ humidity }}%</p>
 
-    {% if temperature < 30 %}
-    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Gun Image" class="image-left">
-    {% endif %}
-
-    {% if distance >= 50 %}
-    <img src="{{ url_for('static', filename='STOP.png') }}" alt="Temperature Image" class="image-center">
-    {% elif distance < 50 %}
-    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" class="image-right">
-    {% endif %}
+    <!-- 습도 값 아래 이미지 배치 -->
+    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" class="image-temperature">
+    <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" class="image-stop">
+    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" class="image-break">
 
     <p style="color: red;">{{ warning_message }}</p>
 </body>
 </html>
+
 '''
 
 # Flask 라우트 설정
