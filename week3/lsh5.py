@@ -48,17 +48,21 @@ touch_thread = threading.Thread(target=check_touch)
 touch_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 종료되도록 설정
 touch_thread.start()
 
-
-def measure_distance():
+def measure_DH():
     sensor = Adafruit_DHT.DHT11
-    global button_states
-    global distance
     global temperature
     global humidity
+    humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
+    time.sleep(0.2)
+
+DH_thread = threading.Thread(target=measure_DH)
+DH_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 종료되도록 설정
+DH_thread.start()
+
+def measure_distance():
+    global distance
     # Trig 핀을 LOW로 설정하고 짧은 시간 대기
     while True:
-        humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
-
         GPIO.output(DistanceTrig, GPIO.LOW)
         time.sleep(0.1)
         
@@ -80,22 +84,32 @@ def measure_distance():
         
         # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
         distance = pulse_duration * 34300 / 2
+        time.sleep(0.2)
 
+distance_thread = threading.Thread(target=measure_distance)
+distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
+distance_thread.start()
+
+def LEDONOFF():
+    global button_states
+    while True:
         if button_states['button1'] == True:
-            if distance < 10:
-                button_states['button2'] = False
-                GPIO.output(ledRed, 1)
-                button_states['button3'] = True
-                GPIO.output(ledGreen, 0)
-            elif distance > 10:
-                button_states['button2'] = True
-                GPIO.output(ledRed, 0)
-                button_states['button3'] = False
-                GPIO.output(ledGreen, 1)
+                if distance < 10:
+                    button_states['button2'] = False
+                    GPIO.output(ledRed, 1)
+                    button_states['button3'] = True
+                    GPIO.output(ledGreen, 0)
+                elif distance > 10:
+                    button_states['button2'] = True
+                    GPIO.output(ledRed, 0)
+                    button_states['button3'] = False
+                    GPIO.output(ledGreen, 1)
+        time.sleep(0.2)
 
-measure_thread = threading.Thread(target=measure_distance)
-measure_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
-measure_thread.start()
+LED_thread = threading.Thread(target=LEDONOFF)
+LED_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
+LED_thread.start()
+
 
 app = Flask(__name__)
 
