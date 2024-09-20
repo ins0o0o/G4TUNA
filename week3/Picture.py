@@ -1,15 +1,15 @@
 from flask import Flask, render_template_string
 import threading
 import time
-import random
 import RPi.GPIO as GPIO
 
 app = Flask(__name__)
 
-# GPIO 핀 설정
-GPIO.setmode(GPIO.BCM)
 DistanceTrig = 23
 DistanceEcho = 24
+
+# GPIO 핀 설정
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(DistanceTrig, GPIO.OUT)
 GPIO.setup(DistanceEcho, GPIO.IN)
 
@@ -93,15 +93,16 @@ def update_distance():
             warning_message = ""  # 거리가 5m 이상일 때 경고 메시지 없음
         time.sleep(1)
 
+# 거리 측정 스레드 실행
+thread = threading.Thread(target=update_distance)
+thread.daemon = True
+thread.start()
+
+
 @app.route('/')
 def index():
     return render_template_string(html_page, distance=int(distance), warning_message=warning_message)
 
-if __name__ == '__main__':
-    # 거리 측정 스레드 실행
-    thread = threading.Thread(target=update_distance)
-    thread.daemon = True
-    thread.start()
-    
+if __name__ == '__main__':  
     # Flask 서버 실행
     app.run(host='0.0.0.0', port=5000, debug=True)
