@@ -68,8 +68,6 @@ DH_thread.start()
 
 def measure_distance():
     global distance
-    global temperature
-    global humidity
     # Trig 핀을 LOW로 설정하고 짧은 시간 대기
     while True:
         GPIO.output(DistanceTrig, GPIO.LOW)
@@ -109,6 +107,7 @@ def index():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="refresh" content="1">
         <title>Slide Toggle Buttons</title>
         <style>
             .switch {
@@ -169,7 +168,7 @@ def index():
         </style>
     </head>
     <body>
-        <h1>Slide Toggle Buttons</h1>
+        <h1>G4TUNA WEEEK3</h1>
 
         <form method="POST" action="/toggle_button1">
             <div class="switch-container">
