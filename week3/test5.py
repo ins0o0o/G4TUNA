@@ -63,27 +63,29 @@ DH_thread.start()
 def measure_distance():
     global distance
     # Trig 핀을 LOW로 설정하고 짧은 시간 대기
-    GPIO.output(DistanceTrig, GPIO.LOW)
-    time.sleep(0.1)
-    
-    # Trig 핀에 짧은 펄스(10μs) 발생
-    GPIO.output(DistanceTrig, GPIO.HIGH)
-    time.sleep(0.00001)  # 10μs 대기
-    GPIO.output(DistanceTrig, GPIO.LOW)
-    
-    # Echo 핀이 HIGH로 될 때까지 대기
-    while GPIO.input(DistanceEcho) == GPIO.LOW:
-        pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
-    
-    # Echo 핀이 LOW로 될 때까지 대기
-    while GPIO.input(DistanceEcho) == GPIO.HIGH:
-        pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
-    
-    # 펄스 지속 시간 계산
-    pulse_duration = pulse_end - pulse_start
-    
-    # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
-    distance = pulse_duration * 34300 / 2
+    while True:
+        GPIO.output(DistanceTrig, GPIO.LOW)
+        time.sleep(0.1)
+        
+        # Trig 핀에 짧은 펄스(10μs) 발생
+        GPIO.output(DistanceTrig, GPIO.HIGH)
+        time.sleep(0.00001)  # 10μs 대기
+        GPIO.output(DistanceTrig, GPIO.LOW)
+        
+        # Echo 핀이 HIGH로 될 때까지 대기
+        while GPIO.input(DistanceEcho) == GPIO.LOW:
+            pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
+        
+        # Echo 핀이 LOW로 될 때까지 대기
+        while GPIO.input(DistanceEcho) == GPIO.HIGH:
+            pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
+        
+        # 펄스 지속 시간 계산
+        pulse_duration = pulse_end - pulse_start
+        
+        # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
+        distance = pulse_duration * 34300 / 2
+        time.sleep(0.5)
 
 distance_thread = threading.Thread(target=measure_distance)
 distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
@@ -95,6 +97,7 @@ html_page = '''
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="1">
     <title>Distance and Temperature Checker</title>
     <style>
         /* 스위치 스타일 */
