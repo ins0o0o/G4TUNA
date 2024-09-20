@@ -4,6 +4,8 @@ import threading
 import time
 import Adafruit_DHT
 
+app = Flask(__name__)
+
 ledRed = 17
 ledYello = 27
 ledGreen = 22
