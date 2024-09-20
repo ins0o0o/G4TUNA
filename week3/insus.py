@@ -76,64 +76,97 @@ html_page = '''
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Distance and Temperature Checker</title>
-    <meta http-equiv="refresh" content="1">
     <style>
+        /* 스위치 스타일 */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
         /* 이미지 위치 설정 */
-        .image-temperature {
-            position: absolute;
-            top: 250px; /* 온도 이미지 위치 */
-            left: 0; /* 왼쪽 가장자리 */
+        .image {
+            display: none; /* 기본적으로 숨김 */
             width: 100px;
             height: 100px;
-        }
-
-        .image-stop {
             position: absolute;
-            top: 250px; /* STOP 이미지 위치 */
-            left: 300px; /* temperature.png 기준 오른쪽 300px */
-            width: 100px;
-            height: 100px;
-        }
-
-        .image-break {
-            position: absolute;
-            top: 250px; /* break 이미지 위치 */
-            left: 600px; /* STOP.png 기준 오른쪽 300px */
-            width: 100px;
-            height: 100px;
-        }
-
-        .warning-text {
-            position: absolute;
-            top: 360px; /* STOP 이미지 아래에 위치 */
-            left: 300px; /* STOP 이미지와 같은 위치 */
-            color: red;
-            font-size: 18px;
-            font-weight: bold;
+            top: 100px; /* 예시 위치 */
         }
     </style>
 </head>
 <body>
     <h1>Distance and Temperature Checker</h1>
+    <label class="switch">
+        <input type="checkbox" id="toggleSwitch">
+        <span class="slider"></span>
+    </label>
+
     <p>현재 거리: {{ distance }} cm</p>
     <p>현재 온도: {{ temperature }} °C</p>
     <p>현재 습도: {{ humidity }}%</p>
+    <p style="color: red;">{{ warning_message }}</p>
 
     <!-- 조건에 따라 이미지 배치 -->
-    {% if temperature < 30 %}
-    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" class="image-temperature">
-    {% endif %}
+    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" id="temperatureImage" class="image">
+    <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" id="stopImage" class="image">
+    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" id="breakImage" class="image">
 
-    {% if distance < 50 %}
-    <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" class="image-stop">
-    <p class="warning-text">{{ warning_message }}</p>
-    {% elif distance >= 50 %}
-    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" class="image-break">
-    {% endif %}
-
+    <script>
+        document.getElementById('toggleSwitch').addEventListener('change', function() {
+            var temperatureImage = document.getElementById('temperatureImage');
+            var stopImage = document.getElementById('stopImage');
+            var breakImage = document.getElementById('breakImage');
+            var distance = {{ distance }};
+            var temperature = {{ temperature }};
+            
+            if (this.checked) {
+                // Toggle ON: Show all images
+                temperatureImage.style.display = 'block';
+                stopImage.style.display = 'block';
+                breakImage.style.display = 'block';
+            } else {
+                // Toggle OFF: Show images based on conditions
+                temperatureImage.style.display = temperature < 30 ? 'block' : 'none';
+                stopImage.style.display = distance < 50 ? 'block' : 'none';
+                breakImage.style.display = distance >= 50 ? 'block' : 'none';
+            }
+        });
+    </script>
 </body>
 </html>
-
 
 '''
 
