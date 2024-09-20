@@ -110,20 +110,9 @@ html_page = '''
         input:checked + .slider:before {
             transform: translateX(26px);
         }
-        /* G4TUNA 이미지 위치 및 크기 설정 */
-        .logo {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 80px;
-            height: 80px;
-        }
     </style>
 </head>
 <body>
-    <!-- G4TUNA 로고 추가 -->
-    <img src="{{ url_for('static', filename='G4TUNA.png') }}" alt="G4TUNA Logo" class="logo">
-
     <div class="container">
         <h1>Embeded CAR Controller</h1>
         <div class="row">
@@ -140,7 +129,7 @@ html_page = '''
         </div>
         <div class="image-slider-container">
             <div class="slider-container">
-                <p>에어컨</p>
+                <p>에어컨</p> <!-- 에어컨 표시 -->
                 <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
                 <br>
                 <label class="switch">
@@ -149,7 +138,7 @@ html_page = '''
                 </label>
             </div>
             <div class="slider-container">
-                <p>브레이크</p>
+                <p>브레이크</p> <!-- 브레이크 표시 -->
                 <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP">
                 <br>
                 <label class="switch">
@@ -158,7 +147,7 @@ html_page = '''
                 </label>
             </div>
             <div class="slider-container">
-                <p>엑셀</p>
+                <p>엑셀</p> <!-- 엑셀 표시 -->
                 <img src="{{ url_for('static', filename='break.png') }}" alt="Break">
                 <br>
                 <label class="switch">
