@@ -267,7 +267,7 @@ def toggle_button4():
 def toggle_button5():
     global button_states
     button_states['button4'] = False
-    button_states['button5'] = not button_states['button4']
+    button_states['button5'] = not button_states['button5']
     return redirect(url_for('index'))
 
 if __name__ == "__main__":
