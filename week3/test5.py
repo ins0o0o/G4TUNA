@@ -208,9 +208,8 @@ html_page = '''
     </script>
 </body>
 </html>
-
-
 '''
+
 app = Flask(__name__)
 
 # 메인 페이지 라우트
