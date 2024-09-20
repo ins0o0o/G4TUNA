@@ -132,7 +132,7 @@ html_page = '''
                 <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
                 <br>
                 <label class="switch">
-                    <input type="checkbox" id="temperatureSlider" checked>
+                    <input type="checkbox" id="temperatureSlider" disabled>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -140,7 +140,7 @@ html_page = '''
                 <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP">
                 <br>
                 <label class="switch">
-                    <input type="checkbox" id="stopSlider" checked>
+                    <input type="checkbox" id="stopSlider" disabled>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -148,7 +148,7 @@ html_page = '''
                 <img src="{{ url_for('static', filename='break.png') }}" alt="Break">
                 <br>
                 <label class="switch">
-                    <input type="checkbox" id="breakSlider" checked>
+                    <input type="checkbox" id="breakSlider" disabled>
                     <span class="slider"></span>
                 </label>
             </div>
