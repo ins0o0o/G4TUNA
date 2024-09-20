@@ -65,7 +65,7 @@ def update_distance():
     global warning_message
     while True:
         measure_distance()  # 1초마다 거리 측정
-        if distance < 500:  # 5m 이하일 때 경고 메시지 설정
+        if distance < 5:  # 5cm 이하일 때 경고 메시지 설정
             warning_message = "Warning: 정지! 정지! 정지! 손들어 움직이면 쏜다 "
         else:
             warning_message = ""  # 거리가 5m 이상일 때 경고 메시지 없음
