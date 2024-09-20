@@ -91,6 +91,19 @@ def measure_distance():
         
         # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
         distance = pulse_duration * 34300 / 2
+
+        if button_states['button1'] == True:
+            if distance < 10:
+                button_states['button2'] = True
+                GPIO.output(ledRed, GPIO.HIGH)
+                button_states['button3'] = False
+                GPIO.output(ledGreen, GPIO.LOW)
+            else:
+                button_states['button2'] = False
+                GPIO.output(ledRed, GPIO.LOW)
+                button_states['button3'] = True
+                GPIO.output(ledGreen, GPIO.HIGH)
+
         time.sleep(0.5)
 
 distance_thread = threading.Thread(target=measure_distance)
