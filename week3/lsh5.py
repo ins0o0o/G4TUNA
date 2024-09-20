@@ -97,6 +97,8 @@ distance_thread = threading.Thread(target=measure_distance)
 distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
 distance_thread.start()
 
+app = Flask(__name__)
+
 @app.route('/')
 def index():
     html = '''
