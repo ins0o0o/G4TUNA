@@ -260,7 +260,6 @@ def toggle_button3():
 @app.route('/toggle_button4', methods=['POST'])
 def toggle_button4():
     global button_states
-    button_states['button1'] = False
     button_states['button4'] = not button_states['button4']
     return redirect(url_for('index'))
 
