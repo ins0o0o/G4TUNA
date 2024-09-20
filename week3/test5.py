@@ -90,7 +90,34 @@ distance_thread.start()
 
 # HTML 페이지 템플릿
 html_page = '''
-
+<!doctype html>
+<html>
+<head>
+    <title>LED Controller</title>
+</head>
+<body>
+    <h1>Embedded System LED Controller</h1>
+    <hr>
+    <div style="padding-left:20px;">
+        <h3>LED1, LED2</h3>
+        <p>
+            <b>LED1: {% if ledStates[0]==1 %} ON {% else %} OFF {% endif %}</b> 
+            <a href="{{ url_for('ledswitch', LEDN=0, state=1) }}"><input type="button" value="ON"></a>
+            <a href="{{ url_for('ledswitch', LEDN=0, state=0) }}"><input type="button" value="OFF"></a>
+        </p>
+        <p>
+            <b>LED2: {% if ledStates[1]==1 %} ON {% else %} OFF {% endif %}</b> 
+            <a href="{{ url_for('ledswitch', LEDN=1, state=1) }}"><input type="button" value="ON"></a>
+            <a href="{{ url_for('ledswitch', LEDN=1, state=0) }}"><input type="button" value="OFF"></a>
+        </p>
+        <p>
+            <b>LED3: {% if ledStates[2]==1 %} ON {% else %} OFF {% endif %}</b> 
+            <a href="{{ url_for('ledswitch', LEDN=2, state=1) }}"><input type="button" value="ON"></a>
+            <a href="{{ url_for('ledswitch', LEDN=2, state=0) }}"><input type="button" value="OFF"></a>
+        </p>
+    </div>
+</body>
+</html>
 '''
 
 app = Flask(__name__)
