@@ -65,7 +65,7 @@ html_page = '''
             text-align: center;
         }
         
-        /* 추가된 슬라이더 스타일 */
+        /* 슬라이더 스타일 */
         .switch {
             position: relative;
             display: inline-block;
@@ -118,7 +118,7 @@ html_page = '''
         <div class="row">
             <label for="systemSlider">전체 동작</label>
             <label class="switch">
-                <input type="checkbox" id="systemSlider" onchange="toggleSystem()" />
+                <input type="checkbox" id="systemSlider" checked onchange="toggleSystem()" />
                 <span class="slider"></span>
             </label>
         </div>
@@ -132,7 +132,7 @@ html_page = '''
                 <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
                 <br>
                 <label class="switch">
-                    <input type="checkbox" id="temperatureSlider" disabled>
+                    <input type="checkbox" id="temperatureSlider" checked>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -140,7 +140,7 @@ html_page = '''
                 <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP">
                 <br>
                 <label class="switch">
-                    <input type="checkbox" id="stopSlider" disabled>
+                    <input type="checkbox" id="stopSlider" checked>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -148,7 +148,7 @@ html_page = '''
                 <img src="{{ url_for('static', filename='break.png') }}" alt="Break">
                 <br>
                 <label class="switch">
-                    <input type="checkbox" id="breakSlider" disabled>
+                    <input type="checkbox" id="breakSlider" checked>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -156,7 +156,7 @@ html_page = '''
     </div>
 
     <script>
-        var systemOn = false;
+        var systemOn = true; // 시작 상태를 ON으로 설정
 
         function toggleSystem() {
             systemOn = !systemOn;
