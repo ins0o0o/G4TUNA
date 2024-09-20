@@ -115,8 +115,8 @@ html_page = '''
             position: absolute;
             top: 10px;
             left: 10px;
-            width: 10px;
-            height: 10px;
+            width: 80px;
+            height: 80px;
         }
     </style>
 </head>
