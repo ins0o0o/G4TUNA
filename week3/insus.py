@@ -117,13 +117,39 @@ html_page = '''
         input:checked + .slider:before {
             transform: translateX(26px);
         }
+
         /* 이미지 위치 설정 */
-        .image {
-            display: none; /* 기본적으로 숨김 */
+        .image-temperature {
+            position: absolute;
+            top: 250px;
+            left: 0;
             width: 100px;
             height: 100px;
+        }
+
+        .image-stop {
             position: absolute;
-            top: 100px; /* 예시 위치 */
+            top: 250px;
+            left: 300px;
+            width: 100px;
+            height: 100px;
+        }
+
+        .image-break {
+            position: absolute;
+            top: 250px;
+            left: 600px;
+            width: 100px;
+            height: 100px;
+        }
+
+        .warning-text {
+            position: absolute;
+            top: 360px;
+            left: 300px;
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -137,32 +163,19 @@ html_page = '''
     <p>현재 거리: {{ distance }} cm</p>
     <p>현재 온도: {{ temperature }} °C</p>
     <p>현재 습도: {{ humidity }}%</p>
-    <p style="color: red;">{{ warning_message }}</p>
 
-    <!-- 조건에 따라 이미지 배치 -->
-    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" id="temperatureImage" class="image">
-    <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" id="stopImage" class="image">
-    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" id="breakImage" class="image">
+    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" id="temperatureImage" class="image-temperature">
+    <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" id="stopImage" class="image-stop">
+    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" id="breakImage" class="image-break">
+    <p id="warningText" class="warning-text">{{ warning_message }}</p>
 
     <script>
         document.getElementById('toggleSwitch').addEventListener('change', function() {
-            var temperatureImage = document.getElementById('temperatureImage');
-            var stopImage = document.getElementById('stopImage');
-            var breakImage = document.getElementById('breakImage');
-            var distance = {{ distance }};
-            var temperature = {{ temperature }};
-            
-            if (this.checked) {
-                // Toggle ON: Show all images
-                temperatureImage.style.display = 'block';
-                stopImage.style.display = 'block';
-                breakImage.style.display = 'block';
-            } else {
-                // Toggle OFF: Show images based on conditions
-                temperatureImage.style.display = temperature < 30 ? 'block' : 'none';
-                stopImage.style.display = distance < 50 ? 'block' : 'none';
-                breakImage.style.display = distance >= 50 ? 'block' : 'none';
-            }
+            var show = this.checked;
+            document.getElementById('temperatureImage').style.display = show ? 'block' : 'none';
+            document.getElementById('stopImage').style.display = show ? 'block' : 'none';
+            document.getElementById('breakImage').style.display = show ? 'block' : 'none';
+            document.getElementById('warningText').style.display = show ? 'block' : 'none';
         });
     </script>
 </body>
