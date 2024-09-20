@@ -86,13 +86,13 @@ def measure_distance():
             GPIO.output(ledRed, GPIO.HIGH)
             button_states['button3'] = True
             GPIO.output(ledGreen, GPIO.LOW)
-        else:
+        elif distance > 10:
             button_states['button2'] = True
             GPIO.output(ledRed, GPIO.LOW)
             button_states['button3'] = False
             GPIO.output(ledGreen, GPIO.HIGH)
 
-        time.sleep(0.5)
+        time.sleep(0.2)
 
 measure_thread = threading.Thread(target=measure_distance)
 measure_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
@@ -108,7 +108,7 @@ def index():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="refresh" content="0.5">
+        <meta http-equiv="refresh" content="1">
         <title>Slide Toggle Buttons</title>
         <style>
             .switch {
