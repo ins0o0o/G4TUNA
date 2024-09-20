@@ -13,7 +13,7 @@ html_page = '''
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Flag Checker</title>
-        <meta http-equiv="refresh" content="1">  <!-- 5초마다 페이지 새로고침 -->
+        <meta http-equiv="refresh" content="1">  <!-- 1초마다 페이지 새로고침 -->
     </head>
     <body>
         <h1>Flag Checker</h1>
