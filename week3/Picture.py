@@ -18,23 +18,44 @@ warning_message = ""  # 경고 메시지를 저장할 변수
 
 html_page = '''
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Distance Checker</title>
-        <meta http-equiv="refresh" content="1">  <!-- 1초마다 페이지 새로고침 -->
-    </head>
-    <body>
-        <h1>Distance Checker</h1>
-        <p>현재 거리: {{ distance }} cm</p>
-        {% if warning_message %}
-        <p style="color: red;">{{ warning_message }}</p>  <!-- 경고 메시지 빨간색으로 표시 -->
-        <img src="{{ url_for('static', filename='STOP.png') }}" alt="Stop Image" style="width:200px;height:200px;"/> <!-- 경고시 이미지 추가 -->
-        {% endif %}
-        <p>이 페이지는 1초마다 새로고침됩니다.</p>
-    </body>
-    </html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distance Checker</title>
+    <meta http-equiv="refresh" content="1">  <!-- 1초마다 페이지 새로고침 -->
+    <style>
+        /* 이미지와 문구의 위치를 조정하는 스타일 */
+        .warning-image {
+            position: absolute;
+            top: 100px; /* 위쪽에서 100px 아래 */
+            left: 150px; /* 왼쪽에서 150px 오른쪽 */
+            width: 200px;
+            height: 200px;
+        }
+
+        .warning-text {
+            position: absolute;
+            top: 320px; /* 위쪽에서 320px 아래 */
+            left: 150px; /* 왼쪽에서 150px 오른쪽 */
+            font-size: 24px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Distance Checker</h1>
+    <p>현재 거리: {{ distance }} cm</p>
+    
+    {% if warning_message %}
+    <img src="{{ url_for('static', filename='STOP.png') }}" alt="Stop Image" class="warning-image">
+    <p class="warning-text">{{ warning_message }}</p>
+    {% endif %}
+    
+    <p>이 페이지는 1초마다 새로고침됩니다.</p>
+</body>
+</html>
+
 '''
 
 def measure_distance():
