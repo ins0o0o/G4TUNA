@@ -64,7 +64,7 @@ html_page = '''
         .slider-container {
             text-align: center;
         }
-        
+
         /* 슬라이더 스타일 */
         .switch {
             position: relative;
@@ -129,6 +129,7 @@ html_page = '''
         </div>
         <div class="image-slider-container">
             <div class="slider-container">
+                <p>에어컨</p> <!-- 에어컨 표시 -->
                 <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
                 <br>
                 <label class="switch">
@@ -137,6 +138,7 @@ html_page = '''
                 </label>
             </div>
             <div class="slider-container">
+                <p>브레이크</p> <!-- 브레이크 표시 -->
                 <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP">
                 <br>
                 <label class="switch">
@@ -145,6 +147,7 @@ html_page = '''
                 </label>
             </div>
             <div class="slider-container">
+                <p>엑셀</p> <!-- 엑셀 표시 -->
                 <img src="{{ url_for('static', filename='break.png') }}" alt="Break">
                 <br>
                 <label class="switch">
