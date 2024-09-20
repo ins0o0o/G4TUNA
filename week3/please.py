@@ -114,7 +114,7 @@ html_page = '''
 </head>
 <body>
     <div class="container">
-        <h1>G4TUNA</h1>
+        <h1>Embeded CAR Controller</h1>
         <div class="row">
             <label for="systemSlider">전체 동작</label>
             <label class="switch">
