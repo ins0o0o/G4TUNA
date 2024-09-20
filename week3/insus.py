@@ -119,30 +119,22 @@ html_page = '''
         }
 
         /* 이미지 위치 설정 */
+        .image {
+            display: none; /* 기본적으로 숨김 */
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 250px;
+        }
         .image-temperature {
-            position: absolute;
-            top: 250px;
             left: 0;
-            width: 100px;
-            height: 100px;
         }
-
         .image-stop {
-            position: absolute;
-            top: 250px;
             left: 300px;
-            width: 100px;
-            height: 100px;
         }
-
         .image-break {
-            position: absolute;
-            top: 250px;
             left: 600px;
-            width: 100px;
-            height: 100px;
         }
-
         .warning-text {
             position: absolute;
             top: 360px;
@@ -150,38 +142,53 @@ html_page = '''
             color: red;
             font-size: 18px;
             font-weight: bold;
+            display: none;
         }
     </style>
 </head>
 <body>
     <h1>Distance and Temperature Checker</h1>
+    <label class="switch">
+        <input type="checkbox" id="toggleSwitch">
+        <span class="slider"></span>
+    </label>
+
     <p>현재 거리: {{ distance }} cm</p>
     <p>현재 온도: {{ temperature }} °C</p>
     <p>현재 습도: {{ humidity }}%</p>
 
-    <!-- 조건에 따라 이미지 배치 -->
-    {% if temperature < 30 %}
-    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" class="image-temperature">
-    {% endif %}
-
-    {% if distance < 50 %}
-    <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" class="image-stop">
-    <p class="warning-text">{{ warning_message }}</p>
-    {% elif distance >= 50 %}
-    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" class="image-break">
-    {% endif %}
+    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" id="temperatureImage" class="image image-temperature">
+    <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" id="stopImage" class="image image-stop">
+    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" id="breakImage" class="image image-break">
+    <p id="warningText" class="warning-text">Warning!</p>
 
     <script>
         document.getElementById('toggleSwitch').addEventListener('change', function() {
-            var show = this.checked;
-            document.getElementById('temperatureImage').style.display = show ? 'block' : 'none';
-            document.getElementById('stopImage').style.display = show ? 'block' : 'none';
-            document.getElementById('breakImage').style.display = show ? 'block' : 'none';
-            document.getElementById('warningText').style.display = show ? 'block' : 'none';
+            var temperatureImage = document.getElementById('temperatureImage');
+            var stopImage = document.getElementById('stopImage');
+            var breakImage = document.getElementById('breakImage');
+            var warningText = document.getElementById('warningText');
+            var temperature = {{ temperature }};
+            var distance = {{ distance }};
+
+            if (this.checked) {
+                // Toggle ON: Display all images
+                temperatureImage.style.display = 'block';
+                stopImage.style.display = 'block';
+                breakImage.style.display = 'block';
+                warningText.style.display = 'block';
+            } else {
+                // Toggle OFF: Display based on conditions
+                temperatureImage.style.display = temperature >= 24 ? 'block' : 'none';
+                stopImage.style.display = distance < 50 ? 'block' : 'none';
+                breakImage.style.display = distance >= 50 ? 'block' : 'none';
+                warningText.style.display = distance < 10 ? 'block' : 'none';
+            }
         });
     </script>
 </body>
 </html>
+
 
 '''
 
