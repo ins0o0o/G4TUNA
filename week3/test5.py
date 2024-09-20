@@ -223,13 +223,13 @@ def index():
     return render_template_string(html_page, distance=int(distance), temperature=int(temperature), humidity=int(humidity), warning_message=warning_message)
 
 @app.route('/on')
-def index1():
+def AutoAccBrkOn():
     global AutoAccBrk
     AutoAccBrk = 1
     return redirect(url_for('index'))
 
 @app.route('/off')
-def index2():
+def AutoAccBrkOFF():
     global AutoAccBrk
     AutoAccBrk = 0
     return redirect(url_for('index'))
