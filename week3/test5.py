@@ -171,7 +171,7 @@ html_page = '''
 <body>
     <h1>Distance and Temperature Checker</h1>
     <label class="switch">
-        <input type="checkbox" id="toggleSwitch">
+        <input type="checkbox" id="toggleSwitch" {% if auto_acc_brk == 1 %}checked{% endif %}>
         <span class="slider"></span>
     </label>
 
@@ -220,7 +220,7 @@ app = Flask(__name__)
 # 메인 페이지 라우트
 @app.route('/')
 def index():
-    return render_template_string(html_page, distance=int(distance), temperature=int(temperature), humidity=int(humidity), warning_message=warning_message)
+    return render_template_string(html_page, distance=int(distance), temperature=int(temperature), humidity=int(humidity), warning_message=warning_message, auto_acc_brk=AutoAccBrk)
 
 @app.route('/on')
 def AutoAccBrkOn():
