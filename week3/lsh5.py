@@ -38,14 +38,10 @@ temperature = 0
 distance = 0
 
 def check_touch():
-    global flag
+    global button_states['button1']
     while True:
         GPIO.wait_for_edge(sensTouch, GPIO.FALLING)  # 버튼이 눌렸을 때까지 대기 (FALLING 엣지 감지)
-        flag = 1 - flag  # flag 값 토글
-        if flag == 1:
-            print("\n<<< Process Start!! >>>\n")
-        else:
-            print("\n<<< Process Terminated >>>\n")
+        button_states['button1'] = not button_states['button1']  # button_states['button1'] 값 토글
         time.sleep(0.5)
 
 touch_thread = threading.Thread(target=check_touch)
@@ -70,41 +66,39 @@ def measure_distance():
     global distance
     # Trig 핀을 LOW로 설정하고 짧은 시간 대기
     while True:
-        GPIO.output(DistanceTrig, GPIO.LOW)
-        time.sleep(0.1)
-        
-        # Trig 핀에 짧은 펄스(10μs) 발생
-        GPIO.output(DistanceTrig, GPIO.HIGH)
-        time.sleep(0.00001)  # 10μs 대기
-        GPIO.output(DistanceTrig, GPIO.LOW)
-        
-        # Echo 핀이 HIGH로 될 때까지 대기
-        while GPIO.input(DistanceEcho) == GPIO.LOW:
-            pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
-        
-        # Echo 핀이 LOW로 될 때까지 대기
-        while GPIO.input(DistanceEcho) == GPIO.HIGH:
-            pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
-        
-        # 펄스 지속 시간 계산
-        pulse_duration = pulse_end - pulse_start
-        
-        # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
-        distance = pulse_duration * 34300 / 2
-
         if button_states['button1'] == True:
-            if distance < 10:
-                button_states['button2'] = True
-                GPIO.output(ledRed, GPIO.HIGH)
-                button_states['button3'] = False
-                GPIO.output(ledGreen, GPIO.LOW)
-            else:
-                button_states['button2'] = False
-                GPIO.output(ledRed, GPIO.LOW)
-                button_states['button3'] = True
-                GPIO.output(ledGreen, GPIO.HIGH)
+            GPIO.output(DistanceTrig, GPIO.LOW)
+            time.sleep(0.1)
+            
+            # Trig 핀에 짧은 펄스(10μs) 발생
+            GPIO.output(DistanceTrig, GPIO.HIGH)
+            time.sleep(0.00001)  # 10μs 대기
+            GPIO.output(DistanceTrig, GPIO.LOW)
+            
+            # Echo 핀이 HIGH로 될 때까지 대기
+            while GPIO.input(DistanceEcho) == GPIO.LOW:
+                pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
+            
+            # Echo 핀이 LOW로 될 때까지 대기
+            while GPIO.input(DistanceEcho) == GPIO.HIGH:
+                pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
+            
+            # 펄스 지속 시간 계산
+            pulse_duration = pulse_end - pulse_start
+            
+            # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
+            distance = pulse_duration * 34300 / 2
+
+        if distance < 10:
+            button_states['button2'] = True
+            GPIO.output(ledRed, GPIO.HIGH)
+            button_states['button3'] = False
+            GPIO.output(ledGreen, GPIO.LOW)
         else:
-            button_states['button1'] = False
+            button_states['button2'] = False
+            GPIO.output(ledRed, GPIO.LOW)
+            button_states['button3'] = True
+            GPIO.output(ledGreen, GPIO.HIGH)
 
         time.sleep(0.5)
 
