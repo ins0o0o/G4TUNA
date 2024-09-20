@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, url_for, redirect
+from flask import Flask, render_template_string, jsonify
 import RPi.GPIO as GPIO
 import threading
 import time
@@ -194,7 +194,7 @@ html_page = '''
         }
 
         function fetchSensorData() {
-            fetch('/')
+            fetch('/sensor_data')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('temperature').innerText = data.temperature;
@@ -209,17 +209,13 @@ html_page = '''
     </script>
 </body>
 </html>
-
 '''
-
-
-
 
 def check_touch():
     global flag
     while True:
-        GPIO.wait_for_edge(sensTouch, GPIO.FALLING)  # 버튼이 눌렸을 때까지 대기 (FALLING 엣지 감지)
-        flag = 1 - flag  # flag 값 토글
+        GPIO.wait_for_edge(sensTouch, GPIO.FALLING)
+        flag = 1 - flag
         if flag == 1:
             print("\n<<< Process Start!! >>>\n")
         else:
@@ -227,103 +223,54 @@ def check_touch():
         time.sleep(0.5)
 
 touch_thread = threading.Thread(target=check_touch)
-touch_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 종료되도록 설정
+touch_thread.daemon = True
 touch_thread.start()
 
-
 def readDH():
-    sensor = Adafruit_DHT.DHT11     # sensor 객체 생성
+    sensor = Adafruit_DHT.DHT11
     global humidity
     global temperature
-    while True:                     #0.5초마다 온도와 습도 값을 불러옴
+    while True:
         humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
         time.sleep(0.5)
 
 DH_thread = threading.Thread(target=readDH)
-DH_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
+DH_thread.daemon = True
 DH_thread.start()
-
 
 def measure_distance():
     global distance
-    # Trig 핀을 LOW로 설정하고 짧은 시간 대기
     while True:
         GPIO.output(DistanceTrig, GPIO.LOW)
         time.sleep(0.1)
-        
-        # Trig 핀에 짧은 펄스(10μs) 발생
         GPIO.output(DistanceTrig, GPIO.HIGH)
-        time.sleep(0.00001)  # 10μs 대기
+        time.sleep(0.00001)
         GPIO.output(DistanceTrig, GPIO.LOW)
         
-        # Echo 핀이 HIGH로 될 때까지 대기
         while GPIO.input(DistanceEcho) == GPIO.LOW:
-            pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
-        
-        # Echo 핀이 LOW로 될 때까지 대기
+            pulse_start = time.time()
         while GPIO.input(DistanceEcho) == GPIO.HIGH:
-            pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
+            pulse_end = time.time()
         
-        # 펄스 지속 시간 계산
         pulse_duration = pulse_end - pulse_start
-        
-        # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
         distance = pulse_duration * 34300 / 2
         time.sleep(0.5)
 
 distance_thread = threading.Thread(target=measure_distance)
-distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
-distance_thread.start() 
-GPIO.setup(DistanceTrig, GPIO.OUT)
-GPIO.setup(DistanceEcho, GPIO.IN)
-
-distance = 0  # 거리 값을 저장할 변수
-warning_message = ""  # 경고 메시지를 저장할 변수
-
-def measure_distance():
-    global distance
-    # Trig 핀을 LOW로 설정하고 짧은 시간 대기
-    GPIO.output(DistanceTrig, GPIO.LOW)
-    time.sleep(0.1)
-    
-    # Trig 핀에 짧은 펄스(10μs) 발생
-    GPIO.output(DistanceTrig, GPIO.HIGH)
-    time.sleep(0.00001)  # 10μs 대기
-    GPIO.output(DistanceTrig, GPIO.LOW)
-    
-    # Echo 핀이 HIGH로 될 때까지 대기
-    while GPIO.input(DistanceEcho) == GPIO.LOW:
-        pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
-    
-    # Echo 핀이 LOW로 될 때까지 대기
-    while GPIO.input(DistanceEcho) == GPIO.HIGH:
-        pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
-    
-    # 펄스 지속 시간 계산
-    pulse_duration = pulse_end - pulse_start
-    
-    # 초음파 속도는 34300 cm/s, 따라서 거리 = 시간 * 속도 / 2 (왕복이므로 2로 나눔)
-    distance = pulse_duration * 34300 / 2
-
-def update_distance():
-    global warning_message
-    while True:
-        measure_distance()  # 1초마다 거리 측정
-        if distance < 10:  # 10cm 이하일 때 경고 메시지 설정
-            warning_message = "Warning: 정지! 정지! 정지! 손들어 움직이면 쏜다 "
-        else:
-            warning_message = ""  # 거리가 5m 이상일 때 경고 메시지 없음
-        time.sleep(1)
+distance_thread.daemon = True
+distance_thread.start()
 
 @app.route('/')
 def index():
-    return render_template_string(html_page, distance=int(distance), warning_message=warning_message)
+    return render_template_string(html_page)
+
+@app.route('/sensor_data')
+def sensor_data():
+    return jsonify({
+        'temperature': temperature,
+        'humidity': humidity,
+        'distance': distance
+    })
 
 if __name__ == '__main__':
-    # 거리 측정 스레드 실행
-    thread = threading.Thread(target=update_distance)
-    thread.daemon = True
-    thread.start()
-    
-    # Flask 서버 실행
     app.run(host='0.0.0.0', port=5000, debug=True)
