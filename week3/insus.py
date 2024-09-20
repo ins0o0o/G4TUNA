@@ -155,19 +155,21 @@ html_page = '''
 </head>
 <body>
     <h1>Distance and Temperature Checker</h1>
-    <label class="switch">
-        <input type="checkbox" id="toggleSwitch">
-        <span class="slider"></span>
-    </label>
-
     <p>현재 거리: {{ distance }} cm</p>
     <p>현재 온도: {{ temperature }} °C</p>
     <p>현재 습도: {{ humidity }}%</p>
 
-    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" id="temperatureImage" class="image-temperature">
-    <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" id="stopImage" class="image-stop">
-    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" id="breakImage" class="image-break">
-    <p id="warningText" class="warning-text">{{ warning_message }}</p>
+    <!-- 조건에 따라 이미지 배치 -->
+    {% if temperature < 30 %}
+    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" class="image-temperature">
+    {% endif %}
+
+    {% if distance < 50 %}
+    <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" class="image-stop">
+    <p class="warning-text">{{ warning_message }}</p>
+    {% elif distance >= 50 %}
+    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" class="image-break">
+    {% endif %}
 
     <script>
         document.getElementById('toggleSwitch').addEventListener('change', function() {
