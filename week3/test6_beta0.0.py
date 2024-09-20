@@ -68,25 +68,25 @@ html_page = '''
     </div>
 
     <div class="status">
-        <div><img src="thermometer.png" alt="온도"> 온도: {{ data['temperature'] }} &#8451;</div>
+        <div><img src="themperature.png" alt="온도"> 온도: {{ data['temperature'] }} &#8451;</div>
         <div><img src="humidity.png" alt="습도"> 습도: {{ data['humidity'] }} %</div>
     </div>
 
     <div class="status">
-        <div><img src="distance.png" alt="침입자 거리"> 침입자 거리: {{ data['intruder_distance'] }} m</div>
+        <div><img src="gun.png" alt="침입자 거리"> 침입자 거리: {{ data['intruder_distance'] }} m</div>
     </div>
 
     <div class="controls">
         <div class="item">
-            <img src="aircon.png" alt="에어컨">
+            <img src="break.png" alt="에어컨">
             <div>에어컨: <span class="{{ 'on' if data['aircon_status'] == 'ON' else 'off' }}">{{ data['aircon_status'] }}</span></div>
         </div>
         <div class="item">
-            <img src="heater.png" alt="히터">
+            <img src="break.png" alt="히터">
             <div>히터: <span class="{{ 'on' if data['heater_status'] == 'ON' else 'off' }}">{{ data['heater_status'] }}</span></div>
         </div>
         <div class="item">
-            <img src="humidifier.png" alt="제습기">
+            <img src="break.png" alt="제습기">
             <div>제습기: <span class="{{ 'on' if data['humidifier_status'] == 'ON' else 'off' }}">{{ data['humidifier_status'] }}</span></div>
         </div>
     </div>
