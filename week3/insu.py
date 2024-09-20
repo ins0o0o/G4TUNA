@@ -81,7 +81,7 @@ html_page = '''
         /* 이미지 위치 설정 */
         .image-temperature {
             position: absolute;
-            top: calc(500px + {{ humidity }}px); /* 습도 값 아래 100px */
+            top: 500px; /* 습도 값 아래 100px */
             left: 0; /* 왼쪽 가장자리 */
             width: 100px;
             height: 100px;
@@ -89,7 +89,7 @@ html_page = '''
 
         .image-stop {
             position: absolute;
-            top: calc(500px + {{ humidity }}px); /* 습도 값 아래 100px */
+            top: 500px; /* STOP 이미지 위치 */
             left: 300px; /* temperature.png 기준 오른쪽 300px */
             width: 100px;
             height: 100px;
@@ -97,7 +97,7 @@ html_page = '''
 
         .image-break {
             position: absolute;
-            top: calc(500px + {{ humidity }}px); /* 습도 값 아래 100px */
+            top: 500px; /* break 이미지 위치 */
             left: 600px; /* STOP.png 기준 오른쪽 300px */
             width: 100px;
             height: 100px;
@@ -110,10 +110,16 @@ html_page = '''
     <p>현재 온도: {{ temperature }} °C</p>
     <p>현재 습도: {{ humidity }}%</p>
 
-    <!-- 습도 값 아래 이미지 배치 -->
+    <!-- 조건에 따라 이미지 배치 -->
+    {% if temperature < 30 %}
     <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" class="image-temperature">
+    {% endif %}
+
+    {% if distance < 50 %}
     <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" class="image-stop">
+    {% elif distance >= 50 %}
     <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" class="image-break">
+    {% endif %}
 
     <p style="color: red;">{{ warning_message }}</p>
 </body>
