@@ -89,35 +89,125 @@ distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종
 distance_thread.start()
 
 # HTML 페이지 템플릿
-html_page = '''
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>LED Controller</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distance and Temperature Checker</title>
+    <style>
+        /* 스위치 스타일 */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* 이미지 위치 설정 */
+        .image {
+            display: none; /* 기본적으로 숨김 */
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 250px;
+        }
+        .image-temperature {
+            left: 0;
+        }
+        .image-stop {
+            left: 300px;
+        }
+        .image-break {
+            left: 600px;
+        }
+        .warning-text {
+            position: absolute;
+            top: 360px;
+            left: 300px;
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Embedded System LED Controller</h1>
-    <hr>
-    <div style="padding-left:20px;">
-        <h3>LED1, LED2</h3>
-        <p>
-            <b>LED1: {% if ledStates[0]==1 %} ON {% else %} OFF {% endif %}</b> 
-            <a href="{{ url_for('ledswitch', LEDN=0, state=1) }}"><input type="button" value="ON"></a>
-            <a href="{{ url_for('ledswitch', LEDN=0, state=0) }}"><input type="button" value="OFF"></a>
-        </p>
-        <p>
-            <b>LED2: {% if ledStates[1]==1 %} ON {% else %} OFF {% endif %}</b> 
-            <a href="{{ url_for('ledswitch', LEDN=1, state=1) }}"><input type="button" value="ON"></a>
-            <a href="{{ url_for('ledswitch', LEDN=1, state=0) }}"><input type="button" value="OFF"></a>
-        </p>
-        <p>
-            <b>LED3: {% if ledStates[2]==1 %} ON {% else %} OFF {% endif %}</b> 
-            <a href="{{ url_for('ledswitch', LEDN=2, state=1) }}"><input type="button" value="ON"></a>
-            <a href="{{ url_for('ledswitch', LEDN=2, state=0) }}"><input type="button" value="OFF"></a>
-        </p>
-    </div>
+    <h1>Distance and Temperature Checker</h1>
+    <label class="switch">
+        <input type="checkbox" id="toggleSwitch">
+        <span class="slider"></span>
+    </label>
+
+    <p>현재 거리: {{ distance }} cm</p>
+    <p>현재 온도: {{ temperature }} °C</p>
+    <p>현재 습도: {{ humidity }}%</p>
+
+    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Image" id="temperatureImage" class="image image-temperature">
+    <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP Image" id="stopImage" class="image image-stop">
+    <img src="{{ url_for('static', filename='break.png') }}" alt="Break Image" id="breakImage" class="image image-break">
+    <p id="warningText" class="warning-text">Warning!</p>
+
+    <script>
+        document.getElementById('toggleSwitch').addEventListener('change', function() {
+            var temperatureImage = document.getElementById('temperatureImage');
+            var stopImage = document.getElementById('stopImage');
+            var breakImage = document.getElementById('breakImage');
+            var warningText = document.getElementById('warningText');
+            var temperature = {{ temperature }};
+            var distance = {{ distance }};
+
+            if (this.checked) {
+                // Toggle ON: Display all images
+                temperatureImage.style.display = 'block';
+                stopImage.style.display = 'block';
+                breakImage.style.display = 'block';
+                warningText.style.display = 'block';
+            } else {
+                // Toggle OFF: Display based on conditions
+                temperatureImage.style.display = temperature >= 24 ? 'block' : 'none';
+                stopImage.style.display = distance < 50 ? 'block' : 'none';
+                breakImage.style.display = distance >= 50 ? 'block' : 'none';
+                warningText.style.display = distance < 10 ? 'block' : 'none';
+            }
+        });
+    </script>
 </body>
 </html>
+
 '''
 
 app = Flask(__name__)
@@ -125,7 +215,7 @@ app = Flask(__name__)
 # 메인 페이지 라우트
 @app.route('/')
 def index():
-    return render_template_string(html_page, ledStates=ledStates)
+    return render_template_string(html_page)
 
 
 if __name__ == '__main__':
