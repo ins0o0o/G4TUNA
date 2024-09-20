@@ -61,7 +61,7 @@ def update_sensors():
     while True:
         measure_distance()  # 거리 측정
         if distance < 10:  # 10cm 이하일 때 경고 메시지 설정
-            warning_message = "Warning: 정지! 정지! 정지! 손들어 움직이면 쏜다"
+            warning_message = "Warning!"
         else:
             warning_message = ""
 
@@ -81,7 +81,7 @@ html_page = '''
         /* 이미지 위치 설정 */
         .image-temperature {
             position: absolute;
-            top: calc(100px + {{ humidity }}px); /* 습도 값 아래 100px */
+            top: calc(500px + {{ humidity }}px); /* 습도 값 아래 100px */
             left: 0; /* 왼쪽 가장자리 */
             width: 100px;
             height: 100px;
@@ -89,7 +89,7 @@ html_page = '''
 
         .image-stop {
             position: absolute;
-            top: calc(100px + {{ humidity }}px); /* 습도 값 아래 100px */
+            top: calc(500px + {{ humidity }}px); /* 습도 값 아래 100px */
             left: 300px; /* temperature.png 기준 오른쪽 300px */
             width: 100px;
             height: 100px;
@@ -97,7 +97,7 @@ html_page = '''
 
         .image-break {
             position: absolute;
-            top: calc(100px + {{ humidity }}px); /* 습도 값 아래 100px */
+            top: calc(500px + {{ humidity }}px); /* 습도 값 아래 100px */
             left: 600px; /* STOP.png 기준 오른쪽 300px */
             width: 100px;
             height: 100px;
