@@ -93,13 +93,13 @@ distance_thread.start()
 def LEDONOFF():
     while True:
         if button_states['button2'] == True:
-                GPIO.ouput(ledRed,1)
-        else:
-                GPIO.ouput(ledRed,0)
-        if button_states['button3'] == True:
                 GPIO.ouput(ledGreen,1)
         else:
                 GPIO.ouput(ledGreen,0)
+        if button_states['button3'] == True:
+                GPIO.ouput(ledRed,1)
+        else:
+                GPIO.ouput(ledRed,0)
         time.sleep(0.2)
 
 LED_thread = threading.Thread(target=LEDONOFF)
@@ -119,7 +119,7 @@ def AutoToggle():
                     button_states['button3'] = False
         time.sleep(0.2)
 
-auto_thread = threading.Thread(target=LEDONOFF)
+auto_thread = threading.Thread(target=AutoToggle)
 auto_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
 auto_thread.start()
 
