@@ -64,6 +64,52 @@ html_page = '''
         .slider-container {
             text-align: center;
         }
+        
+        /* 추가된 슬라이더 스타일 */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
     </style>
 </head>
 <body>
@@ -71,7 +117,10 @@ html_page = '''
         <h1>G4TUNA</h1>
         <div class="row">
             <label for="systemSlider">전체 동작</label>
-            <input type="checkbox" id="systemSlider" onchange="toggleSystem()" />
+            <label class="switch">
+                <input type="checkbox" id="systemSlider" onchange="toggleSystem()" />
+                <span class="slider"></span>
+            </label>
         </div>
         <div class="row">
             <p>온도: <span id="temperature">0</span>°C</p>
@@ -82,17 +131,26 @@ html_page = '''
             <div class="slider-container">
                 <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
                 <br>
-                <input type="checkbox" id="temperatureSlider" disabled>
+                <label class="switch">
+                    <input type="checkbox" id="temperatureSlider" disabled>
+                    <span class="slider"></span>
+                </label>
             </div>
             <div class="slider-container">
                 <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP">
                 <br>
-                <input type="checkbox" id="stopSlider" disabled>
+                <label class="switch">
+                    <input type="checkbox" id="stopSlider" disabled>
+                    <span class="slider"></span>
+                </label>
             </div>
             <div class="slider-container">
                 <img src="{{ url_for('static', filename='break.png') }}" alt="Break">
                 <br>
-                <input type="checkbox" id="breakSlider" disabled>
+                <label class="switch">
+                    <input type="checkbox" id="breakSlider" disabled>
+                    <span class="slider"></span>
+                </label>
             </div>
         </div>
     </div>
@@ -151,6 +209,7 @@ html_page = '''
     </script>
 </body>
 </html>
+
 '''
 
 
