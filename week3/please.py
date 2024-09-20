@@ -64,29 +64,44 @@ html_page = '''
         .slider-container {
             text-align: center;
         }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
         .slider {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 50px;
-            height: 25px;
-            background: #ccc;
+            position: absolute;
             cursor: pointer;
-            outline: none;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
         }
         .slider:before {
-            content: "";
             position: absolute;
-            width: 20px;
-            height: 20px;
+            content: "";
+            height: 26px;
+            width: 26px;
             left: 4px;
-            bottom: 2px;
+            bottom: 4px;
             background-color: white;
-            transition: 0.4s;
-            border: 1px solid #ccc;
+            transition: .4s;
+            border-radius: 50%;
         }
-        .slider:checked:before {
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
             transform: translateX(26px);
-            background-color: #4CAF50;
         }
     </style>
 </head>
@@ -94,8 +109,10 @@ html_page = '''
     <div class="container">
         <h1>G4TUNA</h1>
         <div class="row">
-            <label for="systemSlider">전체 동작</label>
-            <input type="checkbox" id="systemSlider" class="slider" onchange="toggleSystem()">
+            <label for="systemSlider" class="switch">
+                <input type="checkbox" id="systemSlider" onchange="toggleSystem()">
+                <span class="slider"></span>
+            </label>
         </div>
         <div class="row">
             <p>온도: <span id="temperature">0</span>°C</p>
@@ -105,18 +122,24 @@ html_page = '''
         <div class="image-slider-container">
             <div class="slider-container">
                 <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
-                <br>
-                <input type="checkbox" id="temperatureSlider" class="slider" disabled>
+                <label class="switch">
+                    <input type="checkbox" id="temperatureSlider" disabled>
+                    <span class="slider"></span>
+                </label>
             </div>
             <div class="slider-container">
                 <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP">
-                <br>
-                <input type="checkbox" id="stopSlider" class="slider" disabled>
+                <label class="switch">
+                    <input type="checkbox" id="stopSlider" disabled>
+                    <span class="slider"></span>
+                </label>
             </div>
             <div class="slider-container">
                 <img src="{{ url_for('static', filename='break.png') }}" alt="Break">
-                <br>
-                <input type="checkbox" id="breakSlider" class="slider" disabled>
+                <label class="switch">
+                    <input type="checkbox" id="breakSlider" disabled>
+                    <span class="slider"></span>
+                </label>
             </div>
         </div>
     </div>
@@ -126,7 +149,7 @@ html_page = '''
 
         function toggleSystem() {
             systemOn = !systemOn;
-            var sliders = document.querySelectorAll('.slider');
+            var sliders = document.querySelectorAll('.switch input');
             sliders.forEach(function(slider) {
                 slider.disabled = systemOn;
             });
@@ -170,6 +193,7 @@ html_page = '''
     </script>
 </body>
 </html>
+
 
 '''
 
