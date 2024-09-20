@@ -6,6 +6,9 @@ import time
 sensTouch = 5
 flag = 0
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(sensTouch, GPIO.IN)
+
 html_page = '''
 <!DOCTYPE html>
     <html lang="en">
@@ -32,6 +35,9 @@ def generate_flag_values():
             flag = 0
         time.sleep(0.1)
 
+thread = threading.Thread(target=generate_flag_values)
+thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
+thread.start()
 
 
 app = Flask(__name__)
@@ -41,7 +47,4 @@ def index():
     return render_template_string(html_page, flag=flag)
 
 if __name__ == '__main__':
-    thread = threading.Thread(target=generate_flag_values)
-    thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
-    thread.start()
     app.run(host='0.0.0.0', port=5000, debug=True)
