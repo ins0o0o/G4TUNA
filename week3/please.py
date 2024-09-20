@@ -52,58 +52,17 @@ html_page = '''
             justify-content: space-between;
             margin: 20px 0;
         }
-        .sensor-data {
-            margin-top: 20px;
-        }
-        .images-row {
+        .image-slider-container {
             display: flex;
             justify-content: space-around;
-            width: 900px; /* Enough width to accommodate images and space */
+            width: 100%;
+        }
+        .image-slider-container img {
+            width: 100px;
+            height: 100px;
         }
         .slider-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0 300px; /* Space between images */
-        }
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-        .switch input { 
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #2196F3;
-        }
-        input:checked + .slider:before {
-            transform: translateX(26px);
+            text-align: center;
         }
     </style>
 </head>
@@ -111,37 +70,29 @@ html_page = '''
     <div class="container">
         <h1>G4TUNA</h1>
         <div class="row">
-            <label for="systemSlider" class="switch">
-                <input type="checkbox" id="systemSlider" onchange="toggleSystem()">
-                <span class="slider"></span>
-            </label>
+            <label for="systemSlider">전체 동작</label>
+            <input type="checkbox" id="systemSlider" onchange="toggleSystem()" />
         </div>
-        <div class="sensor-data">
+        <div class="row">
             <p>온도: <span id="temperature">0</span>°C</p>
             <p>습도: <span id="humidity">0</span>%</p>
             <p>거리: <span id="distance">0</span>cm</p>
         </div>
-        <div class="images-row">
+        <div class="image-slider-container">
             <div class="slider-container">
-                <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature" width="100" height="100">
-                <label class="switch">
-                    <input type="checkbox" id="temperatureSlider" disabled>
-                    <span class="slider"></span>
-                </label>
+                <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
+                <br>
+                <input type="checkbox" id="temperatureSlider" disabled>
             </div>
             <div class="slider-container">
-                <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP" width="100" height="100">
-                <label class="switch">
-                    <input type="checkbox" id="stopSlider" disabled>
-                    <span class="slider"></span>
-                </label>
+                <img src="{{ url_for('static', filename='STOP.png') }}" alt="STOP">
+                <br>
+                <input type="checkbox" id="stopSlider" disabled>
             </div>
             <div class="slider-container">
-                <img src="{{ url_for('static', filename='break.png') }}" alt="Break" width="100" height="100">
-                <label class="switch">
-                    <input type="checkbox" id="breakSlider" disabled>
-                    <span class="slider"></span>
-                </label>
+                <img src="{{ url_for('static', filename='break.png') }}" alt="Break">
+                <br>
+                <input type="checkbox" id="breakSlider" disabled>
             </div>
         </div>
     </div>
@@ -151,20 +102,37 @@ html_page = '''
 
         function toggleSystem() {
             systemOn = !systemOn;
-            var sliders = document.querySelectorAll('.switch input');
-            sliders.forEach(function(slider) {
-                slider.disabled = !systemOn; // Disable or enable based on system state
-            });
+            if (systemOn) {
+                document.getElementById('temperatureSlider').disabled = true;
+                document.getElementById('stopSlider').disabled = true;
+                document.getElementById('breakSlider').disabled = true;
+            } else {
+                document.getElementById('temperatureSlider').disabled = false;
+                document.getElementById('stopSlider').disabled = false;
+                document.getElementById('breakSlider').disabled = false;
+            }
         }
 
         function updateSliders(temperature, distance) {
             var tempSlider = document.getElementById('temperatureSlider');
             var stopSlider = document.getElementById('stopSlider');
             var breakSlider = document.getElementById('breakSlider');
+            
+            // 온도가 24도 이상이면 temperature slider ON
+            if (temperature >= 24 && systemOn) {
+                tempSlider.checked = true;
+            } else if (systemOn) {
+                tempSlider.checked = false;
+            }
 
-            tempSlider.checked = temperature >= 24;
-            stopSlider.checked = distance < 25;
-            breakSlider.checked = distance >= 25;
+            // 거리가 25cm 미만일 때 STOP slider ON
+            if (distance < 25 && systemOn) {
+                stopSlider.checked = true;
+                breakSlider.checked = false;
+            } else if (systemOn) {
+                stopSlider.checked = false;
+                breakSlider.checked = true;
+            }
         }
 
         function fetchSensorData() {
@@ -174,9 +142,7 @@ html_page = '''
                 document.getElementById('temperature').innerText = data.temperature;
                 document.getElementById('humidity').innerText = data.humidity;
                 document.getElementById('distance').innerText = data.distance;
-                if (systemOn) {
-                    updateSliders(data.temperature, data.distance);
-                }
+                updateSliders(data.temperature, data.distance);
             })
             .catch(error => console.error('Error fetching sensor data:', error));
         }
@@ -185,10 +151,8 @@ html_page = '''
     </script>
 </body>
 </html>
-
-
-
 '''
+
 
 
 
