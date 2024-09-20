@@ -220,6 +220,17 @@ app = Flask(__name__)
 def index():
     return render_template_string(html_page, distance=int(distance), temperature=int(temperature), humidity=int(humidity), warning_message=warning_message)
 
+@app.route('/on')
+def index():
+    global AutoAccBrk
+    AutoAccBrk = 1
+    return redirect(url_for('index'))
+
+@app.route('/off')
+def index():
+    global AutoAccBrk
+    AutoAccBrk = 0
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
