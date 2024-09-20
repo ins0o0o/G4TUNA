@@ -103,6 +103,8 @@ def measure_distance():
                 GPIO.output(ledRed, GPIO.LOW)
                 button_states['button3'] = True
                 GPIO.output(ledGreen, GPIO.HIGH)
+        else:
+            button_states['button1'] = False
 
         time.sleep(0.5)
 
@@ -182,6 +184,7 @@ def index():
     </head>
     <body>
         <h1>G4TUNA WEEEK3</h1>
+        <p>거리: {{distance}} </p>
 
         <form method="POST" action="/toggle_button1">
             <div class="switch-container">
@@ -201,7 +204,7 @@ def index():
                     onchange="this.form.submit()">
                     <span class="slider"></span>
                 </label>
-                <span class="label-text">거리: {{ distance }}</span>
+                <span class="label-text">Acceration</span>
             </div>
         </form>
 
@@ -212,7 +215,7 @@ def index():
                     onchange="this.form.submit()">
                     <span class="slider"></span>
                 </label>
-                <span class="label-text">온도: {{ temperature }}</span>
+                <span class="label-text">Break</span>
             </div>
         </form>
 
@@ -223,7 +226,7 @@ def index():
                     onchange="this.form.submit()">
                     <span class="slider"></span>
                 </label>
-                <span class="label-text">습도: {{ humidity }}</span>
+                <span class="label-text">온도: {{ temperature }}</span>
             </div>
         </form>
 
