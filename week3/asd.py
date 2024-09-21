@@ -250,7 +250,7 @@ def index():
         <!-- Button 2, 3, 5 - 300px 위로 이동, 간격 75px -->
         <div class="container">
             <div class="module">
-                <img src="{{ url_for('static', filename='break.png') }}">
+                <img src="{{ url_for('static', filename='acceleration.png') }}">
                 <form method="POST" action="/toggle_button2">
                     <label class="switch">
                         <input type="checkbox" name="button2" {% if button_states['button2'] %}checked{% endif %} onchange="this.form.submit()">
@@ -260,7 +260,7 @@ def index():
                 </form>
             </div>
             <div class="module">
-                <img src="{{ url_for('static', filename='STOP.png') }}">
+                <img src="{{ url_for('static', filename='break.png') }}">
                 <form method="POST" action="/toggle_button3">
                     <label class="switch">
                         <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} onchange="this.form.submit()">
