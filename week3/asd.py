@@ -260,7 +260,7 @@ def index():
                 </form>
             </div>
             <div class="module">
-                <img src="{{ url_for('static', filename='break.png') }}">
+                <img src="{{ url_for('static', filename='STOP.png') }}">
                 <form method="POST" action="/toggle_button3">
                     <label class="switch">
                         <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} onchange="this.form.submit()">
@@ -270,7 +270,7 @@ def index():
                 </form>
             </div>
             <div class="module">
-                <img src="{{ url_for('static', filename='break.png') }}">
+                <img src="{{ url_for('static', filename='aircon.png') }}">
                 <form method="POST" action="/toggle_button5">
                     <label class="switch">
                         <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} onchange="this.form.submit()">
