@@ -29,7 +29,7 @@ distance = 0
 def measure_DH():
     global temperature
     while True:
-        temperature = random.randint(1,100)
+        temperature = random.randint(1,50)
         if button_states['button4'] == True:
             if temperature > 25:
                 button_states['button5'] = True
