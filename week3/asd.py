@@ -113,27 +113,25 @@ def index():
             body {
                 background-color: #C8BFE7; /* 배경색 설정 */
             }
-            .container {
+            .main-container {
                 display: flex;
                 justify-content: center;
+                align-items: flex-start;
+                margin-top: 20px;
+            }
+            .image-section {
+                display: flex;
+                flex-direction: column;
                 align-items: center;
-                flex-wrap: wrap;
-                margin-top: -10px; /* button2,3,5의 위치 조정을 위해 조정 */
+                margin-right: 100px; /* button1과의 간격 100px */
             }
-            .module {
-                margin: 10px;
-                text-align: center;
-            }
-            .container .module {
-                margin-right: 75px; /* button2,3,5 사이의 간격을 75px로 설정 */
-            }
-            .container .module:last-child {
-                margin-right: 0; /* 마지막 버튼에는 margin-right를 적용하지 않음 */
+            .image-section img {
+                width: 100px; /* 이미지 크기 */
             }
             .top-buttons {
                 display: flex;
                 justify-content: center;
-                margin-top: 20px; /* 제목 바로 밑에 배치 */
+                align-items: center;
             }
             .top-buttons .module {
                 margin-right: 150px; /* button1과 button4 사이 간격 150px */
@@ -141,14 +139,17 @@ def index():
             .top-buttons .module:last-child {
                 margin-right: 0; /* 마지막 버튼에는 margin-right를 적용하지 않음 */
             }
-            .left-images {
+            .button-row {
                 display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                margin-right: 150px; /* Button1과의 간격 150px */
+                justify-content: center;
+                align-items: center;
+                margin-top: 20px;
             }
-            img {
-                width: 100px; /* 이미지 크기 */
+            .button-row .module {
+                margin-right: 75px; /* button2, button3, button5 간격 75px */
+            }
+            .button-row .module:last-child {
+                margin-right: 0; /* 마지막 버튼에 margin-right 제거 */
             }
             .switch {
                 position: relative;
@@ -194,55 +195,48 @@ def index():
                 font-size: 16px;
             }
             .info-text {
-                font-size: 15px; /* 폰트를 15로 설정 */
-            }
-            .temperature-img {
-                margin-top: 80px; /* distance 이미지 밑에 80px 간격 */
+                font-size: 15px;
             }
         </style>
     </head>
     <body>
         <h1 style="text-align: center;">G4TUNA WEEK3</h1>
     
-        <!-- Distance and Temperature Images on the Left -->
-        <div class="left-images">
-            <!-- Distance Section -->
-            <div class="distance-section">
+        <!-- Main Container: Distance & Temperature images, Button1, Button4 -->
+        <div class="main-container">
+            <!-- Distance and Temperature Images on the Left -->
+            <div class="image-section">
                 <img src="{{ url_for('static', filename='distance.png') }}" alt="Distance">
                 <p class="info-text">거리: {{distance}} cm</p>
-            </div>
-    
-            <!-- Temperature Section -->
-            <div class="temperature-section temperature-img">
-                <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
+                <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature" style="margin-top: 20px;">
                 <p class="info-text">온도: {{temperature}} °C</p>
             </div>
+    
+            <!-- Button 1 and Button 4 -->
+            <div class="top-buttons">
+                <div class="module">
+                    <form method="POST" action="/toggle_button1">
+                        <label class="switch">
+                            <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} onchange="this.form.submit()">
+                            <span class="slider"></span>
+                        </label>
+                        <div class="label-text">ADAS</div>
+                    </form>
+                </div>
+                <div class="module">
+                    <form method="POST" action="/toggle_button4">
+                        <label class="switch">
+                            <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
+                            <span class="slider"></span>
+                        </label>
+                        <div class="label-text">Auto Air Conditional</div>
+                    </form>
+                </div>
+            </div>
         </div>
     
-        <!-- Button 1, Button 4 - ADAS, Auto Air Conditional -->
-        <div class="top-buttons">
-            <div class="module">
-                <form method="POST" action="/toggle_button1">
-                    <label class="switch">
-                        <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} onchange="this.form.submit()">
-                        <span class="slider"></span>
-                    </label>
-                    <div class="label-text">ADAS</div>
-                </form>
-            </div>
-            <div class="module">
-                <form method="POST" action="/toggle_button4">
-                    <label class="switch">
-                        <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
-                        <span class="slider"></span>
-                    </label>
-                    <div class="label-text">Auto Air Conditional</div>
-                </form>
-            </div>
-        </div>
-    
-        <!-- Button 2, 3, 5 - 아래 배치, 간격 75px -->
-        <div class="container">
+        <!-- Button 2, 3, 5 row aligned to temperature -->
+        <div class="button-row" style="margin-left: 100px;">
             <div class="module">
                 <img src="{{ url_for('static', filename='break.png') }}">
                 <form method="POST" action="/toggle_button2">
@@ -276,8 +270,6 @@ def index():
         </div>
     </body>
     </html>
-
-
 
     '''
     
