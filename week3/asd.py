@@ -118,7 +118,7 @@ def index():
                 justify-content: center;
                 align-items: center;
                 flex-wrap: wrap;
-                margin-top: -75px; /* button2,3,5의 위치 조정을 위해 125px 아래로 이동 */
+                margin-top: -70px; /* button2,3,5의 위치 조정을 위해 125px 아래로 이동 */
             }
             .module {
                 margin: 10px;
@@ -133,7 +133,7 @@ def index():
             .top-buttons {
                 display: flex;
                 justify-content: center;
-                margin-top: 20px; /* 제목 바로 밑에 배치 */
+                margin-top: 50px; /* 제목 바로 밑에 배치 */
             }
             .top-buttons .module {
                 margin-right: 150px; /* button1과 button4 사이 간격 150px */
