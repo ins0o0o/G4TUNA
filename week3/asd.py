@@ -118,20 +118,22 @@ def index():
                 justify-content: center;
                 align-items: center;
                 flex-wrap: wrap;
+                margin-top: 250px; /* button2,3,5의 위치 조정을 위해 250px 아래로 이동 */
             }
             .module {
                 margin: 10px;
                 text-align: center;
             }
-            .top-left {
-                position: absolute;
-                top: 10px;
-                left: 10px;
+            .top-buttons {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px; /* 제목 바로 밑에 배치 */
             }
-            .bottom-left {
-                position: absolute;
-                top: 10px;
-                left: 160px;
+            .top-buttons .module {
+                margin-right: 150px; /* button1과 button4 사이 간격 150px */
+            }
+            .top-buttons .module:last-child {
+                margin-right: 0; /* 마지막 버튼에는 margin-right를 적용하지 않음 */
             }
             img {
                 width: 100px; /* 이미지 크기 */
@@ -184,30 +186,29 @@ def index():
     <body>
         <h1 style="text-align: center;">G4TUNA WEEK3</h1>
     
-        <!-- Button 1 - ADAS -->
-        <div class="module top-left">
-            
-            <form method="POST" action="/toggle_button1">
-                <label class="switch">
-                    <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <div class="label-text">ADAS</div>
-            </form>
+        <!-- Button 1, Button 4 - ADAS, Auto Air Conditional -->
+        <div class="top-buttons">
+            <div class="module">
+                <form method="POST" action="/toggle_button1">
+                    <label class="switch">
+                        <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">ADAS</div>
+                </form>
+            </div>
+            <div class="module">
+                <form method="POST" action="/toggle_button4">
+                    <label class="switch">
+                        <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">Auto Air Conditional</div>
+                </form>
+            </div>
         </div>
     
-        <!-- Button 4 - Auto Air Conditional -->
-        <div class="module bottom-left">
-            
-            <form method="POST" action="/toggle_button4">
-                <label class="switch">
-                    <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <div class="label-text">Auto Air Conditional</div>
-            </form>
-        </div>
-    
+        <!-- Button 2, 3, 5 - 아래 250px 밑에 배치 -->
         <div class="container">
             <div class="module">
                 <img src="{{ url_for('static', filename='break.png') }}">
