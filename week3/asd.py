@@ -172,7 +172,7 @@ def index():
         </style>
     </head>
     <body>
-        <h1>G4TUNA WEEK3</h1>
+        <h1 style="text-align: center;">G4TUNA WEEK3</h1>
         <div class="container">
             <div class="module">
                 <img src="{{ url_for('static', filename='STOP.png') }}">
