@@ -186,7 +186,7 @@ def index():
     
         <!-- Button 1 - ADAS -->
         <div class="module top-left">
-            <img src="{{ url_for('static', filename='STOP.png') }}">
+            
             <form method="POST" action="/toggle_button1">
                 <label class="switch">
                     <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} onchange="this.form.submit()">
@@ -198,7 +198,7 @@ def index():
     
         <!-- Button 4 - Auto Air Conditional -->
         <div class="module bottom-left">
-            <img src="{{ url_for('static', filename='break.png') }}">
+            
             <form method="POST" action="/toggle_button4">
                 <label class="switch">
                     <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
