@@ -113,32 +113,47 @@ def index():
             body {
                 background-color: #C8BFE7; /* 배경색 설정 */
             }
-            .main-container {
+            .container {
                 display: flex;
                 justify-content: center;
-                align-items: flex-start;
-                margin-top: 20px;
+                align-items: flex-start; /* 모든 버튼을 상단에 맞춤 */
+                flex-wrap: wrap;
+                margin-top: -125px; /* button2,3,5의 위치를 위로 이동 */
             }
-            .image-container, .button-container {
+            .module {
+                margin: 10px;
+                text-align: center;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                margin-right: 75px; /* 버튼과 사진 사이 간격 */
+                justify-content: flex-start;
             }
-            .image-container img, .button-container img {
+            .container .module {
+                margin-right: 75px; /* button2,3,5 사이의 간격을 75px로 설정 */
+            }
+            .container .module:last-child {
+                margin-right: 0; /* 마지막 버튼에는 margin-right를 적용하지 않음 */
+            }
+            .top-buttons {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px; /* 제목 바로 밑에 배치 */
+            }
+            .top-buttons .module {
+                margin-right: 150px; /* button1과 button4 사이 간격 150px */
+            }
+            .top-buttons .module:last-child {
+                margin-right: 0; /* 마지막 버튼에는 margin-right를 적용하지 않음 */
+            }
+            img {
                 width: 100px; /* 이미지 크기 */
-            }
-            .button-container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
+                margin-bottom: 10px; /* 이미지와 스위치 간격 */
             }
             .switch {
                 position: relative;
                 display: inline-block;
                 width: 60px;
                 height: 34px;
-                margin-bottom: 10px; /* 버튼 간격 */
             }
             .switch input {
                 opacity: 0;
@@ -177,73 +192,101 @@ def index():
                 margin-top: 8px;
                 font-size: 16px;
             }
+            .distance-section {
+                display: flex;
+                align-items: center;
+                margin-left: 150px; /* button4 옆 150px 간격으로 위치 */
+                margin-top: -30px; /* 간격을 50px 올림 */
+            }
+            .distance-section img {
+                margin-right: 10px;
+            }
+            .temperature-section {
+                display: flex;
+                align-items: center;
+                margin-left: 150px;
+                margin-top: 50px; /* 기존에서 50px 줄임 */
+            }
+            .temperature-section img {
+                margin-right: 10px;
+            }
             .info-text {
-                font-size: 15px;
+                font-size: 15px; /* 폰트를 15로 설정 */
             }
         </style>
     </head>
     <body>
         <h1 style="text-align: center;">G4TUNA WEEK3</h1>
-    
-        <!-- Main container for images and buttons -->
-        <div class="main-container">
-            <!-- Image Container -->
-            <div class="image-container">
-                <!-- Distance Section -->
-                <div>
-                    <img src="{{ url_for('static', filename='distance.png') }}" alt="Distance">
-                    <p class="info-text">거리: {{distance}} cm</p>
-                </div>
-    
-                <!-- Temperature Section -->
-                <div style="margin-top: 30px;">
-                    <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
-                    <p class="info-text">온도: {{temperature}} °C</p>
-                </div>
+        
+        <!-- Button 1, Button 4 - ADAS, Auto Air Conditional -->
+        <div class="top-buttons">
+            <div class="module">
+                <form method="POST" action="/toggle_button1">
+                    <label class="switch">
+                        <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">ADAS</div>
+                </form>
             </div>
+            <div class="module">
+                <form method="POST" action="/toggle_button4">
+                    <label class="switch">
+                        <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">Auto Air Conditional</div>
+                </form>
+            </div>
+        </div>
     
-            <!-- Button Container -->
-            <div class="button-container">
-                <!-- Button 2 -->
-                <div class="module">
-                    <img src="{{ url_for('static', filename='break.png') }}">
-                    <form method="POST" action="/toggle_button2">
-                        <label class="switch">
-                            <input type="checkbox" name="button2" {% if button_states['button2'] %}checked{% endif %} onchange="this.form.submit()">
-                            <span class="slider"></span>
-                        </label>
-                        <div class="label-text">Acceration</div>
-                    </form>
-                </div>
+        <!-- Distance Section -->
+        <div class="distance-section">
+            <img src="{{ url_for('static', filename='distance.png') }}" alt="Distance">
+            <p class="info-text">거리: {{distance}} cm</p>
+        </div>
     
-                <!-- Button 3 -->
-                <div class="module" style="margin-top: 30px;">
-                    <img src="{{ url_for('static', filename='break.png') }}">
-                    <form method="POST" action="/toggle_button3">
-                        <label class="switch">
-                            <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} onchange="this.form.submit()">
-                            <span class="slider"></span>
-                        </label>
-                        <div class="label-text">Break</div>
-                    </form>
-                </div>
+        <!-- Temperature Section -->
+        <div class="temperature-section">
+            <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
+            <p class="info-text">온도: {{temperature}} °C</p>
+        </div>
     
-                <!-- Button 5 -->
-                <div class="module" style="margin-top: 30px;">
-                    <img src="{{ url_for('static', filename='break.png') }}">
-                    <form method="POST" action="/toggle_button5">
-                        <label class="switch">
-                            <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} onchange="this.form.submit()">
-                            <span class="slider"></span>
-                        </label>
-                        <div class="label-text">Air Conditional</div>
-                    </form>
-                </div>
+        <!-- Button 2, 3, 5 - 300px 위로 이동, 간격 75px -->
+        <div class="container">
+            <div class="module">
+                <img src="{{ url_for('static', filename='acceleration.png') }}">
+                <form method="POST" action="/toggle_button2">
+                    <label class="switch">
+                        <input type="checkbox" name="button2" {% if button_states['button2'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">Acceleration</div>
+                </form>
+            </div>
+            <div class="module">
+                <img src="{{ url_for('static', filename='brake.png') }}">
+                <form method="POST" action="/toggle_button3">
+                    <label class="switch">
+                        <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">Break</div>
+                </form>
+            </div>
+            <div class="module">
+                <img src="{{ url_for('static', filename='airconditioner.png') }}">
+                <form method="POST" action="/toggle_button5">
+                    <label class="switch">
+                        <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">Air Conditional</div>
+                </form>
             </div>
         </div>
     </body>
     </html>
-
 
     '''
     
