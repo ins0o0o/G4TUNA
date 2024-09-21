@@ -187,6 +187,27 @@ def index():
                 margin-top: 8px;
                 font-size: 16px;
             }
+            .distance-section {
+                display: flex;
+                align-items: center;
+                margin-left: 150px; /* button4 옆 150px 간격으로 위치 */
+                margin-top: 20px; /* 간격 추가 */
+            }
+            .distance-section img {
+                margin-right: 10px;
+            }
+            .temperature-section {
+                display: flex;
+                align-items: center;
+                margin-left: 150px;
+                margin-top: 100px; /* distance 섹션과의 간격 */
+            }
+            .temperature-section img {
+                margin-right: 10px;
+            }
+            .info-text {
+                font-size: 15px; /* 폰트를 15로 설정 */
+            }
         </style>
     </head>
     <body>
@@ -212,6 +233,18 @@ def index():
                     <div class="label-text">Auto Air Conditional</div>
                 </form>
             </div>
+        </div>
+    
+        <!-- Distance Section -->
+        <div class="distance-section">
+            <img src="{{ url_for('static', filename='distance.png') }}" alt="Distance">
+            <p class="info-text">거리: {{distance}} cm</p>
+        </div>
+    
+        <!-- Temperature Section -->
+        <div class="temperature-section">
+            <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
+            <p class="info-text">온도: {{temperature}} °C</p>
         </div>
     
         <!-- Button 2, 3, 5 - 아래 125px 밑에 배치, 간격 75px -->
@@ -247,15 +280,13 @@ def index():
                 </form>
             </div>
         </div>
-    
-        <p>거리: {{distance}} cm</p>
-        <p>온도: {{temperature}} °C</p>
     </body>
     </html>
 
+
     '''
     
-    return render_template_string(html, button_states=button_states, distance=distance, temperature=temperature, humidity=humidity)
+    return render_template_string(html, button_states=button_states, distance=round(distance,2), temperature=temperature, humidity=humidity)
 
 # 버튼 1의 상태를 토글하는 라우트
 @app.route('/toggle_button1', methods=['POST'])
