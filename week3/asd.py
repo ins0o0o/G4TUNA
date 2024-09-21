@@ -200,7 +200,7 @@ def index():
                 display: flex;
                 align-items: center;
                 margin-left: 150px;
-                margin-top: 100px; /* distance 섹션과의 간격 */
+                margin-top: 50px; /* distance 섹션과의 간격 */
             }
             .temperature-section img {
                 margin-right: 10px;
