@@ -100,7 +100,7 @@ app = Flask(__name__)
 def index():
     GPIO.output(ledGreen, button_states['button2'])
     GPIO.output(ledRed, button_states['button3'])
-    GPIO.output(ledYello, button_states['button4'])
+    GPIO.output(ledYello, button_states['button5'])
     html = '''
     <!DOCTYPE html>
     <html lang="en">
