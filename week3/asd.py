@@ -118,7 +118,7 @@ def index():
                 justify-content: center;
                 align-items: center;
                 flex-wrap: wrap;
-                margin-top: -10px; /* button2,3,5의 위치 조정을 위해 125px 아래로 이동 */
+                margin-top: -10px; /* button2,3,5의 위치 조정을 위해 조정 */
             }
             .module {
                 margin: 10px;
@@ -140,6 +140,12 @@ def index():
             }
             .top-buttons .module:last-child {
                 margin-right: 0; /* 마지막 버튼에는 margin-right를 적용하지 않음 */
+            }
+            .left-images {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-right: 150px; /* Button1과의 간격 150px */
             }
             img {
                 width: 100px; /* 이미지 크기 */
@@ -187,31 +193,31 @@ def index():
                 margin-top: 8px;
                 font-size: 16px;
             }
-            .distance-section {
-                display: flex;
-                align-items: center;
-                margin-left: 150px; /* button4 옆 150px 간격으로 위치 */
-                margin-top: 10px; /* 간격 추가 */
-            }
-            .distance-section img {
-                margin-right: 10px;
-            }
-            .temperature-section {
-                display: flex;
-                align-items: center;
-                margin-left: 150px;
-                margin-top: 100px; /* distance 섹션과의 간격 */
-            }
-            .temperature-section img {
-                margin-right: 10px;
-            }
             .info-text {
                 font-size: 15px; /* 폰트를 15로 설정 */
+            }
+            .temperature-img {
+                margin-top: 80px; /* distance 이미지 밑에 80px 간격 */
             }
         </style>
     </head>
     <body>
         <h1 style="text-align: center;">G4TUNA WEEK3</h1>
+    
+        <!-- Distance and Temperature Images on the Left -->
+        <div class="left-images">
+            <!-- Distance Section -->
+            <div class="distance-section">
+                <img src="{{ url_for('static', filename='distance.png') }}" alt="Distance">
+                <p class="info-text">거리: {{distance}} cm</p>
+            </div>
+    
+            <!-- Temperature Section -->
+            <div class="temperature-section temperature-img">
+                <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
+                <p class="info-text">온도: {{temperature}} °C</p>
+            </div>
+        </div>
     
         <!-- Button 1, Button 4 - ADAS, Auto Air Conditional -->
         <div class="top-buttons">
@@ -235,19 +241,7 @@ def index():
             </div>
         </div>
     
-        <!-- Distance Section -->
-        <div class="distance-section">
-            <img src="{{ url_for('static', filename='distance.png') }}" alt="Distance">
-            <p class="info-text">거리: {{distance}} cm</p>
-        </div>
-    
-        <!-- Temperature Section -->
-        <div class="temperature-section">
-            <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature">
-            <p class="info-text">온도: {{temperature}} °C</p>
-        </div>
-    
-        <!-- Button 2, 3, 5 - 아래 125px 밑에 배치, 간격 75px -->
+        <!-- Button 2, 3, 5 - 아래 배치, 간격 75px -->
         <div class="container">
             <div class="module">
                 <img src="{{ url_for('static', filename='break.png') }}">
@@ -282,6 +276,7 @@ def index():
         </div>
     </body>
     </html>
+
 
 
     '''
