@@ -211,7 +211,7 @@ def index():
                 margin-right: 10px;
             }
             .info-text {
-                font-size: 15px; /* 폰트를 15로 설정 */
+                font-size: 25px; /* 폰트를 15로 설정 */
             }
         </style>
     </head>
