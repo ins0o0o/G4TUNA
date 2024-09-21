@@ -118,11 +118,17 @@ def index():
                 justify-content: center;
                 align-items: center;
                 flex-wrap: wrap;
-                margin-top: 125px; /* button2,3,5의 위치 조정을 위해 250px 아래로 이동 */
+                margin-top: 125px; /* button2,3,5의 위치 조정을 위해 125px 아래로 이동 */
             }
             .module {
                 margin: 10px;
                 text-align: center;
+            }
+            .container .module {
+                margin-right: 75px; /* button2,3,5 사이의 간격을 75px로 설정 */
+            }
+            .container .module:last-child {
+                margin-right: 0; /* 마지막 버튼에는 margin-right를 적용하지 않음 */
             }
             .top-buttons {
                 display: flex;
@@ -208,7 +214,7 @@ def index():
             </div>
         </div>
     
-        <!-- Button 2, 3, 5 - 아래 250px 밑에 배치 -->
+        <!-- Button 2, 3, 5 - 아래 125px 밑에 배치, 간격 75px -->
         <div class="container">
             <div class="module">
                 <img src="{{ url_for('static', filename='break.png') }}">
