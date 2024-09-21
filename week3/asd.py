@@ -123,6 +123,16 @@ def index():
                 margin: 10px;
                 text-align: center;
             }
+            .top-left {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+            }
+            .bottom-left {
+                position: absolute;
+                top: 100px;
+                left: 10px;
+            }
             img {
                 width: 100px; /* 이미지 크기 */
             }
@@ -173,17 +183,32 @@ def index():
     </head>
     <body>
         <h1 style="text-align: center;">G4TUNA WEEK3</h1>
+    
+        <!-- Button 1 - ADAS -->
+        <div class="module top-left">
+            <img src="{{ url_for('static', filename='STOP.png') }}">
+            <form method="POST" action="/toggle_button1">
+                <label class="switch">
+                    <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} onchange="this.form.submit()">
+                    <span class="slider"></span>
+                </label>
+                <div class="label-text">ADAS</div>
+            </form>
+        </div>
+    
+        <!-- Button 4 - Auto Air Conditional -->
+        <div class="module bottom-left">
+            <img src="{{ url_for('static', filename='break.png') }}">
+            <form method="POST" action="/toggle_button4">
+                <label class="switch">
+                    <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
+                    <span class="slider"></span>
+                </label>
+                <div class="label-text">Auto Air Conditional</div>
+            </form>
+        </div>
+    
         <div class="container">
-            <div class="module">
-                <img src="{{ url_for('static', filename='STOP.png') }}">
-                <form method="POST" action="/toggle_button1">
-                    <label class="switch">
-                        <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} onchange="this.form.submit()">
-                        <span class="slider"></span>
-                    </label>
-                    <div class="label-text">ADAS</div>
-                </form>
-            </div>
             <div class="module">
                 <img src="{{ url_for('static', filename='break.png') }}">
                 <form method="POST" action="/toggle_button2">
@@ -206,16 +231,6 @@ def index():
             </div>
             <div class="module">
                 <img src="{{ url_for('static', filename='break.png') }}">
-                <form method="POST" action="/toggle_button4">
-                    <label class="switch">
-                        <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
-                        <span class="slider"></span>
-                    </label>
-                    <div class="label-text">Auto Air Conditional</div>
-                </form>
-            </div>
-            <div class="module">
-                <img src="{{ url_for('static', filename='break.png') }}">
                 <form method="POST" action="/toggle_button5">
                     <label class="switch">
                         <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} onchange="this.form.submit()">
@@ -225,6 +240,7 @@ def index():
                 </form>
             </div>
         </div>
+    
         <p>거리: {{distance}} cm</p>
         <p>온도: {{temperature}} °C</p>
     </body>
