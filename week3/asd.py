@@ -110,6 +110,14 @@ def index():
         <meta http-equiv="refresh" content="1">
         <title>Slide Toggle Buttons</title>
         <style>
+            /* 합친 CSS 스타일 */
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 50px;
+            }
+
             .switch {
                 position: relative;
                 display: inline-block;
@@ -165,82 +173,87 @@ def index():
             .switch-container {
                 margin: 10px 0;
             }
+
+            .image-slider-container img {
+                width: 100px;
+                height: 100px;
+            }
         </style>
     </head>
     <body>
-        <h1>G4TUNA WEEK3</h1>
-        <p>거리: {{distance}} </p>
-        <p>온도: {{temperature}} </p>
+        <div class="container">
+            <h1>G4TUNA WEEK3</h1>
+            <p>거리: {{distance}} </p>
+            <p>온도: {{temperature}} </p>
 
-        <form method="POST" action="/toggle_button1">
-            <div class="switch-container">
-                <label class="switch">
-                    <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} 
-                    onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <span class="label-text">ADAS</span>
-            </div>
-        </form>
+            <form method="POST" action="/toggle_button1">
+                <div class="switch-container">
+                    <label class="switch">
+                        <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} 
+                        onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="label-text">ADAS</span>
+                </div>
+            </form>
 
-        <form method="POST" action="/toggle_button2">
-            <div class="switch-container">
-                <label class="switch">
-                    <input type="checkbox" name="button2" {% if button_states['button2'] %}checked{% endif %} 
-                    onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <span class="label-text">Acceration</span>
-            </div>
-        </form>
+            <form method="POST" action="/toggle_button2">
+                <div class="switch-container">
+                    <label class="switch">
+                        <input type="checkbox" name="button2" {% if button_states['button2'] %}checked{% endif %} 
+                        onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="label-text">Acceration</span>
+                </div>
+            </form>
 
-        <form method="POST" action="/toggle_button3">
-            <div class="switch-container">
-                <label class="switch">
-                    <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} 
-                    onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <span class="label-text">Break</span>
-            </div>
-        </form>
+            <form method="POST" action="/toggle_button3">
+                <div class="switch-container">
+                    <label class="switch">
+                        <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} 
+                        onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="label-text">Break</span>
+                </div>
+            </form>
 
-        <form method="POST" action="/toggle_button4">
-            <div class="switch-container">
-                <label class="switch">
-                    <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} 
-                    onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <span class="label-text">Auto Air Conditional</span>
-            </div>
-        </form>
+            <form method="POST" action="/toggle_button4">
+                <div class="switch-container">
+                    <label class="switch">
+                        <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} 
+                        onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="label-text">Auto Air Conditional</span>
+                </div>
+            </form>
 
-        <form method="POST" action="/toggle_button5">
-            <div class="switch-container">
-                <label class="switch">
-                    <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} 
-                    onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <span class="label-text">Air Conditional</span>
-            </div>
-        </form>
-
+            <form method="POST" action="/toggle_button5">
+                <div class="switch-container">
+                    <label class="switch">
+                        <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} 
+                        onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="label-text">Air Conditional</span>
+                </div>
+            </form>
+        </div>
     </body>
     </html>
     '''
     
     return render_template_string(html, button_states=button_states, distance=distance, temperature=temperature, humidity=humidity)
 
-# 버튼 1의 상태를 토글하는 라우트
+# 버튼 상태를 토글하는 라우트 (버튼1, 2, 3, 4, 5 각각)
 @app.route('/toggle_button1', methods=['POST'])
 def toggle_button1():
     global button_states
-    button_states['button1'] = not button_states['button1']  # 상태 토글
+    button_states['button1'] = not button_states['button1']
     return redirect(url_for('index'))
 
-# 버튼 2의 상태를 토글하는 라우트
 @app.route('/toggle_button2', methods=['POST'])
 def toggle_button2():
     global button_states
@@ -248,27 +261,7 @@ def toggle_button2():
     button_states['button2'] = not button_states['button2']
     return redirect(url_for('index'))
 
-# 버튼 3의 상태를 토글하는 라우트
 @app.route('/toggle_button3', methods=['POST'])
 def toggle_button3():
     global button_states
     button_states['button1'] = False
-    button_states['button3'] = not button_states['button3']
-    return redirect(url_for('index'))
-
-# 버튼 4의 상태를 토글하는 라우트
-@app.route('/toggle_button4', methods=['POST'])
-def toggle_button4():
-    global button_states
-    button_states['button4'] = not button_states['button4']
-    return redirect(url_for('index'))
-
-@app.route('/toggle_button5', methods=['POST'])
-def toggle_button5():
-    global button_states
-    button_states['button4'] = False
-    button_states['button5'] = not button_states['button5']
-    return redirect(url_for('index'))
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
