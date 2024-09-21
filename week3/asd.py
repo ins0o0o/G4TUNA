@@ -26,122 +26,249 @@ GPIO.setup(DistanceEcho, GPIO.IN)
 button_states = {
     'button1': True,
     'button2': False,
-    'button3': True,
-    'button4': False
+    'button3': False,
+    'button4': True,
+    'button5': False
 }
+
+AutoAccBrk = 0  # 차간 거리 유지 ON / OFF
+AutoAC = 0      # 에어컨 자동 ON / OFF
 
 humidity = 0
 temperature = 0
 distance = 0
 
-ledStates = [0, 0, 0]  # Red, Yellow, Green LED 상태
-
-# LED 상태 업데이트 함수
-def updateLeds():
-    GPIO.output(ledRed, ledStates[0])
-    GPIO.output(ledYello, ledStates[1])
-    GPIO.output(ledGreen, ledStates[2])
-
-# 터치 센서 스레드
 def check_touch():
     global button_states
     while True:
-        GPIO.wait_for_edge(sensTouch, GPIO.FALLING)
-        button_states['button1'] = not button_states['button1']
+        GPIO.wait_for_edge(sensTouch, GPIO.FALLING)  # 버튼이 눌렸을 때까지 대기 (FALLING 엣지 감지)
+        button_states['button1'] = not button_states['button1']  # button_states['button1'] 값 토글
         time.sleep(0.2)
 
 touch_thread = threading.Thread(target=check_touch)
-touch_thread.daemon = True
+touch_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 종료되도록 설정
 touch_thread.start()
 
-# 거리 측정 스레드
-def measure_distance():
+def measure_DH():
     sensor = Adafruit_DHT.DHT11
-    global button_states
-    global distance
     global temperature
     global humidity
     while True:
         humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
-
-        GPIO.output(DistanceTrig, GPIO.LOW)
-        time.sleep(0.1)
-
-        GPIO.output(DistanceTrig, GPIO.HIGH)
-        time.sleep(0.00001)
-        GPIO.output(DistanceTrig, GPIO.LOW)
-
-        while GPIO.input(DistanceEcho) == GPIO.LOW:
-            pulse_start = time.time()
-
-        while GPIO.input(DistanceEcho) == GPIO.HIGH:
-            pulse_end = time.time()
-
-        pulse_duration = pulse_end - pulse_start
-        distance = pulse_duration * 34300 / 2
-
-        if button_states['button1'] == True:
-            if distance < 10:
-                button_states['button2'] = False
-                ledStates[0] = 1  # Red LED ON
-                button_states['button3'] = True
-                ledStates[2] = 0  # Green LED OFF
-            elif distance > 10:
-                button_states['button2'] = True
-                ledStates[0] = 0  # Red LED OFF
-                button_states['button3'] = False
-                ledStates[2] = 1  # Green LED ON
-        updateLeds()
-
+        if button_states['button4'] == True:
+            if temperature > 25:
+                button_states['button5'] = True
+            else:
+                button_states['button5'] = False
         time.sleep(0.2)
 
-measure_thread = threading.Thread(target=measure_distance)
-measure_thread.daemon = True
-measure_thread.start()
+DH_thread = threading.Thread(target=measure_DH)
+DH_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 종료되도록 설정
+DH_thread.start()
+
+def measure_distance():
+    global distance
+    while True:
+        GPIO.output(DistanceTrig, GPIO.LOW)
+        time.sleep(0.1)
+        GPIO.output(DistanceTrig, GPIO.HIGH)
+        time.sleep(0.00001)  # 10μs 대기
+        GPIO.output(DistanceTrig, GPIO.LOW)
+        while GPIO.input(DistanceEcho) == GPIO.LOW:
+            pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
+        while GPIO.input(DistanceEcho) == GPIO.HIGH:
+            pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
+        pulse_duration = pulse_end - pulse_start
+        distance = pulse_duration * 34300 / 2
+        
+        if button_states['button1'] == True:
+                if distance < 10:
+                    button_states['button2'] = False
+                    button_states['button3'] = True
+                elif distance > 10:
+                    button_states['button2'] = True
+                    button_states['button3'] = False
+        time.sleep(0.2)
+
+distance_thread = threading.Thread(target=measure_distance)
+distance_thread.daemon = True  # 메인 프로세스 종료 시 자동으로 종료
+distance_thread.start()
 
 app = Flask(__name__)
 
-# HTML 페이지 템플릿
-html_page = '''
-<!doctype html>
-<html>
-<head>
-    <title>LED Controller</title>
-</head>
-<body>
-    <h1>G4TUNA WEEEK3</h1>
-    <p>거리: {{distance}} cm</p>
-    <p>온도: {{temperature}} °C</p>
-
-    <form method="POST" action="/toggle_led/0">
-        <p>Red LED: {% if ledStates[0] == 1 %} ON {% else %} OFF {% endif %} 
-        <input type="submit" value="{% if ledStates[0] == 1 %} Turn OFF {% else %} Turn ON {% endif %}"></p>
-    </form>
-
-    <form method="POST" action="/toggle_led/1">
-        <p>Yellow LED: {% if ledStates[1] == 1 %} ON {% else %} OFF {% endif %} 
-        <input type="submit" value="{% if ledStates[1] == 1 %} Turn OFF {% else %} Turn ON {% endif %}"></p>
-    </form>
-
-    <form method="POST" action="/toggle_led/2">
-        <p>Green LED: {% if ledStates[2] == 1 %} ON {% else %} OFF {% endif %} 
-        <input type="submit" value="{% if ledStates[2] == 1 %} Turn OFF {% else %} Turn ON {% endif %}"></p>
-    </form>
-</body>
-</html>
-'''
-
-# 메인 페이지 라우트
 @app.route('/')
 def index():
-    return render_template_string(html_page, ledStates=ledStates, distance=distance, temperature=temperature)
+    GPIO.output(ledGreen, button_states['button2'])
+    GPIO.output(ledRed, button_states['button3'])
+    GPIO.output(ledYello, button_states['button5'])
+    html = '''
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="refresh" content="1">
+        <title>Slide Toggle Buttons</title>
+        <style>
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 34px;
+            }
 
-# LED 토글 라우트
-@app.route('/toggle_led/<int:led>', methods=['POST'])
-def toggle_led(led):
-    ledStates[led] = 1 if ledStates[led] == 0 else 0
-    updateLeds()
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                transition: .4s;
+                border-radius: 34px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+            input:checked + .slider {
+                background-color: #4CAF50;
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(26px);
+            }
+
+            /* 스타일 버튼 옆에 텍스트 추가 */
+            .label-text {
+                margin-left: 10px;
+                vertical-align: middle;
+                font-size: 16px;
+            }
+
+            .switch-container {
+                margin: 10px 0;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>G4TUNA WEEK3</h1>
+        <p>거리: {{distance}} </p>
+        <p>온도: {{temperature}} </p>
+
+        <form method="POST" action="/toggle_button1">
+            <div class="switch-container">
+                <label class="switch">
+                    <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} 
+                    onchange="this.form.submit()">
+                    <span class="slider"></span>
+                </label>
+                <span class="label-text">ADAS</span>
+            </div>
+        </form>
+
+        <form method="POST" action="/toggle_button2">
+            <div class="switch-container">
+                <label class="switch">
+                    <input type="checkbox" name="button2" {% if button_states['button2'] %}checked{% endif %} 
+                    onchange="this.form.submit()">
+                    <span class="slider"></span>
+                </label>
+                <span class="label-text">Acceration</span>
+            </div>
+        </form>
+
+        <form method="POST" action="/toggle_button3">
+            <div class="switch-container">
+                <label class="switch">
+                    <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} 
+                    onchange="this.form.submit()">
+                    <span class="slider"></span>
+                </label>
+                <span class="label-text">Break</span>
+            </div>
+        </form>
+
+        <form method="POST" action="/toggle_button4">
+            <div class="switch-container">
+                <label class="switch">
+                    <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} 
+                    onchange="this.form.submit()">
+                    <span class="slider"></span>
+                </label>
+                <span class="label-text">Auto Air Conditional</span>
+            </div>
+        </form>
+
+        <form method="POST" action="/toggle_button5">
+            <div class="switch-container">
+                <label class="switch">
+                    <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} 
+                    onchange="this.form.submit()">
+                    <span class="slider"></span>
+                </label>
+                <span class="label-text">Air Conditional</span>
+            </div>
+        </form>
+
+    </body>
+    </html>
+    '''
+    
+    return render_template_string(html, button_states=button_states, distance=distance, temperature=temperature, humidity=humidity)
+
+# 버튼 1의 상태를 토글하는 라우트
+@app.route('/toggle_button1', methods=['POST'])
+def toggle_button1():
+    global button_states
+    button_states['button1'] = not button_states['button1']  # 상태 토글
     return redirect(url_for('index'))
 
-if __name__ == '__main__':
+# 버튼 2의 상태를 토글하는 라우트
+@app.route('/toggle_button2', methods=['POST'])
+def toggle_button2():
+    global button_states
+    button_states['button1'] = False
+    button_states['button2'] = not button_states['button2']
+    return redirect(url_for('index'))
+
+# 버튼 3의 상태를 토글하는 라우트
+@app.route('/toggle_button3', methods=['POST'])
+def toggle_button3():
+    global button_states
+    button_states['button1'] = False
+    button_states['button3'] = not button_states['button3']
+    return redirect(url_for('index'))
+
+# 버튼 4의 상태를 토글하는 라우트
+@app.route('/toggle_button4', methods=['POST'])
+def toggle_button4():
+    global button_states
+    button_states['button4'] = not button_states['button4']
+    return redirect(url_for('index'))
+
+@app.route('/toggle_button5', methods=['POST'])
+def toggle_button5():
+    global button_states
+    button_states['button4'] = False
+    button_states['button5'] = not button_states['button5']
+    return redirect(url_for('index'))
+
+if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
