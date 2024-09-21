@@ -118,7 +118,7 @@ def index():
                 justify-content: center;
                 align-items: center;
                 flex-wrap: wrap;
-                margin-top: 125px; /* button2,3,5의 위치 조정을 위해 125px 아래로 이동 */
+                margin-top: -175px; /* button2,3,5의 위치를 300px 위로 이동 */
             }
             .module {
                 margin: 10px;
@@ -247,7 +247,7 @@ def index():
             <p class="info-text">온도: {{temperature}} °C</p>
         </div>
     
-        <!-- Button 2, 3, 5 - 아래 125px 밑에 배치, 간격 75px -->
+        <!-- Button 2, 3, 5 - 300px 위로 이동, 간격 75px -->
         <div class="container">
             <div class="module">
                 <img src="{{ url_for('static', filename='break.png') }}">
@@ -282,6 +282,7 @@ def index():
         </div>
     </body>
     </html>
+
 
     '''
     
