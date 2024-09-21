@@ -118,7 +118,7 @@ def index():
                 justify-content: center;
                 align-items: flex-start; /* 모든 버튼을 상단에 맞춤 */
                 flex-wrap: wrap;
-                margin-top: -125px; /* button2,3,5의 위치를 위로 이동 */
+                margin-top: -145px; /* button2,3,5의 위치를 위로 이동 */
             }
             .module {
                 margin: 10px;
@@ -211,7 +211,7 @@ def index():
                 margin-right: 10px;
             }
             .info-text {
-                font-size: 25px; /* 폰트를 15로 설정 */
+                font-size: 20px; /* 폰트를 15로 설정 */
             }
         </style>
     </head>
