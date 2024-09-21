@@ -118,7 +118,7 @@ def index():
                 justify-content: center;
                 align-items: center;
                 flex-wrap: wrap;
-                margin-top: 250px; /* button2,3,5의 위치 조정을 위해 250px 아래로 이동 */
+                margin-top: 125px; /* button2,3,5의 위치 조정을 위해 250px 아래로 이동 */
             }
             .module {
                 margin: 10px;
