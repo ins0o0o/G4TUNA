@@ -191,7 +191,7 @@ def index():
                 display: flex;
                 align-items: center;
                 margin-left: 150px; /* button4 옆 150px 간격으로 위치 */
-                margin-top: 20px; /* 간격 추가 */
+                margin-top: -30px; /* 간격을 50px 올림 */
             }
             .distance-section img {
                 margin-right: 10px;
@@ -200,7 +200,7 @@ def index():
                 display: flex;
                 align-items: center;
                 margin-left: 150px;
-                margin-top: 50px; /* distance 섹션과의 간격 */
+                margin-top: 50px; /* 기존에서 50px 줄임 */
             }
             .temperature-section img {
                 margin-right: 10px;
@@ -282,7 +282,6 @@ def index():
         </div>
     </body>
     </html>
-
 
     '''
     
