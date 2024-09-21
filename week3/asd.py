@@ -199,7 +199,7 @@ def index():
                 <form method="POST" action="/toggle_button3">
                     <label class="switch">
                         <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} onchange="this.form.submit()">
-                        <span the slider"></span>
+                        <span class="slider"></span>
                     </label>
                     <div class="label-text">Break</div>
                 </form>
