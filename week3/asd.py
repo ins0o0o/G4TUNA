@@ -108,21 +108,35 @@ def index():
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="refresh" content="1">
-        <title>Slide Toggle Buttons</title>
+        <title>G4TUNA WEEK3</title>
         <style>
+            body {
+                background-color: #C8BFE7; /* 배경색 설정 */
+            }
+            .container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            .module {
+                margin: 10px;
+                text-align: center;
+            }
+            img {
+                width: 100px; /* 이미지 크기 */
+            }
             .switch {
                 position: relative;
                 display: inline-block;
                 width: 60px;
                 height: 34px;
             }
-
             .switch input {
                 opacity: 0;
                 width: 0;
                 height: 0;
             }
-
             .slider {
                 position: absolute;
                 cursor: pointer;
@@ -134,7 +148,6 @@ def index():
                 transition: .4s;
                 border-radius: 34px;
             }
-
             .slider:before {
                 position: absolute;
                 content: "";
@@ -146,89 +159,77 @@ def index():
                 transition: .4s;
                 border-radius: 50%;
             }
-
             input:checked + .slider {
                 background-color: #4CAF50;
             }
-
             input:checked + .slider:before {
                 transform: translateX(26px);
             }
-
-            /* 스타일 버튼 옆에 텍스트 추가 */
             .label-text {
-                margin-left: 10px;
-                vertical-align: middle;
+                margin-top: 8px;
                 font-size: 16px;
-            }
-
-            .switch-container {
-                margin: 10px 0;
             }
         </style>
     </head>
     <body>
         <h1>G4TUNA WEEK3</h1>
-        <p>거리: {{distance}} </p>
-        <p>온도: {{temperature}} </p>
-
-        <form method="POST" action="/toggle_button1">
-            <div class="switch-container">
-                <label class="switch">
-                    <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} 
-                    onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <span class="label-text">ADAS</span>
+        <div class="container">
+            <div class="module">
+                <img src="{{ url_for('static', filename='STOP.png') }}">
+                <form method="POST" action="/toggle_button1">
+                    <label class="switch">
+                        <input type="checkbox" name="button1" {% if button_states['button1'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">ADAS</div>
+                </form>
             </div>
-        </form>
-
-        <form method="POST" action="/toggle_button2">
-            <div class="switch-container">
-                <label class="switch">
-                    <input type="checkbox" name="button2" {% if button_states['button2'] %}checked{% endif %} 
-                    onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <span class="label-text">Acceration</span>
+            <div class="module">
+                <img src="{{ url_for('static', filename='break.png') }}">
+                <form method="POST" action="/toggle_button2">
+                    <label class="switch">
+                        <input type="checkbox" name="button2" {% if button_states['button2'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">Acceration</div>
+                </form>
             </div>
-        </form>
-
-        <form method="POST" action="/toggle_button3">
-            <div class="switch-container">
-                <label class="switch">
-                    <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} 
-                    onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <span class="label-text">Break</span>
+            <div class="module">
+                <img src="{{ url_for('static', filename='break.png') }}">
+                <form method="POST" action="/toggle_button3">
+                    <label class="switch">
+                        <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span the slider"></span>
+                    </label>
+                    <div class="label-text">Break</div>
+                </form>
             </div>
-        </form>
-
-        <form method="POST" action="/toggle_button4">
-            <div class="switch-container">
-                <label class="switch">
-                    <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} 
-                    onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <span class="label-text">Auto Air Conditional</span>
+            <div class="module">
+                <img src="{{ url_for('static', filename='break.png') }}">
+                <form method="POST" action="/toggle_button4">
+                    <label class="switch">
+                        <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">Auto Air Conditional</div>
+                </form>
             </div>
-        </form>
-
-        <form method="POST" action="/toggle_button5">
-            <div class="switch-container">
-                <label class="switch">
-                    <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} 
-                    onchange="this.form.submit()">
-                    <span class="slider"></span>
-                </label>
-                <span class="label-text">Air Conditional</span>
+            <div class="module">
+                <img src="{{ url_for('static', filename='break.png') }}">
+                <form method="POST" action="/toggle_button5">
+                    <label class="switch">
+                        <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="label-text">Air Conditional</div>
+                </form>
             </div>
-        </form>
-
+        </div>
+        <p>거리: {{distance}} cm</p>
+        <p>온도: {{temperature}} °C</p>
     </body>
     </html>
+
     '''
     
     return render_template_string(html, button_states=button_states, distance=distance, temperature=temperature, humidity=humidity)
