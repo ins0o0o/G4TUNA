@@ -193,7 +193,7 @@ def index():
     </html>
     '''
     
-    return render_template_string(html, button_states=button_states, distance=distance, temperature=temperature)
+    return render_template_string(html, button_states=button_states, distance=round(distance,2), temperature=temperature)
 
 @app.route('/toggle_button1', methods=['POST'])
 def toggle_button1():
