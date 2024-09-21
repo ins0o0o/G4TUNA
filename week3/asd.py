@@ -191,7 +191,7 @@ def index():
                 display: flex;
                 align-items: center;
                 margin-left: 150px; /* button4 옆 150px 간격으로 위치 */
-                margin-top: 20px; /* 간격 추가 */
+                margin-top: 10px; /* 간격 추가 */
             }
             .distance-section img {
                 margin-right: 10px;
