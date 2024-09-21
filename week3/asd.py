@@ -130,8 +130,8 @@ def index():
             }
             .bottom-left {
                 position: absolute;
-                top: 100px;
-                left: 10px;
+                top: 10px;
+                left: 160px;
             }
             img {
                 width: 100px; /* 이미지 크기 */
