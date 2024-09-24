@@ -195,8 +195,8 @@ def index():
             .distance-section {
                 display: flex;
                 align-items: center;
-                margin-left: 150px; /* button4 옆 150px 간격으로 위치 */
-                margin-top: -30px; /* 간격을 50px 올림 */
+                margin-left: 150px;
+                margin-top: -30px;
             }
             .distance-section img {
                 margin-right: 10px;
@@ -205,20 +205,20 @@ def index():
                 display: flex;
                 align-items: center;
                 margin-left: 150px;
-                margin-top: 50px; /* 기존에서 50px 줄임 */
+                margin-top: 50px;
             }
             .temperature-section img {
                 margin-right: 10px;
             }
             .info-text {
-                font-size: 20px; /* 폰트를 15로 설정 */
+                font-size: 20px;
             }
         </style>
     </head>
     <body>
         <h1 style="text-align: center;">G4TUNA WEEK3</h1>
         
-        <!-- Button 1, Button 4 - ADAS, Auto Air Conditional -->
+        <!-- Button 1, Button 4 - ADAS, Auto Air Conditioner -->
         <div class="top-buttons">
             <div class="module">
                 <form method="POST" action="/toggle_button1">
@@ -235,7 +235,7 @@ def index():
                         <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
                         <span class="slider"></span>
                     </label>
-                    <div class="label-text">Auto Air Conditional</div>
+                    <div class="label-text">Auto Air Conditioner</div>
                 </form>
             </div>
         </div>
@@ -252,7 +252,6 @@ def index():
             <p class="info-text">온도: {{temperature}} °C</p>
         </div>
     
-        <!-- Button 2, 3, 5 - 300px 위로 이동, 간격 75px -->
         <div class="container">
             <div class="module">
                 <img src="{{ url_for('static', filename='acceleration.png') }}">
@@ -271,7 +270,7 @@ def index():
                         <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} onchange="this.form.submit()">
                         <span class="slider"></span>
                     </label>
-                    <div class="label-text">Break</div>
+                    <div class="label-text">Brake</div>
                 </form>
             </div>
             <div class="module">
@@ -281,7 +280,7 @@ def index():
                         <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} onchange="this.form.submit()">
                         <span class="slider"></span>
                     </label>
-                    <div class="label-text">Air Conditional</div>
+                    <div class="label-text">Air Conditioner</div>
                 </form>
             </div>
         </div>
