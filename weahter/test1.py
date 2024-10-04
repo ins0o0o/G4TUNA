@@ -6,7 +6,7 @@ url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst'
 queryParams = '?' + urlencode(
   {
    "ServiceKey" : unquote ("b+l6KbUYclc3AGqxHPCMqoAzo9Ql1Ue5x1pMRYhlOHjemB/4JOTQET7PUq7xy6hsR/p1hseiDNohfO2MwEVzyQ=="),
-                "base_date" : "20200729", 
+                "base_date" : "20241004", 
                 "base_time" : "0100",
                 "nx" : 61,
                 "ny" : 126,
