@@ -5,11 +5,11 @@ import json
 url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst'
 queryParams = '?' + urlencode(
   {
-   "ServiceKey" : 'b%2Bl6KbUYclc3AGqxHPCMqoAzo9Ql1Ue5x1pMRYhlOHjemB%2F4JOTQET7PUq7xy6hsR%2Fp1hseiDNohfO2MwEVzyQ%3D%3D',
-                "base_date" : "20241003", 
+   "ServiceKey" : unquote("b%2Bl6KbUYclc3AGqxHPCMqoAzo9Ql1Ue5x1pMRYhlOHjemB%2F4JOTQET7PUq7xy6hsR%2Fp1hseiDNohfO2MwEVzyQ%3D%3D"),
+                "base_date" : "20241002", 
                 "base_time" : "0100",
-                "nx" : 61,
-                "ny" : 126,
+                "nx" : 100,
+                "ny" : 90,
                 "numOfRows" : "10",
                 "pageNo" : "1",
                 "dataType" : "JSON"
