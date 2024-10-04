@@ -8,7 +8,7 @@ params = {
     'pageNo': '1',
     'numOfRows': '1000',
     'dataType': 'XML',
-    'base_date': '20210628',  # 유효한 날짜인지 확인 필요
+    'base_date': '20241003',  # 유효한 날짜인지 확인 필요
     'base_time': '0600',       # 유효한 시간인지 확인 필요
     'nx': '61',
     'ny': '126'
