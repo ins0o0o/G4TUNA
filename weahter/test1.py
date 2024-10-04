@@ -3,15 +3,13 @@ import requests
 import json
 from datetime import datetime
 
-# 오늘 날짜로 설정
-today = datetime.today().strftime('%Y%m%d')
 
 # API 요청 URL 및 파라미터 구성
 url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst'
 queryParams = '?' + urlencode(
   {
    "ServiceKey" : unquote("gAFYOesD02xHwlm93c35FiqgHKnqAJp6d0%2BjWA3aPcN6DAeVtK22eFtV8gA493BmO4azi7xqk9RY5KdKpeBvTA%3D%3D"),
-                "base_date" : today,  # 오늘 날짜로 설정
+                "base_date" : "20241004",  # 오늘 날짜로 설정
                 "base_time" : "0600",  # 최신 시간으로 설정
                 "nx" : 60,             # 유효한 좌표값 사용
                 "ny" : 127,            # 유효한 좌표값 사용
