@@ -96,4 +96,4 @@ def proc_weather():
     return str_sky
     
 print(proc_weather())
-출처: https://dalseobi.tistory.com/130 [달에 앉아있는 서비:티스토리]
+
