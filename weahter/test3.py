@@ -9,8 +9,8 @@ params = {
     'dataType': 'XML',
     'base_date': '20241004',
     'base_time': '0600',
-    'nx': '55',
-    'ny': '127'
+    'nx': '61',
+    'ny': '126'
 }
 
 response = requests.get(url, params=params)
