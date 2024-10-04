@@ -25,9 +25,9 @@ def get_current_hour_string():
 
     return base_time
 
-keys = '발급한 키'
+keys = 'gAFYOesD02xHwlm93c35FiqgHKnqAJp6d0%2BjWA3aPcN6DAeVtK22eFtV8gA493BmO4azi7xqk9RY5KdKpeBvTA%3D%3D'
 url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst'
-params ={'serviceKey' : 'gAFYOesD02xHwlm93c35FiqgHKnqAJp6d0%2BjWA3aPcN6DAeVtK22eFtV8gA493BmO4azi7xqk9RY5KdKpeBvTA%3D%3D', 
+params ={'serviceKey' : keys, 
          'pageNo' : '1', 
          'numOfRows' : '1000', 
          'dataType' : 'XML', 
