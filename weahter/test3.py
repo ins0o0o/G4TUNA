@@ -8,7 +8,7 @@ params = {
     'numOfRows': '1000',
     'dataType': 'XML',
     'base_date': '20241004',
-    'base_time': '0600',
+    'base_time': '1800',
     'nx': '61',
     'ny': '126'
 }
