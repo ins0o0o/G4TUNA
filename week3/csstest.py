@@ -1,27 +1,8 @@
 from flask import Flask, render_template_string, url_for, redirect
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import threading
 import time
-import Adafruit_DHT
-
-ledRed = 17
-ledYello = 27
-ledGreen = 22
-
-sensTouch = 5
-sensDH = 6
-
-DistanceTrig = 23
-DistanceEcho = 24
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(ledRed, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(ledYello, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(ledGreen, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(sensTouch, GPIO.IN)
-GPIO.setup(sensDH, GPIO.IN)
-GPIO.setup(DistanceTrig, GPIO.OUT)
-GPIO.setup(DistanceEcho, GPIO.IN)
+#import Adafruit_DHT
 
 button_states = {
     'button1': True,
@@ -41,7 +22,7 @@ distance = 0
 def check_touch():
     global button_states
     while True:
-        GPIO.wait_for_edge(sensTouch, GPIO.FALLING)  # 버튼이 눌렸을 때까지 대기 (FALLING 엣지 감지)
+        #GPIO.wait_for_edge(sensTouch, GPIO.FALLING)  # 버튼이 눌렸을 때까지 대기 (FALLING 엣지 감지)
         button_states['button1'] = not button_states['button1']  # button_states['button1'] 값 토글
         time.sleep(0.2)
 
@@ -50,11 +31,12 @@ touch_thread.daemon = True  # 메인 스레드가 종료되면 이 스레드도 
 touch_thread.start()
 
 def measure_DH():
-    sensor = Adafruit_DHT.DHT11
+    #sensor = Adafruit_DHT.DHT11
     global temperature
     global humidity
     while True:
-        humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
+        #humidity, temperature = Adafruit_DHT.read_retry(sensor, sensDH)
+        temperature = 22.0
         if button_states['button4'] == True:
             if temperature > 25:
                 button_states['button5'] = True
@@ -69,17 +51,7 @@ DH_thread.start()
 def measure_distance():
     global distance
     while True:
-        GPIO.output(DistanceTrig, GPIO.LOW)
-        time.sleep(0.1)
-        GPIO.output(DistanceTrig, GPIO.HIGH)
-        time.sleep(0.00001)  # 10μs 대기
-        GPIO.output(DistanceTrig, GPIO.LOW)
-        while GPIO.input(DistanceEcho) == GPIO.LOW:
-            pulse_start = time.time()  # Echo 핀이 LOW에서 HIGH로 바뀌는 순간 기록
-        while GPIO.input(DistanceEcho) == GPIO.HIGH:
-            pulse_end = time.time()  # Echo 핀이 HIGH에서 LOW로 바뀌는 순간 기록
-        pulse_duration = pulse_end - pulse_start
-        distance = pulse_duration * 34300 / 2
+        distance = 9.42
         
         if button_states['button1'] == True:
                 if distance < 10:
@@ -98,9 +70,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    GPIO.output(ledGreen, button_states['button2'])
-    GPIO.output(ledRed, button_states['button3'])
-    GPIO.output(ledYello, button_states['button5'])
+    #GPIO.output(ledGreen, button_states['button2'])
+    #GPIO.output(ledRed, button_states['button3'])
+    #GPIO.output(ledYello, button_states['button5'])
     html = '''
     <!DOCTYPE html>
     <html lang="en">
@@ -195,8 +167,8 @@ def index():
             .distance-section {
                 display: flex;
                 align-items: center;
-                margin-left: 150px;
-                margin-top: -30px;
+                margin-left: 150px; /* button4 옆 150px 간격으로 위치 */
+                margin-top: -30px; /* 간격을 50px 올림 */
             }
             .distance-section img {
                 margin-right: 10px;
@@ -205,20 +177,20 @@ def index():
                 display: flex;
                 align-items: center;
                 margin-left: 150px;
-                margin-top: 50px;
+                margin-top: 50px; /* 기존에서 50px 줄임 */
             }
             .temperature-section img {
                 margin-right: 10px;
             }
             .info-text {
-                font-size: 20px;
+                font-size: 20px; /* 폰트를 15로 설정 */
             }
         </style>
     </head>
     <body>
         <h1 style="text-align: center;">G4TUNA WEEK3</h1>
         
-        <!-- Button 1, Button 4 - ADAS, Auto Air Conditioner -->
+        <!-- Button 1, Button 4 - ADAS, Auto Air Conditional -->
         <div class="top-buttons">
             <div class="module">
                 <form method="POST" action="/toggle_button1">
@@ -235,7 +207,7 @@ def index():
                         <input type="checkbox" name="button4" {% if button_states['button4'] %}checked{% endif %} onchange="this.form.submit()">
                         <span class="slider"></span>
                     </label>
-                    <div class="label-text">Auto Air Conditioner</div>
+                    <div class="label-text">Auto Air Conditional</div>
                 </form>
             </div>
         </div>
@@ -252,6 +224,7 @@ def index():
             <p class="info-text">온도: {{temperature}} °C</p>
         </div>
     
+        <!-- Button 2, 3, 5 - 300px 위로 이동, 간격 75px -->
         <div class="container">
             <div class="module">
                 <img src="{{ url_for('static', filename='acceleration.png') }}">
@@ -270,7 +243,7 @@ def index():
                         <input type="checkbox" name="button3" {% if button_states['button3'] %}checked{% endif %} onchange="this.form.submit()">
                         <span class="slider"></span>
                     </label>
-                    <div class="label-text">Brake</div>
+                    <div class="label-text">Break</div>
                 </form>
             </div>
             <div class="module">
@@ -280,7 +253,7 @@ def index():
                         <input type="checkbox" name="button5" {% if button_states['button5'] %}checked{% endif %} onchange="this.form.submit()">
                         <span class="slider"></span>
                     </label>
-                    <div class="label-text">Air Conditioner</div>
+                    <div class="label-text">Air Conditional</div>
                 </form>
             </div>
         </div>
@@ -296,8 +269,7 @@ def index():
 def toggle_button1():
     global button_states
     button_states['button1'] = not button_states['button1']  # 상태 토글
-    return ("손주형")
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 # 버튼 2의 상태를 토글하는 라우트
 @app.route('/toggle_button2', methods=['POST'])
@@ -305,7 +277,7 @@ def toggle_button2():
     global button_states
     button_states['button1'] = False
     button_states['button2'] = not button_states['button2']
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 # 버튼 3의 상태를 토글하는 라우트
 @app.route('/toggle_button3', methods=['POST'])
@@ -313,21 +285,21 @@ def toggle_button3():
     global button_states
     button_states['button1'] = False
     button_states['button3'] = not button_states['button3']
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 # 버튼 4의 상태를 토글하는 라우트
 @app.route('/toggle_button4', methods=['POST'])
 def toggle_button4():
     global button_states
     button_states['button4'] = not button_states['button4']
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 @app.route('/toggle_button5', methods=['POST'])
 def toggle_button5():
     global button_states
     button_states['button4'] = False
     button_states['button5'] = not button_states['button5']
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
