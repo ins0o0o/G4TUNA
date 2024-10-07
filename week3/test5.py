@@ -296,8 +296,7 @@ def index():
 def toggle_button1():
     global button_states
     button_states['button1'] = not button_states['button1']  # 상태 토글
-    return "손주형"
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 # 버튼 2의 상태를 토글하는 라우트
 @app.route('/toggle_button2', methods=['POST'])
@@ -305,7 +304,7 @@ def toggle_button2():
     global button_states
     button_states['button1'] = False
     button_states['button2'] = not button_states['button2']
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 # 버튼 3의 상태를 토글하는 라우트
 @app.route('/toggle_button3', methods=['POST'])
@@ -313,21 +312,21 @@ def toggle_button3():
     global button_states
     button_states['button1'] = False
     button_states['button3'] = not button_states['button3']
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 # 버튼 4의 상태를 토글하는 라우트
 @app.route('/toggle_button4', methods=['POST'])
 def toggle_button4():
     global button_states
     button_states['button4'] = not button_states['button4']
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 @app.route('/toggle_button5', methods=['POST'])
 def toggle_button5():
     global button_states
     button_states['button4'] = False
     button_states['button5'] = not button_states['button5']
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
