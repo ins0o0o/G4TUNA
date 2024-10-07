@@ -14,11 +14,12 @@
         android:id="@+id/brake"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="52dp"
         android:minHeight="48dp"
         android:text="Brake"
-        app:layout_constraintEnd_toEndOf="@+id/img_brake"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_brake" />
 
     <ImageView
@@ -45,18 +46,22 @@
         android:id="@+id/temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginBottom="4dp"
         android:text="온도: 22 °C"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/airconditioner"
-        app:layout_constraintStart_toStartOf="@+id/img_temp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Switch
         android:id="@+id/airconditioner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:minHeight="48dp"
         android:text="Air Conditioner"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_ac" />
 
@@ -68,6 +73,7 @@
         android:layout_marginBottom="44dp"
         android:minHeight="48dp"
         android:text="Auto Air Conditioner"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/img_temp"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -83,8 +89,8 @@
 
     <ImageView
         android:id="@+id/img_distance"
-        android:layout_width="70dp"
-        android:layout_height="68dp"
+        android:layout_width="91dp"
+        android:layout_height="86dp"
         android:layout_marginStart="56dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,6 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="거리: 10cm"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/img_distance"
         app:layout_constraintTop_toBottomOf="@+id/img_distance" />
 
@@ -104,10 +111,11 @@
         android:id="@+id/acceleration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="44dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:minHeight="48dp"
         android:text="Acceleration"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_acceleration" />
 
@@ -129,13 +137,14 @@
         android:layout_marginTop="48dp"
         android:minHeight="48dp"
         android:text="ADAS"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="391dp"
-        android:layout_height="52dp"
+        android:layout_width="438dp"
+        android:layout_height="51dp"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
