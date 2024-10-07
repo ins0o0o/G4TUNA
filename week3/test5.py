@@ -296,7 +296,7 @@ def index():
 def toggle_button1():
     global button_states
     button_states['button1'] = not button_states['button1']  # 상태 토글
-    return ("손주형")
+    return "손주형"
     #return redirect(url_for('index'))
 
 # 버튼 2의 상태를 토글하는 라우트
