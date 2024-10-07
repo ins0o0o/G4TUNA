@@ -28,7 +28,9 @@ button_states = {
     'button2': False,
     'button3': False,
     'button4': True,
-    'button5': False
+    'button5': False,
+    'temperature' : 0,
+    'distance': 0
 }
 
 AutoAccBrk = 0  # 차간 거리 유지 ON / OFF
@@ -101,6 +103,8 @@ def index():
     GPIO.output(ledGreen, button_states['button2'])
     GPIO.output(ledRed, button_states['button3'])
     GPIO.output(ledYello, button_states['button5'])
+    button_states['temperature'] = temperature
+    button_states['distance'] = distance
     return jsonify(button_states)
 
 # 버튼 1의 상태를 토글하는 라우트
