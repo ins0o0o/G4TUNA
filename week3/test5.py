@@ -292,7 +292,7 @@ def index():
     return render_template_string(html, button_states=button_states, distance=round(distance,2), temperature=temperature, humidity=humidity)
 
 # 버튼 1의 상태를 토글하는 라우트
-@app.route('/toggle_button1', methods=['POST'])
+@app.route('/toggle_button1', methods=['GET'])
 def toggle_button1():
     global button_states
     button_states['button1'] = not button_states['button1']  # 상태 토글
