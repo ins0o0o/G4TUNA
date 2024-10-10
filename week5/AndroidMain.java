@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         thread1.start();
     }
 
-    // 몰라
+    
     private void fetchData(String url) {
         StringBuilder response = new StringBuilder();
         try {
