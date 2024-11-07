@@ -7,7 +7,7 @@ params = {
     'pageNo': '1',
     'numOfRows': '1000',
     'dataType': 'XML',
-    'base_date': '20241107',
+    'base_date': '20241108',
     'base_time': '1200',
     'nx': '61',
     'ny': '126'
