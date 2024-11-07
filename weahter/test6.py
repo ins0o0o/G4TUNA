@@ -15,18 +15,13 @@ queryParams = '?' + urllib.parse.urlencode({
 request = urllib.request.Request(url + queryParams)
 with urllib.request.urlopen(request) as response:
     response_body = response.read().decode('utf-8')
-    print("응답 내용:", response_body)  # XML 응답 내용 출력
 
     # XML 파싱
     root = ET.fromstring(response_body)
     
-    # h3 태그에서 자외선 수치 추출 및 +2 연산
+    # h3 태그에서 자외선 수치 추출
     uv_index = root.find('.//h3')
     if uv_index is not None:
-        try:
-            uv_value = int(uv_index.text) + 2  # 자외선 수치를 정수로 변환 후 +2
-            print("자외선 수치 (h3) + 2:", uv_value)
-        except ValueError:
-            print("자외선 수치가 숫자가 아닙니다:", uv_index.text)
+        print("자외선 수치 (h3):", uv_index.text)
     else:
         print("자외선 수치를 찾을 수 없습니다.")
