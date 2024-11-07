@@ -22,6 +22,6 @@ with urllib.request.urlopen(request) as response:
     # h3 태그에서 자외선 수치 추출
     uv_index = root.find('.//h3')
     if uv_index is not None:
-        print("자외선 수치 (h3):", uv_index.text+2)
+        print("자외선 수치 (h3):", uv_index.text)
     else:
         print("자외선 수치를 찾을 수 없습니다.")
