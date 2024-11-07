@@ -1,4 +1,3 @@
-
 import requests
 import xml.etree.ElementTree as ET
 
@@ -19,15 +18,21 @@ if response.status_code == 200:
     # XML 데이터 파싱
     root = ET.fromstring(response.content)
     
-    # 미세먼지 예보 정보 출력
+    # 미세먼지 예보 정보 출력 (서울만)
     for item in root.iter('item'):
         inform_data = item.find('informData').text  # 예보 날짜
-        inform_grade = item.find('informGrade').text  # 예보 등급 (좋음, 보통, 나쁨 등)
+        inform_grade = item.find('informGrade').text  # 지역별 예보 등급
         inform_overall = item.find('informOverall').text  # 종합 예보 설명
-        
-        print(f"예보 날짜: {inform_data}")
-        print(f"예보 등급: {inform_grade}")
-        print(f"예보 설명: {inform_overall}")
-        print("-" * 30)
+
+        # 서울 정보만 출력
+        if '서울' in inform_grade:
+            # 서울에 해당하는 등급 정보 추출
+            grade_info = [info for info in inform_grade.split(', ') if '서울' in info]
+            seoul_grade = grade_info[0] if grade_info else "정보 없음"
+            
+            print(f"예보 날짜: {inform_data}")
+            print(f"서울 미세먼지 등급: {seoul_grade}")
+            print(f"예보 설명: {inform_overall}")
+            print("-" * 30)
 else:
     print("요청 실패:", response.status_code)
