@@ -28,7 +28,7 @@ with urllib.request.urlopen(request) as response:
         # 자외선 수치에 따른 문구 출력
         if uv_value >= 3:
             print("선크림을 바르세요.")
-        elif uv_value in [0, 1, 2]:
+        elif:
             print("햇빛을 만끽하세요.")
     else:
         print("자외선 수치를 찾을 수 없습니다.")
