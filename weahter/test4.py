@@ -8,7 +8,7 @@ params = {
     'returnType': 'xml',
     'numOfRows': '100',
     'pageNo': '1',
-    'searchDate': '2024-11-08',
+    'searchDate': '2024-11-07',
     'InformCode': 'PM10'
 }
 
