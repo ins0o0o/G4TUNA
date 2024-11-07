@@ -1,5 +1,6 @@
 import urllib.request
 import urllib.parse
+import xml.etree.ElementTree as ET
 
 # URL과 파라미터 설정
 url = 'http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4'
@@ -14,4 +15,13 @@ queryParams = '?' + urllib.parse.urlencode({
 request = urllib.request.Request(url + queryParams)
 with urllib.request.urlopen(request) as response:
     response_body = response.read().decode('utf-8')
-    print("응답 내용:", response_body)
+
+    # XML 파싱
+    root = ET.fromstring(response_body)
+    
+    # h3 태그에서 자외선 수치 추출
+    uv_index = root.find('.//h3')
+    if uv_index is not None:
+        print("자외선 수치 (h3):", uv_index.text)
+    else:
+        print("자외선 수치를 찾을 수 없습니다.")
