@@ -1,15 +1,14 @@
 import requests
 import xml.etree.ElementTree as ET
-from datetime import datetime
 
 url = 'https://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4'
 params = {
     'ServiceKey': 'gAFYOesD02xHwlm93c35FiqgHKnqAJp6d0+jWA3aPcN6DAeVtK22eFtV8gA493BmO4azi7xqk9RY5KdKpeBvTA==',
     'pageNo': '1',
-    'numOfRows': '10',
+    'numOfRows': '1',
     'dataType': 'XML',
-    'areaNo': 'seoul',  # 서울 지역 코드 (예시)
-    'time': '20241106'
+    'areaNo': 'seoul',
+    'time': '2024년 11월 7일 6시 발표'  # 한글로 인코딩된 날짜와 시간
 }
 
 response = requests.get(url, params=params)
