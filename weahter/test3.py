@@ -27,8 +27,8 @@ else:
     result_code = root.find('.//resultCode')
     result_msg = root.find('.//resultMsg')
     if result_code is not None and result_msg is not None:
-        print("오류 코드:", result_code.text)
-        print("오류 메시지:", result_msg.text)
+        print("")
+        print("")
     
     # 예보 데이터를 저장할 변수들
     temperature = None
