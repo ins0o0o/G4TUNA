@@ -23,7 +23,7 @@ with urllib.request.urlopen(request) as response:
     uv_index = root.find('.//h3')
     if uv_index is not None:
         uv_value = int(uv_index.text)  # 자외선 수치를 정수로 변환
-        print("자외선 수치 (h3):", uv_value)
+        print("자외선 수치:", uv_value)
 
         # 자외선 수치에 따른 문구 출력
         if uv_value >= 3:
