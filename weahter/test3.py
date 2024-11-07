@@ -26,7 +26,8 @@ else:
     result_code = root.find('.//resultCode')
     result_msg = root.find('.//resultMsg')
     if result_code is not None and result_msg is not None:
-     
+        print("")
+        print("")     
     
     # 현재 온도 찾기
     for item in root.iter('item'):
