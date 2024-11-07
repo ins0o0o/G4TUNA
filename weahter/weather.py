@@ -126,7 +126,7 @@ def get_uv_index():
 # 통합 실행
 
 get_weather_forecast()
-
+print("")
 get_dust_forecast()
-
+print("")
 get_uv_index()
