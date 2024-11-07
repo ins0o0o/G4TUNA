@@ -18,10 +18,10 @@ if response.status_code == 200:
     
     # 서울 지역 정보 출력
     for item in root.iter('item'):
-        sido_name = item.find('sidoName')
+        station_name = item.find('station_name')
         
         # sidoName이 서울일 때만 출력
-        if sido_name is not None and sido_name.text == '서울':
+        if station_name is not None and station_name.text == '서울':
             station_name = item.find('stationName').text if item.find('stationName') is not None else "N/A"
             pm10_value = item.find('pm10Value').text if item.find('pm10Value') is not None else "N/A"
             data_time = item.find('dataTime').text if item.find('dataTime') is not None else "N/A"
