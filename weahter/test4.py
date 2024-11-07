@@ -16,31 +16,19 @@ response = requests.get(url, params=params)
 if response.status_code == 200:
     root = ET.fromstring(response.content)
     
-    # 날짜별로 서울 정보 저장
-    seoul_data = {}
-
+    # 광진구 정보 출력
     for item in root.iter('item'):
-        inform_data = item.find('informData').text  # 예보 날짜
-        inform_grade = item.find('informGrade').text  # 지역별 예보 등급
-        inform_overall = item.find('informOverall').text  # 종합 예보 설명
-
-        # 서울 관련 등급 정보만 추출
-        if '서울' in inform_grade:
-            # 서울 등급 정보 추출
-            grade_info = [info for info in inform_grade.split(', ') if '서울' in info]
-            seoul_grade = grade_info[0] if grade_info else "정보 없음"
+        sido_name = item.find('sidoName').text
+        station_name = item.find('stationName').text
+        
+        # 서울 광진구만 출력
+        if sido_name == '서울' and station_name == '광진구':
+            pm10_value = item.find('pm10Value').text  # PM10 미세먼지 농도
+            data_time = item.find('dataTime').text  # 측정 시간
             
-            # 날짜별로 서울의 예보 정보를 저장 (마지막 값으로 갱신됨)
-            seoul_data[inform_data] = {
-                'grade': seoul_grade,
-                'overall': inform_overall
-            }
-
-    # 날짜별 서울 미세먼지 예보 정보 출력
-    for date, data in seoul_data.items():
-        print(f"예보 날짜: {date}")
-        print(f"서울 미세먼지 등급: {data['grade']}")
-        print(f"예보 설명: {data['overall']}")
-        print("-" * 30)
+            print(f"측정 시간: {data_time}")
+            print(f"지역: {station_name}")
+            print(f"미세먼지(PM10) 농도: {pm10_value} µg/m³")
+            print("-" * 30)
 else:
     print("요청 실패:", response.status_code)
