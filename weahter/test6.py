@@ -9,7 +9,7 @@ params = {
     'numOfRows': '10',
     'dataType': 'XML',
     'areaNo': 'seoul',  # 서울 지역 코드 (예시)
-    'time': '20241107'
+    'time': '20241106'
 }
 
 response = requests.get(url, params=params)
