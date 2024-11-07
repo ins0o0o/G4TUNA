@@ -1,37 +1,17 @@
-import requests
-import xml.etree.ElementTree as ET
+import urllib.request
+import urllib.parse
 
-url = 'https://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4'
-params = {
-    'ServiceKey': 'gAFYOesD02xHwlm93c35FiqgHKnqAJp6d0+jWA3aPcN6DAeVtK22eFtV8gA493BmO4azi7xqk9RY5KdKpeBvTA==',
-    'pageNo': '1',
-    'numOfRows': '1',
-    'dataType': 'XML',
-    'areaNo': 'seoul',
-    'time': '2024년 11월 7일 6시 발표'  # 한글로 인코딩된 날짜와 시간
-}
+# URL과 파라미터 설정
+url = 'http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4'
+queryParams = '?' + urllib.parse.urlencode({
+    urllib.parse.quote_plus('ServiceKey'): 'gAFYOesD02xHwlm93c35FiqgHKnqAJp6d0+jWA3aPcN6DAeVtK22eFtV8gA493BmO4azi7xqk9RY5KdKpeBvTA==',
+    urllib.parse.quote_plus('areaNo'): '1100000000',  # 서울 지역 코드 (예시)
+    urllib.parse.quote_plus('time'): '2024110718',   # 예시 시간: 2022년 07월 11일 18시
+    urllib.parse.quote_plus('dataType'): 'XML'
+})
 
-response = requests.get(url, params=params)
-
-# 응답 상태 코드 및 XML 파싱
-if response.status_code == 200:
-    root = ET.fromstring(response.content)
-    
-    # resultCode 확인
-    result_code = root.find('.//resultCode').text
-    result_msg = root.find('.//resultMsg').text
-    
-    if result_code == '00':  # 정상 응답
-        # 자외선 수치 정보 출력
-        for item in root.iter('item'):
-            date = item.find('date').text if item.find('date') is not None else "N/A"
-            uv_index = item.find('h3').text if item.find('h3') is not None else "N/A"  # 자외선 지수
-            
-            print(f"날짜: {date}")
-            print(f"자외선 지수: {uv_index}")
-    elif result_code == '03':  # NO_DATA 오류
-        print("데이터가 없습니다. 요청한 날짜 또는 지역 코드를 확인하세요.")
-    else:
-        print(f"오류 발생: {result_msg}")
-else:
-    print("요청 실패:", response.status_code)
+# 요청 생성 및 응답 수신
+request = urllib.request.Request(url + queryParams)
+with urllib.request.urlopen(request) as response:
+    response_body = response.read().decode('utf-8')
+    print(response_body)
