@@ -124,9 +124,9 @@ def get_uv_index():
 
 
 # 통합 실행
-print("1. 현재 온도와 강수확률 정보:")
+
 get_weather_forecast()
-print("\n2. 서울 미세먼지 정보:")
+
 get_dust_forecast()
-print("\n3. 자외선 정보:")
+
 get_uv_index()
