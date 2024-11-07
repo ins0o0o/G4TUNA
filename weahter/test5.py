@@ -33,6 +33,12 @@ if response.status_code == 200:
             
             print(f"예보 날짜: {inform_data}")
             print(f"서울 미세먼지 등급: {seoul_grade}")
+            
+            # 등급에 따른 메시지 출력
+            if "나쁨" in seoul_grade or "매우 나쁨" in seoul_grade:
+                print("나쁨 등급입니다. 마스크를 가져가세요.")
+            elif "보통" in seoul_grade or "좋음" in seoul_grade:
+                print("오늘은 마스크가 없는 하루를 보내세요.")
             break
 else:
     print("요청 실패:", response.status_code)
