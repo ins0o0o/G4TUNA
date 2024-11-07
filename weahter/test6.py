@@ -8,7 +8,7 @@ params = {
     'pageNo': '1',
     'numOfRows': '10',
     'dataType': 'XML',
-    'areaNo': '1100000000',  # 서울 지역 코드 (예시)
+    'areaNo': 'seoul',  # 서울 지역 코드 (예시)
     'time': '20241107'
 }
 
