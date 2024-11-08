@@ -179,11 +179,11 @@ def get_calendar_events(calendar_id):
 # 통합 실행
 calendar_id = input("캘린더 ID를 입력하세요: ")
 
-print("\n날씨 정보:")
+print("\n")
 get_weather_forecast()
-print("\n미세먼지 정보:")
+print("\n")
 get_dust_forecast()
-print("\n자외선 정보:")
+print("\n")
 get_uv_index()
-print("\n일정 정보:")
+print("\n")
 get_calendar_events(calendar_id)
