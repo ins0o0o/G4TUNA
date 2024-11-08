@@ -172,7 +172,7 @@ def get_calendar_events(calendar_id):
 # 5. 일정 제목에 따라 준비물 추천 함수
 def recommend_supplies(event_title):
     # OpenAI GPT 모델을 사용하여 준비물 추천 요청
-    prompt = f"일정 제목이 '{event_title}'입니다. 이 일정에 필요한 준비물을 두 개까지 추천해 주세요."
+    prompt = f"'{event_title}'에 필요한 준비물을 세개 추천해줘 설명은 필요없이 딱 물건 세개만 나열해줘. 예를 들어 [우산, 선크림, 마스크]"
     
     try:
         response = openai.ChatCompletion.create(
