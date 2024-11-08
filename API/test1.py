@@ -148,6 +148,7 @@ def get_calendar_events(calendar_id):
                 print(f"{start_time} - {title}")
     else:
         print("Error:", response.status_code, response.text)
+calendar_id = input("\n캘린더 ID를 입력하세요: ")
 
 # 통합 실행
 print("날씨 정보:")
@@ -158,6 +159,6 @@ print("\n자외선 정보:")
 get_uv_index()
 
 # Google Calendar 일정 조회
-calendar_id = input("\n캘린더 ID를 입력하세요: ")
+
 print("\n일정 정보:")
 get_calendar_events(calendar_id)
