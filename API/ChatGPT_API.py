@@ -20,9 +20,7 @@ def recommend_supplies(event_title):
     
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=messages,
-        max_tokens=50,
-        temperature=0.5
+        messages=messages
     )
 
     # 응답에서 준비물 추출
