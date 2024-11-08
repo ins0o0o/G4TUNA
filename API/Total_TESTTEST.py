@@ -1,12 +1,16 @@
 import requests
 import xml.etree.ElementTree as ET
-from datetime import datetime
+from datetime import datetime, timedelta
 import urllib.request
 import urllib.parse
 
 # 오늘 날짜를 자동으로 가져와 필요한 형식으로 사용
 today_date = datetime.today().strftime('%Y%m%d')  # YYYYMMDD 형식
 today_date_hyphen = datetime.today().strftime('%Y-%m-%d')  # YYYY-MM-DD 형식
+
+# 1시간 전 시간 계산 (예: 현재 15시이면 14시로 설정)
+current_time = datetime.now() - timedelta(hours=1)
+base_time = current_time.strftime('%H00')  # HH00 형식
 
 # Google API Key
 google_key = "AIzaSyA2KUAo4fugxxjo4zG2iHMy1FS70zbls8A"
@@ -20,7 +24,7 @@ def get_weather_forecast():
         'numOfRows': '1000',
         'dataType': 'XML',
         'base_date': today_date,
-        'base_time': '0500',
+        'base_time': base_time,  # 현재 시간에서 1시간 뺀 값을 사용
         'nx': '61',
         'ny': '126'
     }
@@ -175,11 +179,11 @@ def get_calendar_events(calendar_id):
 # 통합 실행
 calendar_id = input("캘린더 ID를 입력하세요: ")
 
-print("\n")
+print("\n날씨 정보:")
 get_weather_forecast()
-print("\n")
+print("\n미세먼지 정보:")
 get_dust_forecast()
-print("\n")
+print("\n자외선 정보:")
 get_uv_index()
-print("\n")
+print("\n일정 정보:")
 get_calendar_events(calendar_id)
