@@ -151,7 +151,7 @@ def get_calendar_events(calendar_id):
 calendar_id = input("캘린더 ID를 입력하세요: ")
 
 # 통합 실행
-
+print("\n")
 get_weather_forecast()
 print("\n")
 get_dust_forecast()
