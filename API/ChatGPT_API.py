@@ -175,16 +175,16 @@ def recommend_supplies(event_title):
     prompt = f"일정 제목이 '{event_title}'입니다. 이 일정에 필요한 준비물을 두 개까지 추천해 주세요."
     
     try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
             max_tokens=50,
             n=1,
             stop=None,
             temperature=0.7,
         )
         # ChatGPT의 응답에서 준비물 추천 내용을 출력
-        supplies = response.choices[0].text.strip()
+        supplies = response.choices[0].message['content'].strip()
         print(f"추천 준비물: {supplies}")
     except Exception as e:
         print("준비물 추천 오류:", e)
@@ -192,11 +192,11 @@ def recommend_supplies(event_title):
 # 통합 실행
 calendar_id = input("캘린더 ID를 입력하세요: ")
 
-print("\n")
+print("\n날씨 정보:")
 get_weather_forecast()
-print("\n")
+print("\n미세먼지 정보:")
 get_dust_forecast()
-print("\n")
+print("\n자외선 정보:")
 get_uv_index()
-print("\n")
+print("\n일정 정보:")
 get_calendar_events(calendar_id)
