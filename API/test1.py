@@ -148,7 +148,7 @@ def get_calendar_events(calendar_id):
                 print(f"{start_time} - {title}")
     else:
         print("Error:", response.status_code, response.text)
-calendar_id = input("\n캘린더 ID를 입력하세요: ")
+calendar_id = input("캘린더 ID를 입력하세요: ")
 
 # 통합 실행
 
