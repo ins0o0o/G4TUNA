@@ -13,17 +13,20 @@ openai.api_key = "YOUR_OPENAI_API_KEY"  # OpenAI API 키를 입력하세요
 
 # ChatGPT API를 사용하여 일정 제목에 따른 준비물을 추천
 def recommend_supplies(event_title):
-    prompt = f"다음 일정 제목에 따른 준비물을 추천해주세요: '{event_title}'. 최대 2개의 준비물을 추천해주세요."
+    messages = [
+        {"role": "system", "content": "당신은 사용자가 일정 제목에 따라 준비물을 추천해주는 도우미입니다."},
+        {"role": "user", "content": f"다음 일정 제목에 따른 준비물을 추천해주세요: '{event_title}'. 최대 2개의 준비물을 추천해주세요."}
+    ]
     
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
         max_tokens=50,
         temperature=0.5
     )
 
     # 응답에서 준비물 추출
-    recommendations = response.choices[0].text.strip()
+    recommendations = response['choices'][0]['message']['content'].strip()
     return recommendations
 
 # Google Calendar 일정 가져오기 및 준비물 추천
