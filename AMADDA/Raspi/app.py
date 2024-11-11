@@ -373,5 +373,5 @@ class MainWindow(QMainWindow):
 
 app = QApplication(sys.argv)
 window = MainWindow()
-window.show()
+window.showFullScreen()
 app.exec()
