@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainSKZbjv.ui'
+## Form generated from reading UI file 'maingcsoam.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.0
 ##
@@ -434,8 +434,11 @@ class Ui_MainWindow(object):
         self.profile4_name.raise_()
 
         self.retranslateUi(MainWindow)
-        self.OnOff_button.clicked.connect(MainWindow.button_clicked1)
-        self.profile1_button.clicked.connect(MainWindow.slot1)
+        self.OnOff_button.clicked["bool"].connect(MainWindow.on_off_bt)
+        self.profile4_button.clicked.connect(MainWindow.profile_bt4)
+        self.profile3_button.clicked.connect(MainWindow.profile_bt3)
+        self.profile2_button.clicked.connect(MainWindow.profile_bt2)
+        self.profile1_button.clicked.connect(MainWindow.profile_bt1)
 
         self.OnOff_button.setDefault(False)
         self.profile4_button.setDefault(False)
