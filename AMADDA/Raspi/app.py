@@ -33,7 +33,7 @@ def get_base_time():
 google_key = "AIzaSyA2KUAo4fugxxjo4zG2iHMy1FS70zbls8A"
 
 # openAI chatGPT API Key
-openai.api_key = "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"
+openai.api_key = ""
 
 # calendar id
 calendar_id_1 = 'cvbasd0920@naver.com'
@@ -277,8 +277,15 @@ class MainWindow(QMainWindow):
 
     # 일정 제목에 따라 준비물 추천 함수
     def recommend_supplies(self,events):
-        events_title = list(events.keys())
-        events_num = len(events_title)
+        
+        if events is None:
+            events_title = []
+            events_num = 0
+        else:
+            events_title = list(events.keys())
+            events_num = len(events)
+            
+
         item_recommanded = ['제발','되라','시발']
         # 추천 아이템 생성
         for i in range(events_num):
@@ -366,5 +373,5 @@ class MainWindow(QMainWindow):
 
 app = QApplication(sys.argv)
 window = MainWindow()
-window.showFullScreen()
+window.show()
 app.exec()
