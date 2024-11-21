@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'maingcsoam.ui'
+## Form generated from reading UI file 'mainmnTFUz.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.0
 ##
@@ -471,12 +471,10 @@ class Ui_MainWindow(object):
         self.weather_sub_label_1.setText("")
         self.weather_image.setText("")
         self.temp_humid.setText(QCoreApplication.translate("MainWindow", u"\uc628\ub3c4: 24\u00b0C    \uc2b5\ub3c4: 30%", None))
-        self.rain_probability.setText(QCoreApplication.translate("MainWindow", u"\uac15\uc218\ud655\ub960 70%", None))
-        self.uv_level.setText(QCoreApplication.translate("MainWindow", u"\uc790\uc678\uc120 \uc9c0\uc218 4(\ubcf4\ud1b5)", None))
+        self.rain_probability.setText(QCoreApplication.translate("MainWindow", u"\uac15\uc218\ud655\ub960 30%", None))
+        self.uv_level.setText(QCoreApplication.translate("MainWindow", u"\uc790\uc678\uc120 \uc9c0\uc218 3(\ubcf4\ud1b5)", None))
         self.dust_level.setText(QCoreApplication.translate("MainWindow", u"\ubbf8\uc138\uba3c\uc9c0 \ubcf4\ud1b5", None))
-        self.weather_item.setText(QCoreApplication.translate("MainWindow", u"\uc6b0\uc0b0\n"
-"\n"
-"\uc120\ud06c\ub9bc\n"
+        self.weather_item.setText(QCoreApplication.translate("MainWindow", u"\uc120\ud06c\ub9bc\n"
 "\n"
 "\ub9c8\uc2a4\ud06c", None))
         self.schedule_label_schedule.setText("")
@@ -487,29 +485,32 @@ class Ui_MainWindow(object):
         self.schedule_item_title.setText(QCoreApplication.translate("MainWindow", u"ITEM", None))
         self.schedule_schedule_title.setText(QCoreApplication.translate("MainWindow", u"SCHEDULE", None))
         self.weather_item_title.setText(QCoreApplication.translate("MainWindow", u"ITEM", None))
-        self.schedule_1.setText(QCoreApplication.translate("MainWindow", u"\uc2ec\uc124 \uc911\uac04\uace0\uc0ac", None))
+        self.schedule_1.setText(QCoreApplication.translate("MainWindow", u"\uc804\uc790\uae30\ud559 \uc911\uac04\uace0\uc0ac\n"
+"10:30", None))
         self.schedule_label_2_1.setText("")
         self.schedule_label_2_2.setText("")
-        self.schedule_2_item.setText(QCoreApplication.translate("MainWindow", u"\uc6b0\uc0b0\n"
+        self.schedule_2_item.setText(QCoreApplication.translate("MainWindow", u"\ub178\ud2b8\ubd81\n"
 "\n"
-"\uc120\ud06c\ub9bc\n"
+"\ubc1c\ud45c\uc790\ub8cc\n"
 "\n"
-"\ub9c8\uc2a4\ud06c", None))
-        self.schedule_2.setText(QCoreApplication.translate("MainWindow", u"\uc784\ubca0\ub514\ub4dc\uc2dc\uc2a4\ud15c \uc911\uac04\ubc1c\ud45c", None))
+"\ub808\uc774\uc800 \ud3ec\uc778\ud130", None))
+        self.schedule_2.setText(QCoreApplication.translate("MainWindow", u"\uc784\ubca0\ub514\ub4dc\uc2dc\uc2a4\ud15c \uc911\uac04\ubc1c\ud45c\n"
+"12:00", None))
         self.schedule_label_3_1.setText("")
         self.schedule_label_3_2.setText("")
-        self.schedule_3.setText(QCoreApplication.translate("MainWindow", u"\ub370\uce74 vs \ud3b8\uc785\uc0dd \ud48b\uc0b4", None))
+        self.schedule_3.setText(QCoreApplication.translate("MainWindow", u"\ud48b\uc0b4\n"
+"22:00", None))
         self.custom_sub_label.setText("")
         self.custom_item.setText(QCoreApplication.translate("MainWindow", u"\uc774\uc5b4\ud3f0 / \ubcf4\uc870\ubca0\ud130\ub9ac / \uc9c0\uac11 / \ub77c\uc988\ubca0\ub9ac\ud30c\uc774", None))
-        self.schedule_1_item.setText(QCoreApplication.translate("MainWindow", u"\uc6b0\uc0b0\n"
+        self.schedule_1_item.setText(QCoreApplication.translate("MainWindow", u"\ub178\ud2b8\n"
 "\n"
-"\uc120\ud06c\ub9bc\n"
+"\uacc4\uc0b0\uae30\n"
 "\n"
-"\ub9c8\uc2a4\ud06c", None))
-        self.schedule_3_item.setText(QCoreApplication.translate("MainWindow", u"\uc6b0\uc0b0\n"
+"\ud39c", None))
+        self.schedule_3_item.setText(QCoreApplication.translate("MainWindow", u"\ud48b\uc0b4\ud654\n"
 "\n"
-"\uc120\ud06c\ub9bc\n"
+"\uc6b4\uc804\ubcf5\n"
 "\n"
-"\ub9c8\uc2a4\ud06c", None))
+"\ubb3c\ubcd1", None))
     # retranslateUi
 
