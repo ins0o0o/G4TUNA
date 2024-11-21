@@ -1,8 +1,8 @@
 import sys
-
+import RPi.GPIO as GPIO
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import QTimer, QEvent
+from PySide6.QtCore import QTimer, QThread, Signal
 import openai
 from ui_main import Ui_MainWindow
 from ui_second import Ui_MainWindow as Ui_SecondWindow  
@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 import urllib.request
 import urllib.parse
+from time import sleep
 
 # 오늘 날짜를 자동으로 가져와 필요한 형식으로 사용
 today_date = datetime.today().strftime('%Y%m%d')  # YYYYMMDD 형식
@@ -36,11 +37,29 @@ google_key = "AIzaSyA2KUAo4fugxxjo4zG2iHMy1FS70zbls8A"
 
 # openAI chatGPT API Key
 openai.api_key = ""
+
 # calendar id
 calendar_id_1 = 'cvbasd0920@naver.com'
 calendar_id_2 = 'sohnjohn01@gmail.com'
 calendar_id_3 = None
 calendar_id_4 = None
+
+class SensorThread(QThread):
+    sensor_detected = Signal()  # 센서가 감지되었을 때 신호 발생
+    PIR_PIN = 17
+    GPIO.setmode(GPIO.BCM)      # GPIO 초기화
+    GPIO.setup(PIR_PIN, GPIO.IN)
+    GPIO.setup(27, GPIO.OUT, initial=GPIO.LOW)
+
+    def run(self):
+        import time
+        while True:
+            if GPIO.input(self.PIR_PIN):
+                GPIO.output(27,GPIO.HIGH)
+                self.sensor_detected.emit()  # 메인 쓰레드에 신호 보냄
+            else:
+                GPIO.output(27,GPIO.LOW)
+            time.sleep(0.1)  # 100ms 주기로 센서 확인
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -48,11 +67,16 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.inactivity_timer = QTimer(self)
-        self.inactivity_timer.setInterval(5000)  # 5분
-        self.inactivity_timer.timeout.connect(self.on_off_bt)
-        self.inactivity_timer.start()
+        self.timer = QTimer(self)
+        self.timer.setInterval(5000)  # 5분
+        self.timer.timeout.connect(self.on_timer_timeout)
+        self.timer.start()
 
+        self.sensor_thread = SensorThread()
+        self.sensor_thread.sensor_detected.connect(self.PIR_detect)
+        self.sensor_thread.start()
+
+        # 프로필 감추기
         self.ui.profile4_button.setEnabled(False)
         self.ui.profile4_button.hide()
         self.ui.profile4_name.hide()
@@ -63,43 +87,17 @@ class MainWindow(QMainWindow):
         # self.ui.profile2_button.hide()
         # self.ui.profile2_name.hide()
 
-        # 2번째 일정 및 준비물
-        # self.ui.schedule_label_2_1.hide()
-        # self.ui.schedule_2.hide()
-        # self.ui.schedule_label_2_2.hide()
-        # self.ui.schedule_2_item.hide()
-        # 3번째 일정 및 준비물
-        # self.ui.schedule_label_3_1.hide()
-        # self.ui.schedule_3.hide()
-        # self.ui.schedule_label_3_2.hide()
-        # self.ui.schedule_3_item.hide()
-
-    #     # 타이머 설정 (5분 = 300,000ms)
-    #     self.inactivity_timer = QTimer(self)
-    #     self.inactivity_timer.setInterval(10000)  # 10s
-    #     self.inactivity_timer.timeout.connect(self.turn_off_screen)
-    #     self.inactivity_timer.start()
-
-    #     # 이벤트 필터 활성화
-    #     self.installEventFilter(self)
-
-    # def turn_off_screen(self):
-    #     """화면을 끄는 함수 (Windows)"""
-    #     #os.system("xset dpms force off")
-    #     ctypes.windll.user32.SendMessageW(0xFFFF, 0x112, 0xF170, 2)
-    #     print("화면 끄기 함수 실행")
-
-    # def eventFilter(self, source, event):
-    #     """사용자 입력 이벤트를 감지하여 타이머 리셋"""
-    #     if event.type() in (QEvent.KeyPress, QEvent.MouseMove, QEvent.MouseButtonPress):
-    #         self.inactivity_timer.start()  # 타이머 리셋
-    #         print("이벤트 입력 됨")
-    #     return super().eventFilter(source, event)
+    def PIR_detect(self):
+        if self.second_window.isHidden() is False:
+            self.second_window.hide()
+        self.timer.start()
+    
+    def on_timer_timeout(self):
+        self.second_window = SecondWindow(self)
+        self.second_window.showFullScreen()
 
     def on_off_bt(self):
-        self.second_window = SecondWindow(self)
-        self.hide()  
-        self.second_window.showFullScreen()
+        a = 1
 
     def profile_bt1(self):
         self.weather_update()
@@ -406,12 +404,11 @@ class SecondWindow(QMainWindow):
         self.ui = Ui_SecondWindow()
         self.ui.setupUi(self)
         self.main_window = main_window
-        self.main_window.inactivity_timer.stop()
+        self.main_window.timer.stop()
 
     def back2main(self):
         self.hide()
-        self.main_window.showFullScreen()
-        self.main_window.inactivity_timer.start()
+        self.main_window.timer.start()
 
 app = QApplication(sys.argv)
 window = MainWindow()
