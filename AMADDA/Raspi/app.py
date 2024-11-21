@@ -2,8 +2,10 @@ import sys
 
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtGui import QPixmap
+from PySide6.QtCore import QTimer, QEvent
 import openai
 from ui_main import Ui_MainWindow
+from ui_second import Ui_MainWindow as Ui_SecondWindow  
 import resources_rc
 import requests
 import xml.etree.ElementTree as ET
@@ -34,7 +36,6 @@ google_key = "AIzaSyA2KUAo4fugxxjo4zG2iHMy1FS70zbls8A"
 
 # openAI chatGPT API Key
 openai.api_key = ""
-
 # calendar id
 calendar_id_1 = 'cvbasd0920@naver.com'
 calendar_id_2 = 'sohnjohn01@gmail.com'
@@ -47,6 +48,11 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self.inactivity_timer = QTimer(self)
+        self.inactivity_timer.setInterval(5000)  # 5분
+        self.inactivity_timer.timeout.connect(self.on_off_bt)
+        self.inactivity_timer.start()
+
         self.ui.profile4_button.setEnabled(False)
         self.ui.profile4_button.hide()
         self.ui.profile4_name.hide()
@@ -58,18 +64,42 @@ class MainWindow(QMainWindow):
         # self.ui.profile2_name.hide()
 
         # 2번째 일정 및 준비물
-        self.ui.schedule_label_2_1.hide()
-        self.ui.schedule_2.hide()
-        self.ui.schedule_label_2_2.hide()
-        self.ui.schedule_2_item.hide()
+        # self.ui.schedule_label_2_1.hide()
+        # self.ui.schedule_2.hide()
+        # self.ui.schedule_label_2_2.hide()
+        # self.ui.schedule_2_item.hide()
         # 3번째 일정 및 준비물
-        self.ui.schedule_label_3_1.hide()
-        self.ui.schedule_3.hide()
-        self.ui.schedule_label_3_2.hide()
-        self.ui.schedule_3_item.hide()
+        # self.ui.schedule_label_3_1.hide()
+        # self.ui.schedule_3.hide()
+        # self.ui.schedule_label_3_2.hide()
+        # self.ui.schedule_3_item.hide()
+
+    #     # 타이머 설정 (5분 = 300,000ms)
+    #     self.inactivity_timer = QTimer(self)
+    #     self.inactivity_timer.setInterval(10000)  # 10s
+    #     self.inactivity_timer.timeout.connect(self.turn_off_screen)
+    #     self.inactivity_timer.start()
+
+    #     # 이벤트 필터 활성화
+    #     self.installEventFilter(self)
+
+    # def turn_off_screen(self):
+    #     """화면을 끄는 함수 (Windows)"""
+    #     #os.system("xset dpms force off")
+    #     ctypes.windll.user32.SendMessageW(0xFFFF, 0x112, 0xF170, 2)
+    #     print("화면 끄기 함수 실행")
+
+    # def eventFilter(self, source, event):
+    #     """사용자 입력 이벤트를 감지하여 타이머 리셋"""
+    #     if event.type() in (QEvent.KeyPress, QEvent.MouseMove, QEvent.MouseButtonPress):
+    #         self.inactivity_timer.start()  # 타이머 리셋
+    #         print("이벤트 입력 됨")
+    #     return super().eventFilter(source, event)
 
     def on_off_bt(self):
-        a = 1
+        self.second_window = SecondWindow(self)
+        self.hide()  
+        self.second_window.showFullScreen()
 
     def profile_bt1(self):
         self.weather_update()
@@ -370,6 +400,18 @@ class MainWindow(QMainWindow):
             self.ui.schedule_3.setText(f'{events_title[2]}\n{events[events_title[2]]}')
             self.ui.schedule_3_item.setText(item_recommanded[2])
 
+class SecondWindow(QMainWindow):
+    def __init__(self,main_window):
+        super().__init__()
+        self.ui = Ui_SecondWindow()
+        self.ui.setupUi(self)
+        self.main_window = main_window
+        self.main_window.inactivity_timer.stop()
+
+    def back2main(self):
+        self.hide()
+        self.main_window.showFullScreen()
+        self.main_window.inactivity_timer.start()
 
 app = QApplication(sys.argv)
 window = MainWindow()
