@@ -1,4 +1,6 @@
 import sys
+import threading
+from flask import Flask, request, jsonify
 import RPi.GPIO as GPIO
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtGui import QPixmap
@@ -38,11 +40,10 @@ google_key = "AIzaSyA2KUAo4fugxxjo4zG2iHMy1FS70zbls8A"
 # openAI chatGPT API Key
 openai.api_key = ""
 
-# calendar id
-calendar_id_1 = 'cvbasd0920@naver.com'
-calendar_id_2 = 'sohnjohn01@gmail.com'
-calendar_id_3 = None
-calendar_id_4 = None
+# User Class
+user_data_list = []
+
+user_flag = -1
 
 class SensorThread(QThread):
     sensor_detected = Signal()  # 센서가 감지되었을 때 신호 발생
@@ -72,6 +73,11 @@ class MainWindow(QMainWindow):
         self.timer.timeout.connect(self.on_timer_timeout)
         self.timer.start()
 
+        self.timer2 = QTimer(self)
+        self.timer2.setInterval(500)  # 5분
+        self.timer2.timeout.connect(self.update_profiles)
+        self.timer2.start()
+
         self.sensor_thread = SensorThread()
         self.sensor_thread.sensor_detected.connect(self.PIR_detect)
         self.sensor_thread.start()
@@ -80,12 +86,52 @@ class MainWindow(QMainWindow):
         self.ui.profile4_button.setEnabled(False)
         self.ui.profile4_button.hide()
         self.ui.profile4_name.hide()
-        # self.ui.profile3_button.setEnabled(False)
-        # self.ui.profile3_button.hide()
-        # self.ui.profile3_name.hide()
-        # self.ui.profile2_button.setEnabled(False)
-        # self.ui.profile2_button.hide()
-        # self.ui.profile2_name.hide()
+        self.ui.profile3_button.setEnabled(False)
+        self.ui.profile3_button.hide()
+        self.ui.profile3_name.hide()
+        self.ui.profile2_button.setEnabled(False)
+        self.ui.profile2_button.hide()
+        self.ui.profile2_name.hide()
+        self.ui.profile1_button.setEnabled(False)
+        self.ui.profile1_button.hide()
+        self.ui.profile1_name.hide()
+
+        self.second_window = SecondWindow(self)
+
+    def update_profiles(self):
+        # user_data_list의 요소 개수를 가져옴
+        user_count = len(user_data_list)
+
+        # 최대 4개의 프로필 버튼을 활성화/비활성화
+        profiles = [
+            (self.ui.profile1_button, self.ui.profile1_name),
+            (self.ui.profile2_button, self.ui.profile2_name),
+            (self.ui.profile3_button, self.ui.profile3_name),
+            (self.ui.profile4_button, self.ui.profile4_name),
+        ]
+
+        for i, (button, name) in enumerate(profiles):
+            if i < user_count:
+                # 활성화
+                button.setEnabled(True)
+                button.show()
+                name.show()
+                name.setText(user_data_list[i].user_name)  # 해당 유저 이름 설정
+            else:
+                # 비활성화
+                button.setEnabled(False)
+                button.hide()
+                name.hide()
+
+        if user_flag == 0 :
+            self.profile_bt1()
+        elif user_flag == 1:
+            self.profile_bt2()
+        elif user_flag == 2:
+            self.profile_bt3()
+        elif user_flag == 3:
+            self.profile_bt4()
+
 
     def PIR_detect(self):
         if self.second_window.isHidden() is False:
@@ -101,20 +147,47 @@ class MainWindow(QMainWindow):
 
     def profile_bt1(self):
         self.weather_update()
-        self.recommend_supplies(self.get_calendar_events(calendar_id_1))
+        self.recommend_supplies(self.get_calendar_events(user_data_list[0].user_email))
+        self.ui.custom_item.setText(self.makeDayItem(user_data_list[0]))
+        global user_flag 
+        user_flag = 0
     
     def profile_bt2(self):
         self.weather_update()
-        self.recommend_supplies(self.get_calendar_events(calendar_id_2))
+        self.recommend_supplies(self.get_calendar_events(user_data_list[1].user_email))
+        self.ui.custom_item.setText(self.makeDayItem(user_data_list[1]))
+        global user_flag 
+        user_flag = 1
 
     def profile_bt3(self):
         self.weather_update()
-        self.recommend_supplies(self.get_calendar_events(calendar_id_3))
+        self.recommend_supplies(self.get_calendar_events(user_data_list[2].user_email))
+        self.ui.custom_item.setText(self.makeDayItem(user_data_list[2]))
+        global user_flag 
+        user_flag = 2
 
     def profile_bt4(self):
         self.weather_update()
-        self.recommend_supplies(self.get_calendar_events(calendar_id_4))
-        
+        self.recommend_supplies(self.get_calendar_events(user_data_list[3].user_email))
+        self.ui.custom_item.setText(self.makeDayItem(user_data_list[3]))
+        global user_flag 
+        user_flag = 3
+
+    from datetime import datetime
+
+    def makeDayItem(self, user_data):
+        # 오늘의 요일을 가져옴 (0: 월, 1: 화, ..., 6: 일)
+        day_names = ['월', '화', '수', '목', '금', '토', '일']
+        today_index = datetime.today().weekday()
+        today_name = day_names[today_index]
+
+        # user_data.schedule에서 오늘의 요일에 해당하는 아이템 추출
+        today_items = user_data.schedule.get(today_name, [])
+
+        # 아이템을 문자열로 변환 (콤마로 구분)
+        return ', '.join(today_items) if today_items else "오늘은 준비물이 없습니다."
+    
+
     # 날씨 정보 업데이트
     def weather_update(self):
         w_item_temp = 0
@@ -410,7 +483,100 @@ class SecondWindow(QMainWindow):
         self.hide()
         self.main_window.timer.start()
 
+
+flask_app = Flask(__name__)
+
+@flask_app.route('/receive-data', methods=['POST'])
+def update_data():
+    data = request.json  # JSON 데이터 수신
+    global user_flag 
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+
+    # 삭제 요청 처리
+    if data.get('delete', False):
+        user_flag = -1
+        email_to_delete = data.get('email')
+        if not email_to_delete:
+            return jsonify({"error": "No email provided for deletion"}), 400
+        
+        # user_data_list에서 해당 email을 가진 클래스 삭제
+        for index, user in enumerate(user_data_list):
+            if user.user_email == email_to_delete:
+                del user_data_list[index]
+                print(f"User {email_to_delete} 데이터 삭제")
+                return jsonify({"status": "success", "message": f"User {email_to_delete} deleted"}), 200
+
+        print(f"User {email_to_delete}를 찾을 수 없음")
+        return jsonify({"error": f"User {email_to_delete} not found"}), 404
+
+    # 새 사용자 데이터 처리
+    new_user = process_user_data(data)
+    
+    # user_data_list에서 user_email 검사
+    for index, user in enumerate(user_data_list):
+        if user.user_email == new_user.user_email:
+            # 동일한 user_email이 있다면 기존 인스턴스를 덮어쓰기
+            user_data_list[index] = new_user
+            print(f"User {new_user.user_email} 데이터 갱신")
+            user_flag = index
+            return jsonify({"status": "success", "message": f"User {new_user.user_email} updated"}), 200
+
+    # user_email이 없다면 배열에 새 인스턴스를 추가
+    user_data_list.append(new_user)
+    user_flag = len(user_data_list)-1
+    print(f"User {new_user.user_email} 데이터 추가")
+    
+    return jsonify({"status": "success", "message": f"User {new_user.user_email} added"}), 200
+
+def run_flask():
+    flask_app.run(host="0.0.0.0", port=5000, debug = False)
+
+class UserData:
+    def __init__(self, user_email, user_name):
+        self.user_email = user_email  # 사용자 이메일
+        self.user_name = user_name  # 사용자 이름
+        # 월, 화, 수, 목, 금, 토, 일 키를 가지는 딕셔너리
+        self.schedule = {day: [] for day in ['월', '화', '수', '목', '금', '토', '일']}
+
+    def add_item(self, item, repeat):
+        # `repeat` 문자열을 분석하여 해당 요일에 아이템 추가
+        if '주중' in repeat:
+            for day in ['월', '화', '수', '목', '금']:
+                self.schedule[day].append(item)
+        elif '주말' in repeat:
+            for day in ['토', '일']:
+                self.schedule[day].append(item)
+        elif '매일' in repeat:
+            for day in self.schedule.keys():
+                self.schedule[day].append(item)
+        else:
+            # 특정 요일에만 반복
+            for day in repeat.split(', '):
+                if day in self.schedule:
+                    self.schedule[day].append(item)
+
+def process_user_data(data):
+    user_email = data.get('userEmail')
+    user_name = data.get('userName')
+    user = UserData(user_email, user_name)  # 사용자 클래스 생성
+
+    # `item_n`과 `repeat_n` 처리
+    for key, value in data.items():
+        if key.startswith('item_'):
+            index = key.split('_')[1]  # `n` 값 추출
+            repeat_key = f'repeat_{index}'  # 매칭되는 repeat 키 생성
+            repeat_value = data.get(repeat_key, '')  # repeat 값 가져오기
+            user.add_item(value, repeat_value)  # 아이템과 반복 정보 추가
+    return user
+
+
+flask_thread = threading.Thread(target=run_flask)
+flask_thread.daemon = True
+flask_thread.start()
+
 app = QApplication(sys.argv)
 window = MainWindow()
 window.showFullScreen()
-app.exec()
+
+sys.exit(app.exec())
