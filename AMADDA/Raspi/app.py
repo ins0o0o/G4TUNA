@@ -124,13 +124,13 @@ class MainWindow(QMainWindow):
                 name.hide()
 
         if user_flag == 0 :
-            self.profile_bt1()
+            self.ui.custom_item.setText(self.makeDayItem(user_data_list[0]))
         elif user_flag == 1:
-            self.profile_bt2()
+            self.ui.custom_item.setText(self.makeDayItem(user_data_list[1]))
         elif user_flag == 2:
-            self.profile_bt3()
+            self.ui.custom_item.setText(self.makeDayItem(user_data_list[2]))
         elif user_flag == 3:
-            self.profile_bt4()
+            self.ui.custom_item.setText(self.makeDayItem(user_data_list[3]))
 
 
     def PIR_detect(self):
