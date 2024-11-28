@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainmnTFUz.ui'
+## Form generated from reading UI file 'mainYdyTUn.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.0
 ##
@@ -485,8 +485,8 @@ class Ui_MainWindow(object):
         self.schedule_item_title.setText(QCoreApplication.translate("MainWindow", u"ITEM", None))
         self.schedule_schedule_title.setText(QCoreApplication.translate("MainWindow", u"SCHEDULE", None))
         self.weather_item_title.setText(QCoreApplication.translate("MainWindow", u"ITEM", None))
-        self.schedule_1.setText(QCoreApplication.translate("MainWindow", u"\uc804\uc790\uae30\ud559 \uc911\uac04\uace0\uc0ac\n"
-"10:30", None))
+        self.schedule_1.setText(QCoreApplication.translate("MainWindow", u"\uacc4\uc815\uc744 \ub4f1\ub85d\ud55c \ub4a4\n"
+"\uc544\uc774\ucf58\uc744 \ub20c\ub7ec\uc8fc\uc138\uc694", None))
         self.schedule_label_2_1.setText("")
         self.schedule_label_2_2.setText("")
         self.schedule_2_item.setText(QCoreApplication.translate("MainWindow", u"\ub178\ud2b8\ubd81\n"
@@ -502,11 +502,7 @@ class Ui_MainWindow(object):
 "22:00", None))
         self.custom_sub_label.setText("")
         self.custom_item.setText(QCoreApplication.translate("MainWindow", u"\uc774\uc5b4\ud3f0 / \ubcf4\uc870\ubca0\ud130\ub9ac / \uc9c0\uac11 / \ub77c\uc988\ubca0\ub9ac\ud30c\uc774", None))
-        self.schedule_1_item.setText(QCoreApplication.translate("MainWindow", u"\ub178\ud2b8\n"
-"\n"
-"\uacc4\uc0b0\uae30\n"
-"\n"
-"\ud39c", None))
+        self.schedule_1_item.setText("")
         self.schedule_3_item.setText(QCoreApplication.translate("MainWindow", u"\ud48b\uc0b4\ud654\n"
 "\n"
 "\uc6b4\uc804\ubcf5\n"
