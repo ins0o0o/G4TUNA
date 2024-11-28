@@ -56,10 +56,7 @@ class SensorThread(QThread):
         import time
         while True:
             if GPIO.input(self.PIR_PIN):
-                GPIO.output(27,GPIO.HIGH)
                 self.sensor_detected.emit()  # 메인 쓰레드에 신호 보냄
-            else:
-                GPIO.output(27,GPIO.LOW)
             time.sleep(0.1)  # 100ms 주기로 센서 확인
 
 class MainWindow(QMainWindow):
@@ -74,13 +71,25 @@ class MainWindow(QMainWindow):
         self.timer.start()
 
         self.timer2 = QTimer(self)
-        self.timer2.setInterval(500)  # 5분
+        self.timer2.setInterval(500)  # 0.5초
         self.timer2.timeout.connect(self.update_profiles)
         self.timer2.start()
 
         self.sensor_thread = SensorThread()
         self.sensor_thread.sensor_detected.connect(self.PIR_detect)
         self.sensor_thread.start()
+
+
+        # 2번째 리스트 감추기
+        self.ui.schedule_label_2_1.hide()
+        self.ui.schedule_2.hide()
+        self.ui.schedule_label_2_2.hide()
+        self.ui.schedule_2_item.hide()
+        # 3번째 리스트 감추기
+        self.ui.schedule_label_3_1.hide()
+        self.ui.schedule_3.hide()
+        self.ui.schedule_label_3_2.hide()
+        self.ui.schedule_3_item.hide()
 
         # 프로필 감추기
         self.ui.profile4_button.setEnabled(False)
@@ -136,6 +145,9 @@ class MainWindow(QMainWindow):
     def PIR_detect(self):
         if self.second_window.isHidden() is False:
             self.second_window.hide()
+            GPIO.output(27,GPIO.HIGH)
+            sleep(1000)
+            GPIO.output(27,GPIO.LOW)
         self.timer.start()
     
     def on_timer_timeout(self):
@@ -143,7 +155,10 @@ class MainWindow(QMainWindow):
         self.second_window.showFullScreen()
 
     def on_off_bt(self):
-        a = 1
+        if self.ui.OnOff_button.isChecked():
+            self.timer2.start()
+        else:
+            self.timer2.stop()
 
     def profile_bt1(self):
         self.weather_update()
@@ -478,10 +493,13 @@ class SecondWindow(QMainWindow):
         self.ui.setupUi(self)
         self.main_window = main_window
         self.main_window.timer.stop()
+        self.main_window.timer2.stop()
+
 
     def back2main(self):
         self.hide()
         self.main_window.timer.start()
+        self.main_window.timer2.start()
 
 
 flask_app = Flask(__name__)
