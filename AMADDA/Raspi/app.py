@@ -14,7 +14,20 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 import urllib.request
 import urllib.parse
-from time import sleep
+import time
+
+# 음계 주파수 정의 (Hz)
+notes = {
+    "DO": 262,
+    "MI": 330,
+    "SOL": 392,
+    "DDO": 523
+}
+
+# 멜로디 시퀀스
+melody = [
+    "DO", "MI", "SOL", "DDO"
+]
 
 # 오늘 날짜를 자동으로 가져와 필요한 형식으로 사용
 today_date = datetime.today().strftime('%Y%m%d')  # YYYYMMDD 형식
@@ -47,16 +60,22 @@ user_flag = -1
 
 class SensorThread(QThread):
     sensor_detected = Signal()  # 센서가 감지되었을 때 신호 발생
-    PIR_PIN = 17
+    PIR_PIN = 27
+    BUZ_PIN = 12
+    LED_PIN = 22
+
     GPIO.setmode(GPIO.BCM)      # GPIO 초기화
     GPIO.setup(PIR_PIN, GPIO.IN)
-    GPIO.setup(27, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(BUZ_PIN, GPIO.OUT)
+    GPIO.setup(LED_PIN, GPIO.OUT, initial=GPIO.LOW)
 
     def run(self):
-        import time
         while True:
             if GPIO.input(self.PIR_PIN):
                 self.sensor_detected.emit()  # 메인 쓰레드에 신호 보냄
+                GPIO.output(self.LED_PIN, GPIO.HIGH)
+            else:
+                GPIO.output(self.LED_PIN, GPIO.LOW)
             time.sleep(0.1)  # 100ms 주기로 센서 확인
 
 class MainWindow(QMainWindow):
@@ -64,9 +83,9 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-
+        self.ui.OnOff_button.setChecked(False)
         self.timer = QTimer(self)
-        self.timer.setInterval(5000)  # 5분
+        self.timer.setInterval(10000)  # 10초
         self.timer.timeout.connect(self.on_timer_timeout)
         self.timer.start()
 
@@ -145,9 +164,34 @@ class MainWindow(QMainWindow):
     def PIR_detect(self):
         if self.second_window.isHidden() is False:
             self.second_window.hide()
-            GPIO.output(27,GPIO.HIGH)
-            sleep(1000)
-            GPIO.output(27,GPIO.LOW)
+            # QApplication.processEvents()
+            self.weather_update()
+
+            if user_flag == 0 :
+                self.recommend_supplies(self.get_calendar_events(user_data_list[0].user_email))
+            elif user_flag == 1:
+                self.recommend_supplies(self.get_calendar_events(user_data_list[1].user_email))
+            elif user_flag == 2:
+                self.recommend_supplies(self.get_calendar_events(user_data_list[2].user_email))
+            elif user_flag == 3:
+                self.recommend_supplies(self.get_calendar_events(user_data_list[3].user_email))
+
+            if self.ui.OnOff_button.isChecked():
+                # GPIO.output(27,GPIO.HIGH)
+                # QTimer.singleShot(1000, lambda: GPIO.output(27, GPIO.LOW))
+                buzzer = GPIO.PWM(12, 440)  # 기본 주파수 440Hz
+                buzzer.start(50)  # 초기 듀티 사이클 50%
+
+                for note in melody:
+                    if note in notes:
+                        buzzer.ChangeFrequency(notes[note])  # 음계에 따른 주파수 변경
+                        time.sleep(0.2)  # 각 음의 지속 시간 (0.5초)
+                    else:
+                        time.sleep(0.2)  # 공백 처리 (음이 없는 경우)
+                buzzer.stop()
+
+            self.timer2.start()
+
         self.timer.start()
     
     def on_timer_timeout(self):
@@ -402,7 +446,7 @@ class MainWindow(QMainWindow):
             events_num = len(events)
             
 
-        item_recommanded = ['제발','되라','시발']
+        item_recommanded = ['지갑','이어폰','충전기']
         # 추천 아이템 생성
         for i in range(events_num):
             prompt = f"'{events_title[i]}'라는 일정 제목 맞춰 챙겨 해당 일정에 필요한 챙겨나갈 준비물 세 가지를 추천해줘. 설명은 필요 없고  형식은 무조건 \n\n로 구분된 세단어로 답변해.예를 들면 '우산\n\n선크림\n\n마스크'와 같이 말이야."
