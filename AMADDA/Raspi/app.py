@@ -85,7 +85,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.ui.OnOff_button.setChecked(False)
         self.timer = QTimer(self)
-        self.timer.setInterval(10000)  # 10초
+        self.timer.setInterval(10000)  # 10초 : 시연 목적으로 짧게 설정, 이후에 5분으로 설정 (300000)
         self.timer.timeout.connect(self.on_timer_timeout)
         self.timer.start()
 
